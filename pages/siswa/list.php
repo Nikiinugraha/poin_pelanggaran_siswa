@@ -17,12 +17,19 @@ include ROOTPATH . "/includes/header.php";
 // 
 
 // Mengambil semua data siswa dari tabel 'Siswa' JOIN 'Ortu_Wali', 'Kelas', 'Tingkat', 'Program_Keahlian', 'Guru'
-$result = mysqli_query($conn, "SELECT * FROM Siswa 
-JOIN Ortu_Wali ON Siswa.Id_Ortu_Wali = Ortu_Wali.Id 
-JOIN Kelas ON Siswa.Id_Kelas = Kelas.Id 
-JOIN Tingkat ON Kelas.Tingkat = Tingkat.Id 
-JOIN Program_Keahlian ON Kelas.Program = Program_Keahlian.Id 
-JOIN Guru ON Kelas.Kode_Guru = Guru.Kode_Guru");
+// $result = mysqli_query($conn, "SELECT * FROM siswa 
+// JOIN ortu_wali USING(id_ortu_wali)
+// JOIN kelas USING(id_kelas)
+// JOIN tingkat USING(tingkat)
+// JOIN program_keahlian USING(program)
+// JOIN guru USING(kode_guru)");
+// 
+$result = mysqli_query($conn, "SELECT * FROM siswa 
+JOIN ortu_wali USING(id_ortu_wali)
+JOIN kelas USING(id_kelas)
+JOIN tingkat ON kelas.id_tingkat = tingkat.id_tingkat
+JOIN program_keahlian ON kelas.id_program_keahlian = program_keahlian.id_program_keahlian
+JOIN guru USING(kode_guru)");
 ?>
 
 <div class="container">
@@ -61,21 +68,28 @@ JOIN Guru ON Kelas.Kode_Guru = Guru.Kode_Guru");
                 ?>
                 <tr>
                 <td><?php echo $no++; ?></td>
-                <td><?php echo htmlspecialchars($row['NIS']); ?></td>
-                <td><?php echo htmlspecialchars($row['Nama_Siswa']); ?></td>
-                <td><?php echo htmlspecialchars($row['Jenis_Kelamin']); ?></td>
-                <td><?php echo htmlspecialchars($row['Alamat']); ?></td>
-                <td><?= (empty($row['Ayah']) || $row['Ayah'] == 'NULL') ? '-' : htmlspecialchars($row['Ayah']) ?></td>
-                <td><?= (empty($row['Ibu']) || $row['Ibu'] == 'NULL') ? '-' : htmlspecialchars($row['Ibu']) ?></td>
-                <td><?= (empty($row['Wali']) || $row['Wali'] == 'NULL') ? '-' : htmlspecialchars($row['Wali']) ?></td>
-                  <td><?php echo htmlspecialchars($row['Pekerjaan_Ayah']); ?></td>
-                  <td><?php echo htmlspecialchars($row['Pekerjaan_Ibu']); ?></td>
-                  <td><?php echo htmlspecialchars($row['Pekerjaan_Wali']); ?></td>
-                  <td><?= (empty($row['Alamat_Ayah']) || $row['Alamat_Ayah'] == 'NULL') ? '-' : htmlspecialchars($row['Alamat_Ayah']) ?></td>
-                <td><?= (empty($row['Alamat_Ibu']) || $row['Alamat_Ibu'] == 'NULL') ? '-' : htmlspecialchars($row['Alamat_Ibu']) ?></td>
-                <td><?= (empty($row['Alamat_Wali']) || $row['Alamat_Wali'] == 'NULL') ? '-' : htmlspecialchars($row['Alamat_Wali']) ?></td>
-               <td><?php echo htmlspecialchars($row['Nama_Tingkat'] . ' ' . $row['Program_Keahlian'] . ' ' . $row['Rombel']); ?> </td>
-               <td><?php echo htmlspecialchars($row['Nama_Pengguna']); ?></td>
+                <td><?php echo htmlspecialchars($row['nis']); ?></td>
+                <td><?php echo htmlspecialchars($row['nama_siswa']); ?></td>
+                <td><?php echo htmlspecialchars($row['jenis_kelamin']); ?></td>
+                <td><?php echo htmlspecialchars($row['alamat']); ?></td>
+                <td><?= (empty($row['ayah']) || $row['ayah'] == 'NULL') ? '-' : htmlspecialchars($row['ayah']) ?></td>
+                <td><?= (empty($row['ibu']) || $row['ibu'] == 'NULL') ? '-' : htmlspecialchars($row['ibu']) ?></td>
+                <td><?= (empty($row['wali']) || $row['wali'] == 'NULL') ? '-' : htmlspecialchars($row['wali']) ?></td>
+                  <td><?php echo htmlspecialchars($row['pekerjaan_ayah']); ?></td>
+                  <td><?php echo htmlspecialchars($row['pekerjaan_ibu']); ?></td>
+                  <td><?php echo htmlspecialchars($row['pekerjaan_wali']); ?></td>
+                  <td><?= (empty($row['alamat_Ayah']) || $row['alamat_ayah'] == 'NULL') ? '-' : htmlspecialchars($row['alamat_ayah']) ?></td>
+                <td><?= (empty($row['alamat_ibu']) || $row['alamat_ibu'] == 'NULL') ? '-' : htmlspecialchars($row['alamat_ibu']) ?></td>
+                <td><?= (empty($row['alamat_wali']) || $row['alamat_wali'] == 'NULL') ? '-' : htmlspecialchars($row['alamat_wali']) ?></td>
+               <td><?php echo htmlspecialchars($row['nama_tingkat'] . ' ' . $row['program_keahlian'] . ' ' . $row['rombel']); ?> </td>
+               <td><?php echo htmlspecialchars($row['nama_pengguna']); ?></td>
+                         <td style="text-align: center;"><a href="ubah.php?id=">Edit</a>
+                    <input type="hidden" name="action" value="hapus">
+                    <input type="hidden" name="id">
+                    <input type="submit" value="hapus">
+        
+              
+                </td>
                 </tr>
             <?php
             }
