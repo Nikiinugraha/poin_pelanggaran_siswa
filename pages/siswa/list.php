@@ -81,7 +81,7 @@ JOIN guru USING(kode_guru)");
                   <td><?= (empty($row['alamat_Ayah']) || $row['alamat_ayah'] == 'NULL') ? '-' : htmlspecialchars($row['alamat_ayah']) ?></td>
                 <td><?= (empty($row['alamat_ibu']) || $row['alamat_ibu'] == 'NULL') ? '-' : htmlspecialchars($row['alamat_ibu']) ?></td>
                 <td><?= (empty($row['alamat_wali']) || $row['alamat_wali'] == 'NULL') ? '-' : htmlspecialchars($row['alamat_wali']) ?></td>
-               <td><?php echo htmlspecialchars($row['nama_tingkat'] . ' ' . $row['program_keahlian'] . ' ' . $row['rombel']); ?> </td>
+               <td><?php echo htmlspecialchars($row['tingkat'] . ' ' . $row['program_keahlian'] . ' ' . $row['rombel']); ?> </td>
                <td><?php echo htmlspecialchars($row['nama_pengguna']); ?></td>
                          <td style="text-align: center;"><a href="ubah.php?id=">Edit</a>
                     <input type="hidden" name="action" value="hapus">
