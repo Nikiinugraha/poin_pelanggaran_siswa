@@ -1,9 +1,13 @@
 <?php
 include "../config/config.php";
 include "../includes/header.php";
-?>
 
-<h2>Dashboard</h2>
-<p>Selamat datang di aplikasi Poin Pelanggaran Siswa</p>
+if(isset($_COOKIE['username'])) {
+    echo "Hallo ". $_COOKIE['nama'];
+    echo "<br>";
+    echo "Username " . $_COOKIE['username'];
+}
+
+?>
 
 <?php include "../includes/footer.php"; ?>
