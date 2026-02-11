@@ -1,10 +1,8 @@
-
-
 <?php
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 
-include ROOTPATH . "/config/config.php";
-include ROOTPATH . "/includes/header.php";
+include ROOTPATH . '/config/config.php';
+include ROOTPATH . '/includes/header.php';
 
 // $result = mysqli_query($conn, "SELECT * FROM siswa
 
@@ -14,22 +12,22 @@ include ROOTPATH . "/includes/header.php";
 // JOIN program_keahlian ON kelas.Program_Keahlian = program_keahlian.id
 // JOIN guru ON kelas.Kode_Guru = guru.KodeGuru");
 
-// 
+//
 
 // Mengambil semua data siswa dari tabel 'Siswa' JOIN 'Ortu_Wali', 'Kelas', 'Tingkat', 'Program_Keahlian', 'Guru'
-// $result = mysqli_query($conn, "SELECT * FROM siswa 
+// $result = mysqli_query($conn, "SELECT * FROM siswa
 // JOIN ortu_wali USING(id_ortu_wali)
 // JOIN kelas USING(id_kelas)
 // JOIN tingkat USING(tingkat)
 // JOIN program_keahlian USING(program)
 // JOIN guru USING(kode_guru)");
-// 
-$result = mysqli_query($conn, "SELECT * FROM siswa 
+//
+$result = mysqli_query($conn, 'SELECT * FROM siswa 
 JOIN ortu_wali USING(id_ortu_wali)
 JOIN kelas USING(id_kelas)
 JOIN tingkat ON kelas.id_tingkat = tingkat.id_tingkat
 JOIN program_keahlian ON kelas.id_program_keahlian = program_keahlian.id_program_keahlian
-JOIN guru USING(kode_guru)");
+JOIN guru USING(kode_guru)');
 ?>
 
 <div class="container">
@@ -67,29 +65,33 @@ JOIN guru USING(kode_guru)");
             while ($row = mysqli_fetch_assoc($result)) {
                 ?>
                 <tr>
-                <td><?php echo $no++; ?></td>
-                <td><?php echo htmlspecialchars($row['nis']); ?></td>
-                <td><?php echo htmlspecialchars($row['nama_siswa']); ?></td>
-                <td><?php echo htmlspecialchars($row['jenis_kelamin']); ?></td>
-                <td><?php echo htmlspecialchars($row['alamat']); ?></td>
-                <td><?= (empty($row['ayah']) || $row['ayah'] == 'NULL') ? '-' : htmlspecialchars($row['ayah']) ?></td>
-                <td><?= (empty($row['ibu']) || $row['ibu'] == 'NULL') ? '-' : htmlspecialchars($row['ibu']) ?></td>
-                <td><?= (empty($row['wali']) || $row['wali'] == 'NULL') ? '-' : htmlspecialchars($row['wali']) ?></td>
-                  <td><?php echo htmlspecialchars($row['pekerjaan_ayah']); ?></td>
-                  <td><?php echo htmlspecialchars($row['pekerjaan_ibu']); ?></td>
-                  <td><?php echo htmlspecialchars($row['pekerjaan_wali']); ?></td>
-                  <td><?= (empty($row['alamat_Ayah']) || $row['alamat_ayah'] == 'NULL') ? '-' : htmlspecialchars($row['alamat_ayah']) ?></td>
-                <td><?= (empty($row['alamat_ibu']) || $row['alamat_ibu'] == 'NULL') ? '-' : htmlspecialchars($row['alamat_ibu']) ?></td>
-                <td><?= (empty($row['alamat_wali']) || $row['alamat_wali'] == 'NULL') ? '-' : htmlspecialchars($row['alamat_wali']) ?></td>
-               <td><?php echo htmlspecialchars($row['tingkat'] . ' ' . $row['program_keahlian'] . ' ' . $row['rombel']); ?> </td>
-               <td><?php echo htmlspecialchars($row['nama_pengguna']); ?></td>
-                         <td style="text-align: center;"><a href="ubah.php?id=">Edit</a>
-                    <input type="hidden" name="action" value="hapus">
-                    <input type="hidden" name="id">
-                    <input type="submit" value="hapus">
-        
-              
-                </td>
+                    <td><?php echo $no++; ?></td>
+                    <td><?php echo htmlspecialchars($row['nis']); ?></td>
+                    <td><?php echo htmlspecialchars($row['nama_siswa']); ?></td>
+                    <td><?php echo htmlspecialchars($row['jenis_kelamin']); ?></td>
+                    <td><?php echo htmlspecialchars($row['alamat']); ?></td>
+                    <td><?= (empty($row['ayah']) || $row['ayah'] == 'NULL') ? '-' : htmlspecialchars($row['ayah']) ?></td>
+                    <td><?= (empty($row['ibu']) || $row['ibu'] == 'NULL') ? '-' : htmlspecialchars($row['ibu']) ?></td>
+                    <td><?= (empty($row['wali']) || $row['wali'] == 'NULL') ? '-' : htmlspecialchars($row['wali']) ?></td>
+                    <td><?php echo htmlspecialchars($row['pekerjaan_ayah']); ?></td>
+                    <td><?php echo htmlspecialchars($row['pekerjaan_ibu']); ?></td>
+                    <td><?php echo htmlspecialchars($row['pekerjaan_wali']); ?></td>
+                    <td><?= (empty($row['alamat_Ayah']) || $row['alamat_ayah'] == 'NULL') ? '-' : htmlspecialchars($row['alamat_ayah']) ?></td>
+                    <td><?= (empty($row['alamat_ibu']) || $row['alamat_ibu'] == 'NULL') ? '-' : htmlspecialchars($row['alamat_ibu']) ?></td>
+                    <td><?= (empty($row['alamat_wali']) || $row['alamat_wali'] == 'NULL') ? '-' : htmlspecialchars($row['alamat_wali']) ?></td>
+                    <td><?php echo htmlspecialchars($row['tingkat'] . ' ' . $row['program_keahlian'] . ' ' . $row['rombel']); ?> </td>
+                    <td><?php echo htmlspecialchars($row['nama_pengguna']); ?></td>
+                    <td style="text-align: center;">
+                        <form action="/poin_pelanggaran_siswa/process/siswa_process.php" method="POST"
+                    onsubmit="return confirm('Yakin ingin menghapus siswa ini?')">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="nis" value="<?= $row['nis'] ?>">
+                    <input type="submit" value="🗑️ Delete">
+                </form>
+                    </td>
+                    <td>
+                        <a href="edit.php?nis=<?= $row['nis'] ?>">Edit</a>
+                    </td>
                 </tr>
             <?php
             }
