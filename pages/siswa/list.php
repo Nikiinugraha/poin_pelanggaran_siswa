@@ -3,25 +3,11 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 
 include ROOTPATH . '/config/config.php';
 include ROOTPATH . '/includes/header.php';
+?>
 
-// $result = mysqli_query($conn, "SELECT * FROM siswa
+<link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/siswa.css">
 
-// JOIN ortu_wali ON siswa.Id_Ortu_Wali = ortu_wali.id
-// JOIN kelas ON siswa.Id_Kelas = kelas.id
-// JOIN tingkat ON kelas.Id_Tingkat = tingkat.id
-// JOIN program_keahlian ON kelas.Program_Keahlian = program_keahlian.id
-// JOIN guru ON kelas.Kode_Guru = guru.KodeGuru");
-
-//
-
-// Mengambil semua data siswa dari tabel 'Siswa' JOIN 'Ortu_Wali', 'Kelas', 'Tingkat', 'Program_Keahlian', 'Guru'
-// $result = mysqli_query($conn, "SELECT * FROM siswa
-// JOIN ortu_wali USING(id_ortu_wali)
-// JOIN kelas USING(id_kelas)
-// JOIN tingkat USING(tingkat)
-// JOIN program_keahlian USING(program)
-// JOIN guru USING(kode_guru)");
-//
+<?php
 $result = mysqli_query($conn, 'SELECT * FROM siswa 
 JOIN ortu_wali USING(id_ortu_wali)
 JOIN kelas USING(id_kelas)

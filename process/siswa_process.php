@@ -56,9 +56,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Jika aksi adalah "edit", maka ubah data siswa berdasarkan NIS
     } elseif ($action == 'edit') {
-        // belum
+        // Ambil semua data dari form
+        // $nama_siswa = $_POST['nama_siswa'];  // Nama siswa
+        // $jenis_kelamin = $_POST['jenis_kelamin'];  // Jenis kelamin siswa
+        // $alamat = $_POST['alamat_siswa'];  // Alamat siswa
+        // $kelas = $_POST['kelas'];  // Kelas siswa
 
-        // Jika aksi adalah "delete", maka delete data siswa berdasarkan NIS
+        // // kode untuk memecah string kelas menjadi array (contoh "XII RPL 1" menjadi array ["XII", "RPL", "1"])
+        // $kelas = explode(' ', $kelas);
+        // $tingkat = $kelas[0];  // XII
+        // $program_keahlian = $kelas[1];  // RPL
+        // $rombel = $kelas[2];  // 1
+
+        // $query_kelas = mysqli_query($conn, "SELECT id_kelas FROM kelas JOIN program_keahlian USING(id_program_keahlian) JOIN tingkat USING(id_tingkat) WHERE tingkat = '$tingkat' AND program_keahlian = '$program_keahlian' AND rombel = '$rombel'");
+        // $id_kelas = mysqli_fetch_assoc($query_kelas)['id_kelas'];  // mengambil id kelas
+
+        // $ayah = $_POST['ayah'];  // Ayah siswa
+        // $ibu = $_POST['ibu'];  // Ibu siswa
+        // $wali = $_POST['wali'];  // Wali siswa
+        // $pekerjaan_ayah = $_POST['pekerjaan_ayah'];  // Pekerjaan ayah
+        // $pekerjaan_ibu = $_POST['pekerjaan_ibu'];  // Pekerjaan ibu
+        // $pekerjaan_wali = $_POST['pekerjaan_wali'];  // Pekerjaan wali
+        // $telp_ayah = $_POST['telp_ayah'];  // no telp ayah
+        // $telp_ibu = $_POST['telp_ibu'];  // no telp ibu
+        // $telp_wali = $_POST['telp_wali'];  // no telp wali
+        // $alamat_ayah = $_POST['alamat_ayah'];  // Alamat ayah
+        // $alamat_ibu = $_POST['alamat_ibu'];  // Alamat ibu
+        // $alamat_wali = $_POST['alamat_wali'];  // Alamat wali
+
+        // // Update data ortu_wali
+        // $query_ortu = "UPDATE ortu_wali SET ayah='$ayah', ibu='$ibu', wali='$wali', pekerjaan_ayah='$pekerjaan_ayah', pekerjaan_ibu='$pekerjaan_ibu', pekerjaan_wali='$pekerjaan_wali', no_telp_ayah='$telp_ayah', no_telp_ibu='$telp_ibu', no_telp_wali='$telp_wali', alamat_ayah='$alamat_ayah', alamat_ibu='$alamat_ibu', alamat_wali='$alamat_wali' WHERE id_ortu_wali='$id_ortu_wali'";
+        // mysqli_query($conn, $query_ortu);
+
+        // // Update data siswa
+        // $query = "UPDATE siswa SET nis='$nis', nama_siswa='$nama_siswa', jenis_kelamin='$jenis_kelamin', alamat='$alamat', id_ortu_wali='$id_ortu_wali', id_kelas='$id_kelas' WHERE nis='$nis'";
+        // mysqli_query($conn, $query);
+
+        // // Jika aksi adalah "delete", maka delete data siswa berdasarkan NIS
     } elseif ($action == 'delete') {
         // Mengambil data siswa yang akan dihapus
         $nis = $_POST['nis'];

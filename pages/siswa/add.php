@@ -14,11 +14,11 @@ include ROOTPATH . '/includes/header.php';
             <input type="hidden" name="action" value="add" />
             <tr>
                 <td><label>NIS</label></td>
-                <td><input type="number" name="nis" required /></td>
+                <td><input type="number" autocomplete="off" name="nis"/></td>
             </tr>
             <tr>
                 <td><label>Nama Siswa</label></td>
-                <td><input type="text" name="nama_siswa" required /></td>
+                <td><input type="text" autocomplete="off" name="nama_siswa" required /></td>
             </tr>
             <tr>
                 <!-- Datalist berisi jenis kelamin -->
@@ -29,7 +29,7 @@ include ROOTPATH . '/includes/header.php';
             </tr>
             <tr>
                 <td><label>Alamat</label></td>
-                <td><textarea name="alamat_siswa" required></textarea></td>
+                <td><textarea name="alamat_siswa" autocomplete="off" required></textarea></td>
             </tr>
             <tr>
                 <td><label for="kelas">Kelas</label></td>

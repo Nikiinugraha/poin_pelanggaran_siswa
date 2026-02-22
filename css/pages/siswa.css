@@ -1,0 +1,23 @@
+.container {
+    width: 100%;
+}
+
+.container .header-table h2 {
+    text-align: center;
+}
+
+.container table {
+    margin: 20px;
+    width: 100%;
+}
+
+.container table tr {
+    margin: 20px;
+    width: 100%;
+}
+
+.container table td {
+    margin: 20px;
+    width: 100%;
+}
+
