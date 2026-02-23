@@ -72,7 +72,7 @@ include ROOTPATH . '/includes/header.php';
             </tr>
             <tr>
                 <td>
-                    <button type="submit" style="float:right">Tambah Data Guru</button>
+                    <button type="submit">Tambah Data Guru</button>
                 </td>
             </tr>
         </table>

@@ -10,11 +10,16 @@
     <link rel="stylesheet" href="css/pages/login.css">  
 </head>
 
-<body>
+<body class="login-body">
     <div class="login-card">
-        <h1>Welcome Back</h1>
-        <p>Silakan login untuk mengakses sistem</p>
-        
+        <div class="login-card-header">
+            <div class="logo">
+                <img src="assets/images/logo ti.PNG" alt="Logo">
+            </div>
+            <h1>Welcome Back</h1>
+            <p>Silakan login untuk mengakses sistem</p>
+        </div>
+        <div class="login-card-body">
         <form action="process/login_process.php" method="post" autocomplete="off">
             <!-- Fake inputs to trick browser autofill -->
             <input type="text" name="fake_user" style="display:none" aria-hidden="true">
@@ -37,7 +42,7 @@
                 </div>
             </div>
 
-            <button type="submit">Login</button>
+            <button type="submit" class="login-btn">Login</button>
         </form>
     </div>
 

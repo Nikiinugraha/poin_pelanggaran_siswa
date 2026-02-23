@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $role = $_POST['role'];
         $password_input = password_hash("Guru12345*!", PASSWORD_DEFAULT);
 
-        $query = mysqli_query($conn, "INSERT INTO guru (kode_guru, nama_pengguna, username, jabatan, telp, role, password) VALUES ('$kode_guru', '$nama_pengguna', '$username', '$jabatan', '$telp', '$role', '$password')");
+        $query = mysqli_query($conn, "INSERT INTO guru (kode_guru, nama_pengguna, username, jabatan, telp, role, password) VALUES ('$kode_guru', '$nama_pengguna', '$username', '$jabatan', '$telp', '$role', '$password_input')");
 
         if ($query) {
             header("Location: /poin_pelanggaran_siswa/pages/guru/list.php");
