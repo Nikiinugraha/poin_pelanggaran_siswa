@@ -10,15 +10,27 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $action = $_POST['action'];
 
     if($action == 'add'){
-        $pelanggaran = $_POST['pelanggaran'];
+        $jenis = $_POST['jenis'];
         $poin = $_POST['poin'];
 
-        $query = mysqli_query($conn, "INSERT INTO jenis_pelanggaran (jenis, poin) VALUES ('$pelanggaran', '$poin')");
+        $query = mysqli_query($conn, "INSERT INTO jenis_pelanggaran (jenis, poin) VALUES ('$jenis', '$poin')");
 
         if($query){
             header("Location: ../pages/jenis_pelanggaran/list.php");
         } else {
             echo "Gagal Menambah Data Jenis Pelanggaran";
+        }
+    }
+
+    if($action == 'delete') {
+        $id = $_POST['id'];
+
+        $query = mysqli_query($conn, "DELETE FROM jenis_pelanggaran WHERE id_jenis_pelanggaran = '$id'");
+
+        if($query){
+            header("Location: ../pages/jenis_pelanggaran/list.php");
+        } else {
+            echo "Gagal Menghapus Data Jenis Pelanggaran";
         }
     }
 }
