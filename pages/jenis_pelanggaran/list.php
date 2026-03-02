@@ -41,7 +41,7 @@ $result = mysqli_query($conn, 'SELECT * FROM jenis_pelanggaran');
                     <td><?= htmlspecialchars($row['jenis']) ?></td>
                     <td><?= htmlspecialchars($row['poin']) ?></td>
                     <td>
-                        <button class="btn-warning"><a href="edit.php?id=<?= $row['id_jenis_pelanggaran'] ?>">Edit</a></button>
+                        <button class="btn-warning"><a href="edit.php?id_jenis_pelanggaran=<?= $row['id_jenis_pelanggaran'] ?>">Edit</a></button>
                     </td>
                     <td>
                         <form action="/poin_pelanggaran_siswa/process/jenis_pelanggaran_process.php" method="post"
