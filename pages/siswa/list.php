@@ -69,28 +69,12 @@ JOIN guru USING(kode_guru)');
                     <td><?php echo htmlspecialchars($row['nama_pengguna']); ?></td>
                     <td style="text-align: center;">
 
-                        <?php
-                        // mengecek apakah data siswa sudah digunakan di table lain
-                        $siswa = $row['nis'];
-                        $cek = mysqli_query($conn, "SELECT nis FROM siswa WHERE nis='$siswa'");
-
-                        if (mysqli_num_rows($cek) > 0) {
-                        ?>
-                            <input type="button" value="Delete" disabled>
-
-                        <?php
-                        } else {
-                        ?>
-
-                            <form action="/poin_pelanggaran_siswa/process/siswa_process.php" method="POST"
-                                onsubmit="return confirm('Yakin ingin menghapus siswa ini?')">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="nis" value="<?= $row['nis'] ?>">
-                                <input type="submit" value="🗑️ Delete">
-                            </form>
-                        <?php
-                        }
-                        ?>
+                        <form action="/poin_pelanggaran_siswa/process/siswa_process.php" method="POST"
+                            onsubmit="return confirm('Yakin ingin menghapus siswa ini?')">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="nis" value="<?= $row['nis'] ?>">
+                            <input type="submit" value="🗑️ Delete">
+                        </form>
 
                     </td>
                     <td>

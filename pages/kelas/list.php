@@ -44,6 +44,8 @@ $result = mysqli_query($conn, "SELECT id_kelas, tingkat, program_keahlian, rombe
                         }
                         ?></td>
             <td>
+
+           
                 <form action="/poin_pelanggaran_siswa/process/kelas_process.php" method="POST"
                     onsubmit="return confirm('Yakin ingin menghapus kelas ini?')">
                     <input type="hidden" name="action" value="delete">

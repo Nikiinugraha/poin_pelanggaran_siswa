@@ -28,6 +28,8 @@ include ROOTPATH . '/includes/header.php';
                 </datalist>
                 <input list="tingkat" id="tingkat" name="tingkat" placeholder="Tingkat" autocomplete="off" required />
             </td>
+        </tr>
+        <tr>
             <td><label>Program Keahlian</label></td>
             <td>
                 <datalist id="program_keahlian">
@@ -41,11 +43,31 @@ include ROOTPATH . '/includes/header.php';
                 </datalist>
                 <input list="program_keahlian" id="program_keahlian" name="program_keahlian" placeholder="Program Keahlian" autocomplete="off" required />
             </td>
+        </tr>
+        <tr>
             <td><label for="rombel">Rombel</label></td>
             <td>
                 <input type="number" id="rombel" name="rombel" placeholder="Rombel" autocomplete="off" required />
             </td>
+        </tr>
+        <tr>
+            <td><label for="walikelas">Wali Kelas</label></td>
+            <td>
 
+                <datalist id="walikelas">
+                    <?php
+                    $query_guru = mysqli_query($conn, "SELECT * FROM guru WHERE aktif LIKE 'Y'");
+                    while ($guru = mysqli_fetch_assoc($query_guru)) {
+                        echo "<option value='" . $guru['nama_pengguna'] . "'></option>";
+                    }
+                    ?>
+                </datalist>
+                <input list="walikelas" id="walikelas" name="walikelas" placeholder="Wali Kelas" autocomplete="off" required />
+            </td>
+        </tr>
+
+        <tr>
+            <td><input type="submit" value="Simpan" /></td>
         </tr>
     </table>
 </form>

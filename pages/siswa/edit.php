@@ -63,24 +63,34 @@ if (!$siswa) {
 
             <tr>
                 <td>
+                    <label for="nis">NIS</label>
                     <input type="text" name="nis" value="<?php echo htmlspecialchars($siswa['nis']); ?>" required />
                 </td>
+            </tr>
+            <tr>
                 <td>
+                    <label for="nama_siswa">Nama</label>
                     <input type="text" name="nama_siswa" value="<?php echo htmlspecialchars($siswa['nama_siswa']); ?>" required />
                 </td>
+            </tr>
+            <tr>
                 <td>
-                    <label>Jenis Kelamin</label>
+                    <label for="jenis_kelamin">Jenis Kelamin</label>
                 </td>
-                <td><input type="radio" name="jenis_kelamin" value="<?php echo htmlspecialchars($siswa['jenis_kelamin']); ?>" required />Laki - Laki
-                    <input type="radio" name="jenis_kelamin" value="<?php echo htmlspecialchars($siswa['jenis_kelamin']); ?>" required />Perempuan
+            </tr>
+            <tr>
+                <td><input type="radio" name="jenis_kelamin" value="Laki - Laki" <?php echo ($siswa['jenis_kelamin'] == 'Laki - Laki') ? 'checked' : ''; ?> required />Laki - Laki
+                    <input type="radio" name="jenis_kelamin" value="Perempuan" <?php echo ($siswa['jenis_kelamin'] == 'Perempuan') ? 'checked' : ''; ?> required />Perempuan
                 </td>
+            </tr>
+            <tr>
                 <td>
+                    <label for="alamat">Alamat</label>
                     <input type="text" name="alamat" value="<?php echo htmlspecialchars($siswa['alamat']); ?>" required />
                 </td>
             </tr>
             <!-- Baris kedua: tombol untuk menyimpan perubahan -->
             <tr>
-                <td></td>
                 <td>
                     <!-- Tombol untuk mengirim data ke file proses -->
                     <button type="submit" style="float:right">Update</button>
