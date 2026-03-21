@@ -7,7 +7,9 @@ include ROOTPATH . '/includes/header.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    if ($_POST['action'] == 'delete') {
+    $action = $_POST['action'];
+    
+    if ($action == 'delete') {
 
         $id_kelas = $_POST['id_kelas'];
 
@@ -27,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if ($_POST['action'] == 'add') {
+    if ($action == 'add') {
         $tingkat = $_POST['tingkat'];
         $program_keahlian = $_POST['program_keahlian'];
         $rombel = $_POST['rombel'];
@@ -37,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $query_tingkat = mysqli_query($conn, "SELECT id_tingkat FROM tingkat WHERE tingkat = '$tingkat'");
         $id_tingkat = mysqli_fetch_assoc($query_tingkat)['id_tingkat'];
 
-        // Menentukan id_program_keahlian berdasarkan nama program keahlian
+        // Menentukan id_prxogram_keahlian berdasarkan nama program keahlian
         $query_pk = mysqli_query($conn, "SELECT id_program_keahlian FROM program_keahlian WHERE program_keahlian = '$program_keahlian'");
         $id_program_keahlian = mysqli_fetch_assoc($query_pk)['id_program_keahlian'];
 
@@ -53,5 +55,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Location: /poin_pelanggaran_siswa/pages/kelas/list.php");
             exit;
         }
+    }
+
+
+    if($action == 'edit'){
+
+        $id_tingkat = $_POST['id_tingkat'];
+        $rombel = $_POST['rombel'];
+        $kode_guru = $_POST['kode_guru'];
+        $id_program_keahlian = $_POST['id_program_keahlian'];
+
+        //query update
+        $query = mysqli_query($conn, "UPDATE kelas SET id_tingkat = '$id_tingkat', id_program_keahlian = '$id_program_keahlian', rombel = '$rombel', kode_guru = '$kode_guru' WHERE id_kelas = '$id_kelas'");
+
+        if($query){
+            header("Location: /poin_pelanggaran_siswa/pages/kelas/list.php");
+            exit;   
+        } else {
+            echo "Gagal Update";
+            exit;
+        }
+
+        
     }
 }

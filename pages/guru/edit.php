@@ -19,28 +19,11 @@ if (isset($_GET['kode_guru'])) {
     $kode_guru = 0;
 }
 
-// Menyiapkan variabel $cashier untuk menampung data kasir
+// Menyiapkan variabel $guru untuk menampung data guru
 $guru = null;
 $kode_guru = $_GET["kode_guru"];
-$result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM guru WHERE kode_guru = $kode_guru"));
+$guru = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM guru WHERE kode_guru = $kode_guru"));
 
-// Jika kode_guru lebih dari 0, lakukan pencarian data kasir di database
-if ($kode_guru > 0) {
-    // Jalankan query untuk mengambil data kasir berdasarkan id
-    $result = mysqli_query($conn, "SELECT * FROM guru WHERE kode_guru= $kode_guru");
-
-    // Jika hasil ditemukan dan ada datanya, simpan ke variabel $cashier
-    if ($result && mysqli_num_rows($result) > 0) {
-        $guru = mysqli_fetch_assoc($result);
-    }
-}
-
-// Jika data siswa tidak ditemukan, tampilkan pesan dan hentikan proses
-if (!$guru) {
-    echo '<p>Data Guru Tidak Ditemukan</p>';
-    include ROOTPATH . '/includes/footer.php';  // tampilkan footer
-    exit;  // hentikan eksekusi kode
-}
 ?>
 
 <!-- Menengahkan seluruh isi halaman -->

@@ -52,7 +52,7 @@ $result = mysqli_query($conn, "SELECT id_kelas, tingkat, program_keahlian, rombe
                     <input type="hidden" name="id_kelas" value="<?= $row['id_kelas'] ?>">
                     <input type="submit" value="Delete">
                 </form>
-                <a href="/poin_pelanggaran_siswa/pages/kelas/edit.php?id_kelas">Edit</a>
+                <a href="/poin_pelanggaran_siswa/pages/kelas/edit.php?id_kelas=<?= $row['id_kelas'] ?>">Edit</a>
             </td>
         </tr>
             <?php
