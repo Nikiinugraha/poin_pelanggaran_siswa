@@ -43,7 +43,7 @@ if (!isset($_COOKIE['username'])) {
                         <li><a href="/poin_pelanggaran_siswa/pages/kelas/list.php">Data Kelas</a></li>
                     </ul>
                 </li>
-                <li><a href="/poin_pelanggaran_siswa/pages/entri_pelanggaran/list.php">Entri Pelanggaran</a></li>
+                <li><a href="/poin_pelanggaran_siswa/pages/pelanggaran/add.php">Entri Pelanggaran</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle">Cetak & Laporan</a>
                     <ul class="dropdown-menu">

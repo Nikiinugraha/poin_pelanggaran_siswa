@@ -33,9 +33,9 @@ if (!$kelas) {
 
 <form action="/poin_pelanggaran_siswa/process/kelas_process.php" method="POST">
 
-
     <table cellpadding="10">
         <input type="text" name="id_kelas" value="<?= $kelas['id_kelas'] ?>" hidden>
+        <input type="hidden" name="action" value="edit">
 
         <td><label>Tingkat</label></td>
         <td>
@@ -93,7 +93,11 @@ if (!$kelas) {
             <button type="submit">Simpan Perubahan</button>
             </td>
         </tr>
-
-
+        <tr>
+            <td>
+                <a href="list.php">Kembali</a>
+            </td>
+        </tr>
     </table>
+
 </form>

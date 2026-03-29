@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // EDIT GURU
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $action = $_POST['action'];
     $kode_guru = $_POST['kode_guru'];
 
     if($action == 'edit') {

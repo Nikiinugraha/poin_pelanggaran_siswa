@@ -8,7 +8,7 @@ include ROOTPATH . '/includes/header.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $action = $_POST['action'];
-    
+
     if ($action == 'delete') {
 
         $id_kelas = $_POST['id_kelas'];
@@ -58,24 +58,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 
-    if($action == 'edit'){
+    if ($action == 'edit') {
 
-        $id_tingkat = $_POST['id_tingkat'];
+        $id_kelas = $_POST['id_kelas'];
+        $tingkat = $_POST['tingkat'];
+        $program_keahlian = $_POST['program_keahlian'];
         $rombel = $_POST['rombel'];
-        $kode_guru = $_POST['kode_guru'];
-        $id_program_keahlian = $_POST['id_program_keahlian'];
+        $walikelas = $_POST['walikelas'];
 
-        //query update
-        $query = mysqli_query($conn, "UPDATE kelas SET id_tingkat = '$id_tingkat', id_program_keahlian = '$id_program_keahlian', rombel = '$rombel', kode_guru = '$kode_guru' WHERE id_kelas = '$id_kelas'");
+        // Menentukan id_tingkat berdasarkan nama tingkat
+        $query_tingkat = mysqli_query($conn, "SELECT id_tingkat FROM tingkat WHERE tingkat = '$tingkat'");
+        $row_tingkat = mysqli_fetch_assoc($query_tingkat);
+        
+        if (!$row_tingkat) {
+            header("Location: /poin_pelanggaran_siswa/pages/kelas/edit.php?id_kelas=$id_kelas&error=Tingkat '$tingkat' tidak ditemukan!");
+            exit();
+        }
+        $id_tingkat = $row_tingkat['id_tingkat'];
 
-        if($query){
-            header("Location: /poin_pelanggaran_siswa/pages/kelas/list.php");
-            exit;   
+        // Menentukan id_program_keahlian berdasarkan nama program keahlian
+        $query_pk = mysqli_query($conn, "SELECT id_program_keahlian FROM program_keahlian WHERE program_keahlian ='$program_keahlian'");
+        $row_pk = mysqli_fetch_assoc($query_pk);
+
+        if (!$row_pk) {
+            header("Location: /poin_pelanggaran_siswa/pages/kelas/edit.php?id_kelas=$id_kelas&error=Program Keahlian '$program_keahlian' tidak ditemukan!");
+            exit();
+        }
+        $id_program_keahlian = $row_pk["id_program_keahlian"];
+
+        // Menentukan kode_guru berdasarkan nama wali kelas
+        $query_guru = mysqli_query($conn, "SELECT kode_guru FROM guru WHERE nama_pengguna = '$walikelas'");
+        $row_guru = mysqli_fetch_assoc($query_guru);
+
+        if (!$row_guru) {
+            header("Location: /poin_pelanggaran_siswa/pages/kelas/edit.php?id_kelas=$id_kelas&error=Guru '$walikelas' tidak ditemukan atau mungkin tidak terdaftar!");
+            exit();
+        }
+        $kode_guru = $row_guru["kode_guru"];
+
+        // Query update
+        $query = "UPDATE kelas SET  
+                  id_tingkat = '$id_tingkat', 
+                  id_program_keahlian = '$id_program_keahlian', 
+                  rombel = '$rombel', 
+                  kode_guru = '$kode_guru' 
+                  WHERE id_kelas = '$id_kelas'";
+
+        $result = mysqli_query($conn, $query);
+
+        if ($result) {
+            header("Location: /poin_pelanggaran_siswa/pages/kelas/list.php?success=Data kelas berhasil diubah!");
+            exit;
         } else {
-            echo "Gagal Update";
+            echo "Gagal Update: " . mysqli_error($conn);
             exit;
         }
-
-        
     }
 }

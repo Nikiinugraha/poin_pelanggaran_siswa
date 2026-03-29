@@ -66,23 +66,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Jika aksi adalah "delete", maka delete data siswa berdasarkan NIS
     } elseif ($action == 'delete') {
-        // Mengambil data siswa yang akan dihapus
-        $nis = $_POST['nis'];
-        $siswa_data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id_ortu_wali FROM siswa WHERE nis='$nis'"));
-
-        // Cek apakah masih ada siswa di kelas ini
-        $cek = mysqli_query($conn, "SELECT COUNT(*) as total FROM siswa WHERE nis = '$nis'");
-        $row = mysqli_fetch_assoc($cek);
-
-        if ($row['total'] > 0) {
-            // Masih ada siswa, tolak penghapusan
-            header("Location: /poin_pelanggaran_siswa/pages/siswa/list.php?error=Siswa tidak bisa dihapus, masih terdapat " . $row['total'] . " siswa dengan nis ini!");
-            exit();
-        } else {
-            // Aman dihapus
-            mysqli_query($conn, "DELETE FROM siswa WHERE nis = $nis");
-            header("Location: /poin_pelanggaran_siswa/pages/siswa/list.php?success=Siswa berhasil dihapus!");
-            exit();
+        // Mengambil data id_ortu_wali dari siswa yang akan dihapus
+        $query_siswa = mysqli_query($conn, "SELECT id_ortu_wali FROM siswa WHERE nis='$nis'");
+        $siswa_data = mysqli_fetch_assoc($query_siswa);
+        
+        if ($siswa_data) {
+            $id_ortu_wali = $siswa_data['id_ortu_wali'];
+            
+            // Mencoba menghapus data siswa
+            $delete_siswa = mysqli_query($conn, "DELETE FROM siswa WHERE nis='$nis'");
+            
+            if ($delete_siswa) {
+                // Cek apakah masih ada siswa lain dari ortu_wali yang sama
+                $cek_ortu = mysqli_query($conn, "SELECT COUNT(*) as total FROM siswa WHERE id_ortu_wali='$id_ortu_wali'");
+                $row = mysqli_fetch_assoc($cek_ortu);
+                
+                if ($row['total'] == 0) {
+                    // Jika tidak ada siswa lain dengan ortu/wali yang sama, hapus ortu/wali
+                    mysqli_query($conn, "DELETE FROM ortu_wali WHERE id_ortu_wali='$id_ortu_wali'");
+                }
+                
+                header("Location: /poin_pelanggaran_siswa/pages/siswa/list.php?success=Siswa berhasil dihapus!");
+                exit();
+            } else {
+                header("Location: /poin_pelanggaran_siswa/pages/siswa/list.php?error=Gagal menghapus siswa. Pastikan siswa tidak memiliki catatan pelanggaran yang terikat!");
+                exit();
+            }
         }
     }
 
