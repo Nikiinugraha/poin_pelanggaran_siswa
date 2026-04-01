@@ -45,10 +45,10 @@ if (!isset($_COOKIE['username'])) {
                 </li>
                 <li><a href="/poin_pelanggaran_siswa/pages/pelanggaran/add.php">Entri Pelanggaran</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle">Cetak & Laporan</a>
+                    <a href="#" class="dropdown-toggle">Laporan</a>
                     <ul class="dropdown-menu">
-                        <li><a href="/poin_pelanggaran_siswa/pages/cetak_surat/list.php">Cetak Surat</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/laporan/list.php">Laporan</a></li>
+                        <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_pelanggaran.php">Laporan Pelanggaran Siswa</a></li>
+                        <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_panggilan_ortu.php">Laporan Surat Panggilan Ortu</a></li>
                     </ul>
                 </li>
                 <li><a href="/poin_pelanggaran_siswa/logout.php">Logout</a></li>
