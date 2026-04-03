@@ -1,0 +1,209 @@
+/* Mengatur dasar halaman agar bersih */
+body {
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+/* Mengatur container kertas A4 */
+.page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 20px auto;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Judul Surat */
+.title {
+    text-align: center;
+    font-size: 16pt;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+/* Bagian Isi Surat */
+.content {
+    font-size: 12pt;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+/* Indentasi/Tab */
+.indent {
+    margin-left: 30px;
+    margin-bottom: 20px;
+}
+
+/* Desain Baris Form (Nama: Isi) */
+.form-row {
+    display: flex;
+    margin-bottom: 8px;
+    align-items: flex-start;
+}
+
+.label {
+    width: 150px;
+    flex-shrink: 0;
+}
+
+.separator {
+    width: 20px;
+    flex-shrink: 0;
+}
+
+.field {
+    font-weight: bold;
+    flex-grow: 1;
+}
+
+.field-masalah {
+    flex-grow: 1;
+}
+
+.statement {
+    margin-top: 25px;
+    text-indent: 45px;
+}
+
+/* Area Tanda Tangan */
+.signature-section {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.sig-block {
+    text-align: left;
+}
+
+.sig-right {
+    text-align: right;
+}
+
+.sig-name {
+    margin-top: 70px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* Tanda tangan tanpa garis bawah (untuk orang tua/siswa) */
+.sig-name-plain {
+    margin-top: 70px;
+    font-weight: bold;
+}
+
+.footer-sig {
+    margin-top: 50px;
+    text-align: center;
+}
+
+/* Tombol Navigasi */
+.no-print {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+button {
+    display: inline-flex;
+    padding: 10px 20px;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #f5f5f5;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* ATURAN KHUSUS CETAK */
+@media print {
+    /* Pastikan tidak ada ruang kosong di luar body */
+    html, body {
+        height: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+        background-color: white !important;
+    }
+
+    /* Sembunyikan navigasi utama, tombol, dan footer sistem agar tidak ikut terprint */
+    header, .no-print, footer, nav, aside {
+        display: none !important;
+    }
+
+    .page {
+        margin: 0 !important;
+        padding: 8mm 12mm !important; /* Kurangi padding agar lebih banyak ruang */
+        box-shadow: none !important;
+        width: 100% !important;
+        min-height: auto !important; 
+        max-height: 290mm !important; /* Batas ketat tinggi A4 */
+        box-sizing: border-box !important;
+        overflow: hidden; /* Sembunyikan jika ada elemen yang sedikit meluap */
+    }
+
+    /* Kompakkan jarak antar elemen agar muat 1 lembar */
+    .title {
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 14pt;
+    }
+
+    .content {
+        font-size: 11pt; /* Perkecil sedikit ukuran font saat cetak */
+        line-height: 1.4;
+    }
+
+    .indent {
+        margin-bottom: 10px;
+    }
+
+    .signature-section {
+        margin-top: 20px; /* Kurangi jarak ke area tanda tangan */
+        gap: 15px;
+    }
+
+    .sig-name, .sig-name-plain {
+        margin-top: 50px; /* Perkecil ruang tanda tangan */
+    }
+
+    .footer-sig {
+        margin-top: 25px;
+    }
+
+    @page {
+        size: A4;
+        margin: 0;
+    }
+}
+
+/* Animasi Printer (Disesuaikan dengan kode Anda sebelumnya) */
+.printer-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    margin-right: 8px;
+}
+
+.printer-container svg {
+    width: 100%;
+    height: auto;
+}
+
+.print-btn:hover .printer-page {
+    height: 16px;
+}
