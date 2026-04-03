@@ -1,0 +1,222 @@
+/* 
+    File   : list_panggilan_ortu.css
+    Fungsi : Styling untuk halaman daftar siswa yang perlu dipanggil (Poin 50-100)
+*/
+
+:root {
+    --primary-color: #3498db;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --success-color: #2ecc71;
+    --text-color: #333;
+    --bg-color: #f4f7f6;
+    --card-bg: #fff;
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+}
+
+.title-page {
+    margin: 20px 0;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+/* Container Styling */
+.main-container {
+    width: 85%;
+    margin: 20px auto;
+}
+
+/* Fieldset and Legend Styling */
+fieldset {
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    width: 100% !important; /* Overriding inline 70% */
+}
+
+legend {
+    font-weight: bold;
+    padding: 0 15px;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+/* Table Styling */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+    background-color: transparent;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+}
+
+th {
+    background-color: #f8f9fa;
+    color: #555;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    padding: 15px 10px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+tr:hover {
+    background-color: #fcfcfc;
+}
+
+/* Search Form Header */
+.table-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
+
+.search-form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.search-input {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 250px;
+    outline: none;
+    transition: var(--transition);
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Button & Action Styling */
+.btn-primary, .btn-warning, .btn-danger {
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.btn-primary { background-color: var(--primary-color); color: white; }
+.btn-primary:hover { background-color: #2980b9; transform: translateY(-2px); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.btn-primary a { color: white; text-decoration: none; }
+
+.btn-warning { background-color: var(--warning-color); color: white; }
+.btn-warning:hover { background-color: #d35400; transform: translateY(-2px); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+.btn-danger { background-color: var(--danger-color); color: white; }
+.btn-danger:hover { background-color: #c0392b; transform: translateY(-2px); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+/* Print Button Customization */
+.print-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 15px 30px;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    margin: 20px auto;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+.print-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);
+}
+
+.printer-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.printer-container svg {
+    width: 35px;
+    height: auto;
+}
+
+.printer-container svg path, 
+.printer-container svg circle {
+    stroke: white !important;
+}
+
+/* Utility */
+.scroll {
+    overflow-x: auto;
+    margin-top: 10px;
+}
+
+.poin-badge {
+    background-color: #fdf2f2;
+    color: var(--danger-color);
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid #feb2b2;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.action-row hr {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #eee;
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        width: 95%;
+    }
+    .search-input {
+        width: 100%;
+    }
+    .table-header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}

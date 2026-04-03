@@ -137,7 +137,7 @@ if(isset($_GET['cari'])){
                         <td align="center"><?= htmlspecialchars($poin_persiswa) ?></td>
                         <td>
                             <!-- tombol untuk menampilkan detail pelanggaran dengan mengirim nis terpilih melalui method GET -->
-                            <button class="btn-primary"><a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?=$row['nis']?>">Detail</a></button>
+                            <button class="btn-primary"><a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?=$row['nis']?>&from=list_pelanggaran.php">Detail</a></button>
                         </td>
                     </tr>
                     <?php

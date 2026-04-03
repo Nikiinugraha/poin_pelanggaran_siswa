@@ -1,69 +1,107 @@
-button {
- display: flex;
- height: 3em;
- align-items: center;
- justify-content: center;
- background-color: #eeeeee4b;
- border-radius: 3px;
- letter-spacing: 1px;
- transition: all 0.2s linear;
- cursor: pointer;
- border: none;
- background: #fff;
+/* Container untuk menyeimbangkan letak tombol di tengah halaman */
+.print-btn-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
 }
-button > svg {
- margin-right: 5px;
- margin-left: 5px;
- font-size: 20px;
- transition: all 0.4s ease-in;
+
+/* Base style tombol cetak yang lebih premium */
+.print-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+    height: auto; /* Reset global height */
 }
-button:hover > svg {
- font-size: 1.2em;
- transform: translateX(-5px);
+
+.print-btn:hover {
+    background: linear-gradient(135deg, #1e88e5, #1565c0);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(25, 118, 210, 0.4);
 }
-button:hover {
- box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
- transform: translateY(-2px);
+
+.print-btn:active {
+    transform: translateY(-1px);
 }
-/* animasi icon printer */ 
+
+/* Animasi icon printer yang diperhalus */
 .printer-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    position: relative;
 }
+
 .printer-container {
-  height: 50%;
-  width: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
 }
+
 .printer-container svg {
-  width: 100%;
-  height: auto;
-  transform: translateY(4px);
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 2px rgba(255,255,255,0.3));
 }
+
+/* Ganti warna path svg biar kontras di tombol biru */
+.print-btn .printer-container svg path,
+.print-btn .printer-container svg circle {
+    stroke: white !important;
+    fill: none !important;
+}
+
+.print-btn .printer-container svg path[fill="black"],
+.print-btn .printer-container svg circle[fill="black"] {
+    fill: white !important;
+    stroke: none !important;
+}
+
 .printer-page-wrapper {
-  width: 100%;
-  height: 50%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
 }
+
 .printer-page {
-  width: 70%;
-  height: 10px;
-  border: 1px solid black;
-  background-color: white;
-  transform: translateY(0px);
-  transition: all 0.3s;
-  transform-origin: top;
+    width: 10px;
+    height: 0;
+    background: white;
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 1px;
+    transition: all 0.4s ease;
+    transform: translateY(-10px);
+    opacity: 0;
 }
+
 .print-btn:hover .printer-page {
-  height: 16px;
+    height: 12px;
+    transform: translateY(2px);
+    opacity: 1;
 }
 
 /* Styling Halaman Laporan */

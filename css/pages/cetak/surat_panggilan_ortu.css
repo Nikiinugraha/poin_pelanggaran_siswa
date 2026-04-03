@@ -1,0 +1,109 @@
+/* ═════════════════════════════════════════════════════════
+   TAMPILAN DI LAYAR (SCREEN DISPLAY VIEW)
+   ═════════════════════════════════════════════════════════ */
+body {
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container utama kertas surat (Ukuran A4) */
+.page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 30px auto;
+    background: white;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+}
+
+/* Bagian Kop Surat */
+.header img {
+    width: 100%;
+    height: auto;
+    border-bottom: 2px solid #000;
+    padding-bottom: 5px;
+}
+
+/* Pengaturan Tabel Informasi */
+.table-info td {
+    vertical-align: top;
+    padding: 3px 0;
+}
+
+/* Area tombol navigasi (hanya di layar) */
+.no-print {
+    margin: 20px 0;
+}
+
+/* Tombol Navigasi Sistem */
+button {
+    display: inline-flex;
+    height: 3em;
+    padding: 0 20px;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    transition: 0.2s;
+    gap: 8px;
+}
+
+button:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+}
+
+.btn-primary { background-color: #4a90e2; color: white; border-color: #357abd; }
+
+/* ═════════════════════════════════════════════════════════
+   PENGATURAN SAAT CETAK (PRINT MEDIA)
+   ═════════════════════════════════════════════════════════ */
+@media print {
+    /* 1. Sembunyikan semua elemen navigasi, menu web, dan tombol */
+    .no-print, 
+    header, 
+    footer, 
+    nav, 
+    aside, 
+    .navbar, 
+    .sidebar, 
+    .main-footer,
+    button {
+        display: none !important;
+    }
+
+    /* 2. Bersihkan background body */
+    body {
+        background-color: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* 3. Maksimalkan kertas surat (Paksa pas di 1 lembar) */
+    .page {
+        width: 100% !important;
+        min-height: auto !important; /* Tinggi otomatis agar tidak tumpah */
+        max-height: 290mm; /* Batasi sedikit di bawah A4 */
+        margin: 0 !important;
+        padding: 10mm 15mm !important; /* Margin cetak fisik printer */
+        box-shadow: none !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 4. Hapus Header/Footer otomatis dari Browser (Tanggal, URL di pojok) */
+    @page {
+        size: A4; /* Paksa ke A4 */
+        margin: 0; 
+    }
+}

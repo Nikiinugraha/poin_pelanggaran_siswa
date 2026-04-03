@@ -84,7 +84,7 @@ if (isset($_POST['upload']) && isset($_FILES["foto_dokumen"])) {
     $nama_file_foto  = $_FILES["foto_dokumen"]['name'];
     $data_file_foto  = $_FILES["foto_dokumen"];
     
-    // Menentukan lokasi folder untuk menyimpan foto (folder "assets/images/")
+    // Menentukan lokasi folder untuk menyimpan foto (folder "gambar/")
     $folder_tujuan   = ROOTPATH . "/assets/images/";
     $lokasi_simpan   = $folder_tujuan . $nama_file_foto;
     
@@ -121,7 +121,6 @@ if (isset($_POST['upload']) && isset($_FILES["foto_dokumen"])) {
         }
     }
 }
-
 
 // ============================================================
 // QUERY 1: CARI CALON SISWA YANG PERLU DIPANGGIL ORTU NYA (Poin 50-100)
@@ -188,7 +187,6 @@ if (isset($_GET['cari_daftar_calon_ortu'])) {
 // Jalankan misinya ke database (Kirim pesanan datanya)
 $hasil_calon_panggilan = mysqli_query($conn, $query_calon_panggilan);
 
-
 // ============================================================
 // QUERY 2: CARI DATA SURAT PANGGILAN ORTU YANG SUDAH DIBUAT (DI TABEL SURAT_KELUAR)
 // ============================================================
@@ -232,7 +230,7 @@ include ROOTPATH . "/includes/header.php";
         <!-- icon printer (gambar mesin pencetak yang lucu) -->
         <span class="printer-wrapper">
             <span class="printer-container">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 92 75">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 92 75" height="20px" width="20px">
                     <path stroke-width="5" stroke="black" d="M12 37.5H80C85.2467 37.5 89.5 41.7533 89.5 47V69C89.5 70.933 87.933 72.5 86 72.5H6C4.067 72.5 2.5 70.933 2.5 69V47C2.5 41.7533 6.75329 37.5 12 37.5Z"></path>
                     <mask fill="white" id="path-2-inside-1_30_7"><path d="M12 12C12 5.37258 17.3726 0 24 0H57C70.2548 0 81 10.7452 81 24V29H12V12Z"></path></mask>
                     <path mask="url(#path-2-inside-1_30_7)" fill="black" d="M7 12C7 2.61116 14.6112 -5 24 -5H57C73.0163 -5 86 7.98374 86 24H76C76 13.5066 67.4934 5 57 5H24C20.134 5 17 8.13401 17 12H7ZM81 29H12H81ZM7 29V12C7 2.61116 14.6112 -5 24 -5V5C20.134 5 17 8.13401 17 12V29H7ZM57 -5C73.0163 -5 86 7.98374 86 24V29H76V24C76 13.5066 67.4934 5 57 5V-5Z"></path>
@@ -242,7 +240,7 @@ include ROOTPATH . "/includes/header.php";
             <span class="printer-page-wrapper"><span class="printer-page"></span></span>
         </span>
         &nbsp;&nbsp;Cetak Surat Panggilan Ortu/Wali
-    </button><br>
+    </button><br><br>
 
     <!-- ═════════════════════════════════════════════════════════
          BAGIAN 1: TABEL DAFTAR SISWA YANG BISA DIPANGGIL (Poin 50-100)
@@ -335,7 +333,7 @@ include ROOTPATH . "/includes/header.php";
                             ?>
                                 <!-- Tombol untuk melihat detail kesalahannya secara lengkap -->
                                 <button class="btn-primary">
-                                    <a href="/Poin_Pelanggaran_Siswa_XIIRPL4/pages/laporan/detail_pelanggaran.php?nis=<?= $baris_calon['nis'] ?>&tanggal=<?= $baris_calon['tanggal_surat'] ?>">Detail</a>
+                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $baris_calon['nis'] ?>&tanggal=<?= $baris_calon['tanggal_surat'] ?>&from=list_panggilan_ortu.php">Detail</a>
                                 </button> 
                                 
                                 <?php 
@@ -349,7 +347,7 @@ include ROOTPATH . "/includes/header.php";
                                 if(mysqli_num_rows($cek_surat_panggilan) == 0){
                                 ?>
                                     <hr>
-                                    <form action="/Poin_Pelanggaran_Siswa_XIIRPL4/pages/cetak/add_panggilan_ortu.php" method="post">
+                                    <form action="/poin_pelanggaran_siswa/pages/cetak/add_panggilan_ortu.php" method="post">
                                         <input type="hidden" name="nis" value="<?= $baris_calon['nis'] ?>">
                                         <input type="submit" value="Cetak Panggilan Ortu" style="padding: 10px 15px;font-weight:bold;background-color: #fff;border-radius: 5px;border: 1px solid #ccc;">
                                     </form> 
@@ -366,7 +364,7 @@ include ROOTPATH . "/includes/header.php";
                                 if(mysqli_num_rows($cek_surat_perjanjian) == 0){ 
                                 ?>
                                     <hr>
-                                    <form action="/Poin_Pelanggaran_Siswa_XIIRPL4/pages/cetak/add_perjanjian_ortu.php" method="post">
+                                    <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php" method="post">
                                         <input type="hidden" name="nis" value="<?= $baris_calon['nis'] ?>">
                                         <input type="submit" value="Cetak Perjanjian Ortu" style="padding: 10px 15px;font-weight:bold;background-color: #fff;border-radius: 5px;border: 1px solid #ccc;">
                                     </form>
@@ -377,11 +375,11 @@ include ROOTPATH . "/includes/header.php";
                             } elseif ($baris_calon['status_dokumen'] == "Masih Proses") { 
                             ?>
                                 <button class="btn-primary">
-                                    <a href="/Poin_Pelanggaran_Siswa_XIIRPL4/pages/laporan/detail_pelanggaran.php?nis=<?= $baris_calon['nis'] ?>&tanggal=<?= $baris_calon['tanggal_surat'] ?>">Detail Pelanggaran</a>
+                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $baris_calon['nis'] ?>&tanggal=<?= $baris_calon['tanggal_surat'] ?>&from=list_panggilan_ortu.php">Detail Pelanggaran</a>
                                 </button>
                                 <hr>
                                 <button class="btn-primary">
-                                    <a href="/Poin_Pelanggaran_Siswa_XIIRPL4/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $baris_calon['nis'] ?>">Cetak Surat TTD Ortu</a>
+                                    <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $baris_calon['nis'] ?>">Cetak Surat TTD Ortu</a>
                                 </button> 
                                 <hr>
                                 <!-- Ini adalah area tempat kita mengupload/mengirim foto kertas yang tertanda tangan -->
@@ -398,7 +396,7 @@ include ROOTPATH . "/includes/header.php";
                             } elseif ($baris_calon['status_dokumen'] == "Selesai") { 
                             ?>
                                 <!-- '_blank' membuat gambar kebuka di jendela baru browser, sehingga halaman tabel terhindari dari tutup paksa -->
-                                <a href="/Poin_Pelanggaran_Siswa_XIIRPL4/gambar/<?= htmlspecialchars($baris_calon['foto_dokumen']) ?>"
+                                <a href="/poin_pelanggaran_siswa/assets/images/<?= htmlspecialchars($baris_calon['foto_dokumen']) ?>"
                                    target="_blank" class="btn-primary"
                                    style="text-decoration:none;color:white;font-family:'Arial';font-size:13px;">Lihat Gambar</a>
                             <?php } ?>
@@ -507,7 +505,7 @@ include ROOTPATH . "/includes/header.php";
                             <!-- Tombol ini berfungsi kalau kertasnya hilang dicetak lagi dari database -->
                             <!-- 'urlencode' biar nomor yang ada logo karakter unik tidak rusak saat tersentuh alamat website -->
                             <button class="btn-primary">
-                                <a href="/Poin_Pelanggaran_Siswa_XIIRPL4/pages/cetak/surat_panggilan_ortu.php?no_surat=<?= urlencode($baris_surat['no_surat']) ?>">Cetak Ulang</a>
+                                <a href="/poin_pelanggaran_siswa/pages/cetak/surat_panggilan_ortu.php?no_surat=<?= urlencode($baris_surat['no_surat']) ?>">Cetak Ulang</a>
                             </button>
                         </td>
                     </tr>
