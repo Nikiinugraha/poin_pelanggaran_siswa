@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Insert data siswa
         $password_enkripsi = password_hash($password, PASSWORD_DEFAULT);
-        $query = "INSERT INTO siswa (nis, nama_siswa, jenis_kelamin, alamat, password, id_ortu_wali, id_kelas) 
-        VALUES ('$nis', '$nama_siswa', '$jenis_kelamin', '$alamat', '$password_enkripsi', '$id_ortu_wali', '$id_kelas')";
+        $query = "INSERT INTO siswa (nis, nama_siswa, jenis_kelamin, alamat, password, status, id_ortu_wali, id_kelas) 
+        VALUES ('$nis', '$nama_siswa', '$jenis_kelamin', '$alamat', '$password_enkripsi', 'Aktif', '$id_ortu_wali', '$id_kelas')";
         mysqli_query($conn, $query);
 
         // Jika aksi adalah "edit", maka ubah data siswa berdasarkan NIS
@@ -60,8 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $nama_siswa = $_POST['nama_siswa'];
         $jenis_kelamin = $_POST['jenis_kelamin'];
         $alamat = $_POST['alamat'];
+        $status = $_POST['status'];
 
-        $query = "UPDATE siswa SET nis='$nis', nama_siswa='$nama_siswa', jenis_kelamin='$jenis_kelamin', alamat='$alamat' WHERE nis='$nis'";
+        $query = "UPDATE siswa SET nis='$nis', nama_siswa='$nama_siswa', jenis_kelamin='$jenis_kelamin', alamat='$alamat', status='$status' WHERE nis='$nis'";
         mysqli_query($conn, $query);
 
         // Jika aksi adalah "delete", maka delete data siswa berdasarkan NIS
