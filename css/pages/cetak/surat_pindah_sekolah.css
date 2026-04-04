@@ -1,0 +1,243 @@
+/* ═════════════════════════════════════════════════════════
+   TAMPILAN DI LAYAR (SCREEN DISPLAY VIEW)
+   ═════════════════════════════════════════════════════════ */
+body {
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    font-family: "Times New Roman", Times, serif;
+}
+
+/* Container utama kertas surat (Ukuran A4) */
+.page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 30px auto;
+    background: white;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    position: relative;
+    color: #000;
+}
+
+/* Bagian Kop Surat */
+.header img {
+    width: 100%;
+    height: auto;
+    border-bottom: 2px solid #000;
+    padding-bottom: 5px;
+}
+
+/* Judul Surat */
+.title {
+    text-align: center;
+    font-size: 14pt;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    line-height: 1.2;
+}
+
+/* Bagian Isi Surat */
+.content {
+    font-size: 12pt;
+    line-height: 1.5;
+    text-align: justify;
+}
+
+.content p {
+    margin-bottom: 15px;
+}
+
+/* Indentasi / Grouping Informasi */
+.indent {
+    margin-left: 30px;
+    margin-bottom: 20px;
+}
+
+/* Baris Data (Label: Value) */
+.form-row {
+    display: flex;
+    margin-bottom: 5px;
+    align-items: flex-start;
+}
+
+.label {
+    width: 160px;
+    flex-shrink: 0;
+}
+
+.separator {
+    width: 20px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.field {
+    font-weight: bold;
+    flex-grow: 1;
+}
+
+/* Area Tanda Tangan */
+.signature-section {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.sig-block {
+    text-align: left;
+}
+
+.sig-right {
+    text-align: right;
+}
+
+.sig-name-plain {
+    margin-top: 80px;
+    font-weight: bold;
+}
+
+/* ═════════════════════════════════════════════════════════
+   DASHBOARD & NAVIGASI (HANYA DI LAYAR)
+   ═════════════════════════════════════════════════════════ */
+.no-print {
+    margin: 20px 0;
+}
+
+button {
+    display: inline-flex;
+    height: 3em;
+    padding: 0 20px;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    transition: 0.3s;
+    gap: 8px;
+    color: #333;
+}
+
+button:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+button svg {
+    transition: transform 0.3s ease;
+}
+
+button:hover svg {
+    transform: scale(1.1);
+}
+
+/* Animasi Icon Printer */
+.printer-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 100%;
+}
+
+.printer-container {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.printer-container svg {
+    width: 100%;
+    height: auto;
+    transform: translateY(4px);
+}
+
+.printer-page-wrapper {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.printer-page {
+    width: 70%;
+    height: 8px;
+    border: 1px solid black;
+    background-color: white;
+    transition: all 0.3s;
+    transform-origin: top;
+}
+
+.print-btn:hover .printer-page {
+    height: 14px;
+}
+
+/* ═════════════════════════════════════════════════════════
+   PENGATURAN SAAT CETAK (PRINT MEDIA)
+   ═════════════════════════════════════════════════════════ */
+@media print {
+    /* 1. Sembunyikan elemen navigasi */
+    .no-print, 
+    header, 
+    footer, 
+    nav, 
+    aside, 
+    button {
+        display: none !important;
+    }
+
+    /* 2. Reset Background */
+    body {
+        background-color: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* 3. Maksimalkan Area Kertas */
+    .page {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 10mm 15mm !important; 
+        box-shadow: none !important;
+        min-height: auto !important;
+        max-height: 297mm;
+        box-sizing: border-box !important;
+        overflow: hidden;
+    }
+
+    /* 4. Optimasi Font & Spasi */
+    .content {
+        font-size: 11pt;
+        line-height: 1.4;
+    }
+
+    .title {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-size: 13pt;
+    }
+
+    .signature-section {
+        margin-top: 25px;
+    }
+
+    .sig-name-plain {
+        margin-top: 60px;
+    }
+
+    @page {
+        size: A4;
+        margin: 0;
+    }
+}
