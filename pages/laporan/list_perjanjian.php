@@ -358,7 +358,7 @@ $ikon_printer = '
 <center>
 
     <!-- Tombol untuk langsung mencetak surat perjanjian siswa baru -->
-    <button class="print-btn" onclick="window.location.href='/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php'">
+    <button class="print-btn" onclick="window.location.href='/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php?from=list_perjanjian.php'">
         <?= $ikon_printer ?>
         &nbsp;&nbsp;Cetak Surat Perjanjian Siswa
     </button><br>
@@ -463,7 +463,7 @@ $ikon_printer = '
                                 </button>
                                 <hr>
                                 <!-- Form untuk mencetak surat perjanjian baru -->
-                                <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php" method="post">
+                                <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php?from=list_perjanjian.php" method="post">
                                     <input type="hidden" name="nis" value="<?= $data_siswa['nis'] ?>">
                                     <input type="submit" value="Cetak" style="padding:10px 15px;font-weight:bold;background-color:#fff;border-radius:5px;border:1px solid #ccc;">
                                 </form>
@@ -471,11 +471,11 @@ $ikon_printer = '
                             <?php } elseif ($data_siswa['status_dokumen'] == "Masih Proses") { ?>
                                 <!-- Status: Surat sudah dicetak, menunggu upload foto -->
                                 <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_siswa['nis'] ?>&tanggal=<?= $data_siswa['tanggal_surat'] ?>">Detail Pelanggaran</a>
+                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_siswa['nis'] ?>&tanggal=<?= $data_siswa['tanggal_surat'] ?>&from=list_perjanjian.php">Detail Pelanggaran</a>
                                 </button>
                                 <hr>
                                 <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_siswa.php?nis=<?= $data_siswa['nis'] ?>">Cetak Surat</a>
+                                    <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_siswa.php?nis=<?= $data_siswa['nis'] ?>&from=list_perjanjian.php">Cetak Surat</a>
                                 </button>
                                 <hr>
                                 <!-- Form upload foto dokumen yang sudah ditandatangani -->
@@ -608,7 +608,7 @@ $ikon_printer = '
                                 // Jika belum pernah dicetak (jumlah = 0), tampilkan tombol cetak
                                 if (mysqli_num_rows($cek_surat_panggilan) == 0) { ?>
                                     <hr>
-                                    <form action="/poin_pelanggaran_siswa/pages/cetak/add_panggilan_ortu.php" method="post">
+                                    <form action="/poin_pelanggaran_siswa/pages/cetak/add_panggilan_ortu.php?from=list_perjanjian.php" method="post">
                                         <input type="hidden" name="nis" value="<?= $data_ortu['nis'] ?>">
                                         <input type="submit" value="Cetak Panggilan Ortu" style="padding:10px 15px;font-weight:bold;background-color:#fff;border-radius:5px;border:1px solid #ccc;">
                                     </form>
@@ -623,7 +623,7 @@ $ikon_printer = '
                                 );
                                 if (mysqli_num_rows($cek_surat_perjanjian_ortu) == 0) { ?>
                                     <hr>
-                                    <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php" method="post">
+                                    <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php?from=list_perjanjian.php" method="post">
                                         <input type="hidden" name="nis" value="<?= $data_ortu['nis'] ?>">
                                         <input type="submit" value="Cetak Perjanjian Ortu" style="padding:10px 15px;font-weight:bold;background-color:#fff;border-radius:5px;border:1px solid #ccc;">
                                     </form>
@@ -632,17 +632,17 @@ $ikon_printer = '
                             <?php } elseif ($data_ortu['status_dokumen'] == "Masih Proses") { ?>
                                 <!-- Status: Surat sudah dicetak, menunggu upload foto -->
                                 <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_ortu['nis'] ?>&tanggal=<?= $data_ortu['tanggal_surat'] ?>">Detail Pelanggaran</a>
+                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_ortu['nis'] ?>&tanggal=<?= $data_ortu['tanggal_surat'] ?>&from=list_perjanjian.php">Detail Pelanggaran</a>
                                 </button>
                                 <hr>
                                 <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $data_ortu['nis'] ?>">Cetak Surat</a>
+                                    <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $data_ortu['nis'] ?>&from=list_perjanjian.php">Cetak Surat</a>
                                 </button>
                                 <hr>
                                 <form action="" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_ortu['tanggal_surat']) ?>">
                                     <input type="hidden" name="jenis_upload" value="perjanjian_orang_tua">
-                                    <input type="file" name="foto_dokumen" accept="image/*" required>
+                                    <input type="file" name="foto_dokumen" accept="image/*, application/pdf" required>
                                     <input type="submit" name="upload" value="Upload" class="btn-warning" style="color:white;font-weight:bold;">
                                 </form>
 

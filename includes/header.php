@@ -50,6 +50,7 @@ if (!isset($_COOKIE['username'])) {
                         <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_pelanggaran.php">Laporan Pelanggaran Siswa</a></li>
                         <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_panggilan_ortu.php">Laporan Surat Panggilan Ortu</a></li>
                         <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_perjanjian.php">Laporan Surat Perjanjian</a></li>
+                        <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_pindah.php">Laporan Surat Pindah Sekolah</a></li>
                     </ul>
                 </li>
                 <li><a href="/poin_pelanggaran_siswa/logout.php">Logout</a></li>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 10, 2026 at 04:13 AM
+-- Generation Time: Apr 04, 2026 at 07:06 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,7 +43,7 @@ CREATE TABLE `guru` (
 --
 
 INSERT INTO `guru` (`kode_guru`, `nama_pengguna`, `role`, `username`, `password`, `aktif`, `jabatan`, `telp`) VALUES
-('0021.001', 'Drs. I Gusti Made Murjana, M.Pd.', 'Guru', 'made', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Kepala Sekolah', '081805474228'),
+('0021.001', 'Drs. I Gusti Made Murjana, M.Pd.', 'Guru', 'Murjana', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Kepala Sekolah', '081805474228'),
 ('0021.002', 'I Nyoman Sucana, M.Kom.', 'Guru', 'sucana', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Waka Kurikulum', '08123650940'),
 ('0021.003', 'Bagus Putu Eka Wijaya, S.Kom.', 'Guru', 'guseka', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Waka Kesiswaan', '082146503026'),
 ('0021.004', 'Dewa Made Indra Suarmika, S.Kom.', 'Guru', 'indra', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Waka Sarana Prasarana', '082237442222'),
@@ -138,7 +138,10 @@ INSERT INTO `guru` (`kode_guru`, `nama_pengguna`, `role`, `username`, `password`
 ('0021.093', 'Finsensius Ratuaki, M.Pd.', 'Guru', 'finsen', '$2y$10$L/11/fwOBwX3FJlyigeu.ehiLcZ1.cXX/ZugdZGP.fDSgHqWd25aK', 'Y', 'Guru BK X', '082247033088'),
 ('0021.094', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Guru', 'chintya', '$2y$10$L/11/fwOBwX3FJlyigeu.ehiLcZ1.cXX/ZugdZGP.fDSgHqWd25aK', 'Y', 'Guru BK XI', '082247033030'),
 ('0021.095', 'Adventina Puspita', 'Guru', 'puspita', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '0895347674833'),
-('0021.096', 'Aprianus Anjelius Foutnine, S.Fil', 'Guru', 'anjel', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081238437877');
+('0021.096', 'Aprianus Anjelius Foutnine, S.Fil', 'Guru', 'anjel', '$2y$10$qdT68nIqcmlV.AwvGFNX0eqMASuBMFMu7AJq0a.CAoNNQWT8qfxca', 'Y', 'Guru Mapel', '081238437877'),
+('0021.097', 'Komang Niki Nugraha', 'Guru', 'sucana', '', 'Y', 'Guru Mapel', '089796958474'),
+('0021.098', 'Okta Suryawan', 'Guru', 'okta', '$2y$10$q4sDY4nE.4KfNgbvaVQMe.8LknE1nRKXdG5SlMT02l5Zxc21W3rIG', 'Y', 'Guru BK XI', '0897960598'),
+('0021.099', 'Yoga Arya Pratama', 'Guru', 'Yoga', '$2y$10$HFhTxHvALrE5xBTBwxRtFeui1qeUeGHtBn79UwI8oFBJRs8rXnZle', 'Y', 'Komka RPL', '089796958474');
 
 -- --------------------------------------------------------
 
@@ -157,7 +160,6 @@ CREATE TABLE `jenis_pelanggaran` (
 --
 
 INSERT INTO `jenis_pelanggaran` (`id_jenis_pelanggaran`, `jenis`, `poin`) VALUES
-(1, 'Seragam Sekolah', 2),
 (2, 'Kehadiran Di Sekolah', 5),
 (3, 'Proses Belajar Mengajar', 6),
 (4, 'Pelanggaran Norma Norma', 9),
@@ -184,9 +186,6 @@ CREATE TABLE `kelas` (
 --
 
 INSERT INTO `kelas` (`id_kelas`, `id_tingkat`, `id_program_keahlian`, `rombel`, `kode_guru`) VALUES
-(1, 3, 1, 1, '0021.036'),
-(2, 3, 1, 2, '0021.082'),
-(3, 3, 1, 3, '0021.003'),
 (4, 3, 1, 4, '0021.039'),
 (5, 3, 1, 5, '0021.007'),
 (6, 3, 3, 1, '0021.011'),
@@ -195,30 +194,27 @@ INSERT INTO `kelas` (`id_kelas`, `id_tingkat`, `id_program_keahlian`, `rombel`, 
 (9, 3, 2, 3, '0021.025'),
 (10, 3, 2, 4, '0021.076'),
 (11, 3, 4, 1, '0021.060'),
-(12, 2, 1, 1, '0021.005'),
 (13, 2, 1, 2, '0021.077'),
 (14, 2, 1, 3, '0021.078'),
 (15, 2, 1, 4, '0021.002'),
 (16, 2, 1, 5, '0021.048'),
 (17, 2, 3, 1, '0021.079'),
 (18, 2, 3, 2, '0021.033'),
-(19, 2, 2, 1, '0021.021'),
 (20, 2, 2, 2, '0021.029'),
 (21, 2, 2, 3, '0021.014'),
 (22, 2, 2, 4, '0021.084'),
 (23, 2, 4, 1, '0021.006'),
-(24, 1, 1, 1, '0021.008'),
 (25, 1, 1, 2, '0021.081'),
 (26, 1, 1, 3, '0021.015'),
 (27, 1, 1, 4, '0021.022'),
-(28, 1, 1, 5, '0021.035'),
-(29, 1, 3, 1, '0021.009'),
-(30, 1, 5, 1, '0021.019'),
-(31, 1, 5, 2, '0021.018'),
-(32, 1, 2, 1, '0021.010'),
-(33, 1, 2, 2, '0021.037'),
-(34, 1, 2, 3, '0021.012'),
-(35, 1, 4, 1, '0021.062');
+(40, 3, 4, 2, '0021.008'),
+(41, 1, 1, 1, '0021.008'),
+(43, 2, 5, 1, '0021.019'),
+(44, 3, 5, 1, '0021.019'),
+(46, 3, 5, 5, '0021.098'),
+(47, 1, 1, 1, '0021.001'),
+(48, 2, 2, 2, '0021.012'),
+(50, 1, 1, 3, '0021.016');
 
 -- --------------------------------------------------------
 
@@ -231,6 +227,12 @@ CREATE TABLE `ortu_wali` (
   `ayah` varchar(50) DEFAULT NULL,
   `ibu` varchar(50) DEFAULT NULL,
   `wali` varchar(50) DEFAULT NULL,
+  `tempat_lahir_ayah` varchar(20) NOT NULL,
+  `tempat_lahir_ibu` varchar(20) NOT NULL,
+  `tempat_lahir_wali` varchar(20) NOT NULL,
+  `tanggal_lahir_ayah` date DEFAULT NULL,
+  `tanggal_lahir_ibu` date DEFAULT NULL,
+  `tanggal_lahir_wali` date DEFAULT NULL,
   `pekerjaan_ayah` varchar(50) DEFAULT NULL,
   `pekerjaan_ibu` varchar(50) DEFAULT NULL,
   `pekerjaan_wali` varchar(50) DEFAULT NULL,
@@ -246,11 +248,20 @@ CREATE TABLE `ortu_wali` (
 -- Dumping data for table `ortu_wali`
 --
 
-INSERT INTO `ortu_wali` (`id_ortu_wali`, `ayah`, `ibu`, `wali`, `pekerjaan_ayah`, `pekerjaan_ibu`, `pekerjaan_wali`, `no_telp_ayah`, `no_telp_ibu`, `no_telp_wali`, `alamat_ayah`, `alamat_ibu`, `alamat_wali`) VALUES
-(1, 'Bagus Ahmad', 'Wati Utari', NULL, 'Dokter Spesialis', 'Dokter Spesialis', NULL, '6281679485408', '6281679485408', NULL, 'Jalan Nangka 2 A, Gang Rujak', 'Jalan Nangka 2 A, Gang Rujak', NULL),
-(2, 'Lukman Halimah', 'Mega Rahma', NULL, 'Penjahit', 'Penjahit', NULL, '628621323300', '628621323300', NULL, 'Jalan Antasura, Perumahan Elit', 'Jalan Antasura, Perumahan Elit', NULL),
-(3, 'Calvin Connor', 'Natalia Glover', NULL, 'Pengelola Properti', 'Pengelola Properti', NULL, '6282540268936', '628785988574', NULL, NULL, NULL, 'Jalan Sesetan, Gang No 5'),
-(4, NULL, NULL, 'Safiya Hartman', NULL, NULL, 'Designer', NULL, NULL, '62860589252', 'Psr Jatinegara Bl BKS/30, Dki Jakarta', 'Psr Jatinegara Bl BKS/30, Dki Jakarta', NULL);
+INSERT INTO `ortu_wali` (`id_ortu_wali`, `ayah`, `ibu`, `wali`, `tempat_lahir_ayah`, `tempat_lahir_ibu`, `tempat_lahir_wali`, `tanggal_lahir_ayah`, `tanggal_lahir_ibu`, `tanggal_lahir_wali`, `pekerjaan_ayah`, `pekerjaan_ibu`, `pekerjaan_wali`, `no_telp_ayah`, `no_telp_ibu`, `no_telp_wali`, `alamat_ayah`, `alamat_ibu`, `alamat_wali`) VALUES
+(2, 'Lukman Halimah', 'Mega Rahma', NULL, 'Denpasar', '', '', '2026-04-04', NULL, NULL, 'Penjahit', 'Penjahit', NULL, '628621323300', '628621323300', NULL, 'Jalan Antasura, Perumahan Elit', 'Jalan Antasura, Perumahan Elit', NULL),
+(3, 'Calvin Connor', 'Natalia Glover', NULL, '', '', '', '2026-04-04', NULL, NULL, 'Pengelola Properti', 'Pengelola Properti', NULL, '6282540268936', '628785988574', NULL, 'Jalan Sesetan, Gang No 5', 'Jalan Sesetan, Gang No 5', ''),
+(20, 'Jak', 'Sri', '', '', '', '', '2026-04-04', NULL, NULL, 'Pelatih sepak bola', 'Menteri pribumi', '', '089706958484', '089706958484', '', 'JL Tukad Punggawa 22 panjer', 'JL Tukad Punggawa 22 Panjer', ''),
+(22, '', '', 'Komang Adi', '', '', '', '2026-04-04', NULL, NULL, '', '', 'Buruh', '', '', '0897068548383', '', '', 'JL Waturenggong'),
+(23, '', '', 'Komang Adi', '', '', '', '2026-04-04', NULL, NULL, '', '', 'Buruh', '', '', '0897068548383', '', '', 'JL Waturenggong'),
+(27, '', '', '', '', '', '', '2026-04-04', NULL, NULL, '', '', '', '', '', '', '', '', ''),
+(28, '', '', '', '', '', '', '2026-04-04', NULL, NULL, '', '', '', '', '', '', '', '', ''),
+(29, 'WQWWEWE', 'QWEWQWEE', '', '', '', '', '2026-04-04', NULL, NULL, 'ASDSDA', 'QDWWQQWD', '', '08970594003', '08786950904', '', 'SDADADADS', 'WDQSDWQDW', ''),
+(30, 'WQWWEWE', 'QWEWQWEE', '', '', '', '', '2026-04-04', NULL, NULL, 'ASDSDA', 'QDWWQQWD', '', '08970594003', '08786950904', '', 'SDADADADS', 'WDQSDWQDW', ''),
+(31, 'Suhandi', '', '', '', '', '', '2026-04-04', NULL, NULL, 'Pelatih Sepak Bola', '', '', '089685948383', '', '', 'JL Melaya Desa Adat Penarungan', '', ''),
+(36, 'Suhandi Junior', '', '', '', '', '', '2026-04-04', NULL, NULL, 'Pilot', '', '', '08970594233', '', '', 'JL Pulet ', '', ''),
+(37, 'Bambang Saptajia', '', '', '', '', '', '2026-04-04', NULL, NULL, 'Programmer', '', '', '08970695855', '', '', 'JL Tukad Nyali', '', ''),
+(38, 'Wayan Laksana', 'Kadek Siti Adnyani', '', '', '', '', '2026-04-04', NULL, NULL, 'Sopir', 'Ibu Rumah Tanggga', '', '0897069584352', '089706958412', '', 'JL. Tukad Unda', 'JL. Tukad Unda', '');
 
 -- --------------------------------------------------------
 
@@ -273,7 +284,34 @@ CREATE TABLE `pelanggaran_siswa` (
 INSERT INTO `pelanggaran_siswa` (`id_pelanggaran_siswa`, `tanggal`, `nis`, `id_jenis_pelanggaran`, `keterangan`) VALUES
 (1, '2026-01-02 09:26:32', 9124, 2, 'Terlambat masuk hari Senin'),
 (2, '2026-01-02 09:26:35', 9125, 3, 'Tidak mengerjakan PR'),
-(3, '2026-01-02 11:26:35', 9126, 3, 'Makan di kelas saat pelajaran Matematika');
+(4, '2026-03-31 09:14:05', 9124, 3, 'Ribut dikelas'),
+(5, '2026-04-01 13:23:53', 9124, 5, 'Berbicara Kasar kepada kepala sekolah'),
+(6, '2026-04-01 14:50:45', 9124, 5, 'Melakukan penganiayaan terhadapat kepala sekolah\r\n'),
+(7, '2026-04-01 14:51:03', 9124, 5, 'Membawa sabu di sekolah'),
+(8, '2026-04-01 14:51:19', 9124, 5, 'BASJC BASC BC  '),
+(9, '2026-04-02 12:05:57', 9124, 2, 'sbbhbhdjq'),
+(10, '2026-04-02 15:31:44', 9125, 5, 'qwe'),
+(11, '2026-04-02 15:32:04', 9125, 5, 'gfhgfg'),
+(12, '2026-04-02 15:32:17', 9125, 5, 'vvjhvvjh'),
+(13, '2026-04-03 01:58:30', 9125, 5, 'Smackdown Kepala Sekolah'),
+(14, '2026-04-03 01:58:46', 9125, 5, 'Membuka brangkas sekolah'),
+(15, '2026-04-03 02:13:47', 9126, 5, 'Memukul Guru '),
+(16, '2026-04-03 02:14:03', 9126, 5, 'Mengatakan Guru Goblok'),
+(17, '2026-04-03 02:14:22', 9126, 5, 'Melakukan Pemerkosaan'),
+(18, '2026-04-03 02:14:35', 9126, 3, 'Bermain HP'),
+(19, '2026-04-03 02:15:01', 9126, 4, 'Berkata Kasar'),
+(20, '2026-04-03 02:15:42', 9126, 5, 'Mengambilo uang teman'),
+(21, '2026-04-03 02:18:56', 9126, 7, 'Tidak membawa topi'),
+(22, '2026-04-03 07:17:22', 9127, 7, 'Tidak membawa topi\r\n'),
+(23, '2026-04-03 08:36:03', 9127, 5, 'bahdbsahdbaj'),
+(24, '2026-04-03 08:36:12', 9127, 5, 'bdsbjbj'),
+(25, '2026-04-03 08:36:28', 9127, 4, 'sdb qj'),
+(26, '2026-04-03 15:56:40', 9128, 5, 'Mengambil barang teman'),
+(27, '2026-04-03 15:56:58', 9128, 5, 'akakakakak'),
+(28, '2026-04-03 15:57:06', 9128, 5, 'anajsnaajsa'),
+(29, '2026-04-03 15:57:23', 9128, 5, 'sndbbsqkjqbk'),
+(30, '2026-04-03 15:57:30', 9128, 5, 'skdnaksninsiqn'),
+(31, '2026-04-03 15:57:38', 9128, 5, 'sbdaja');
 
 -- --------------------------------------------------------
 
@@ -287,16 +325,23 @@ CREATE TABLE `perjanjian_orang_tua` (
   `id_pelanggaran_siswa` int(5) DEFAULT NULL,
   `status` enum('Masih Proses','Selesai') DEFAULT NULL,
   `foto_dokumen` varchar(100) DEFAULT NULL,
-  `tingkat` varchar(3) DEFAULT NULL
+  `tingkat` varchar(3) DEFAULT NULL,
+  `nama_ortu` varchar(100) NOT NULL,
+  `pekerjaan_ortu` varchar(50) NOT NULL,
+  `alamat_ortu` varchar(100) NOT NULL,
+  `no_telp_ortu` varchar(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `perjanjian_orang_tua`
 --
 
-INSERT INTO `perjanjian_orang_tua` (`id_perjanjian_ortu`, `tanggal`, `id_pelanggaran_siswa`, `status`, `foto_dokumen`, `tingkat`) VALUES
-(1, '2026-01-02 09:26:31', 1, 'Masih Proses', NULL, 'X'),
-(2, '2026-01-03 09:26:32', 2, 'Selesai', 'IMG_20260923.jpg', 'XI');
+INSERT INTO `perjanjian_orang_tua` (`id_perjanjian_ortu`, `tanggal`, `id_pelanggaran_siswa`, `status`, `foto_dokumen`, `tingkat`, `nama_ortu`, `pekerjaan_ortu`, `alamat_ortu`, `no_telp_ortu`) VALUES
+(3, '2026-04-04 12:27:29', 10, 'Masih Proses', NULL, 'XII', 'Lukman Halimah', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 0),
+(4, '2026-04-04 12:27:29', 11, 'Masih Proses', NULL, 'XII', 'Lukman Halimah', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 0),
+(5, '2026-04-04 12:27:29', 12, 'Masih Proses', NULL, 'XII', 'Lukman Halimah', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 0),
+(6, '2026-04-04 12:27:29', 13, 'Masih Proses', NULL, 'XII', 'Lukman Halimah', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 0),
+(7, '2026-04-04 12:27:29', 14, 'Masih Proses', NULL, 'XII', 'Lukman Halimah', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 0);
 
 -- --------------------------------------------------------
 
@@ -310,17 +355,33 @@ CREATE TABLE `perjanjian_siswa` (
   `id_pelanggaran_siswa` int(11) DEFAULT NULL,
   `status` enum('Masih Proses','Selesai') DEFAULT NULL,
   `foto_dokumen` varchar(100) DEFAULT NULL,
-  `tingkat` varchar(3) DEFAULT NULL
+  `tingkat` varchar(3) DEFAULT NULL,
+  `nama_ortu` varchar(100) NOT NULL,
+  `pekerjaan_ortu` varchar(50) NOT NULL,
+  `alamat_ortu` varchar(100) NOT NULL,
+  `no_telp_ortu` varchar(16) NOT NULL,
+  `wali_kelas` varchar(100) NOT NULL,
+  `guru_bk` varchar(100) NOT NULL,
+  `wakasek_kesiswaan` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `perjanjian_siswa`
 --
 
-INSERT INTO `perjanjian_siswa` (`id_perjanjian_siswa`, `tanggal`, `id_pelanggaran_siswa`, `status`, `foto_dokumen`, `tingkat`) VALUES
-(1, '2026-01-02 09:26:31', 1, 'Masih Proses', NULL, 'X'),
-(2, '2026-01-03 09:26:32', 2, 'Selesai', 'IMG_20260923.jpg', 'XI'),
-(3, '2026-01-05 08:26:32', 3, 'Masih Proses', NULL, 'XI');
+INSERT INTO `perjanjian_siswa` (`id_perjanjian_siswa`, `tanggal`, `id_pelanggaran_siswa`, `status`, `foto_dokumen`, `tingkat`, `nama_ortu`, `pekerjaan_ortu`, `alamat_ortu`, `no_telp_ortu`, `wali_kelas`, `guru_bk`, `wakasek_kesiswaan`) VALUES
+(1, '2026-01-02 09:26:31', 1, 'Masih Proses', NULL, 'X', '', '', '', '', '', '', ''),
+(4, '2026-04-03 16:07:20', 22, 'Selesai', 'Aplikasi Poin Pelanggaran Siswa_page-0001.jpg', 'X', 'Bambang Saptaji', 'Programmer', 'JL Tukad Nyali', '08970695855', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Finsensius Ratuaki, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(5, '2026-04-03 16:07:20', 23, 'Selesai', 'Aplikasi Poin Pelanggaran Siswa_page-0001.jpg', 'X', 'Bambang Saptaji', 'Programmer', 'JL Tukad Nyali', '08970695855', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Finsensius Ratuaki, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(6, '2026-04-03 16:07:20', 24, 'Selesai', 'Aplikasi Poin Pelanggaran Siswa_page-0001.jpg', 'X', 'Bambang Saptaji', 'Programmer', 'JL Tukad Nyali', '08970695855', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Finsensius Ratuaki, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(7, '2026-04-03 16:07:20', 25, 'Selesai', 'Aplikasi Poin Pelanggaran Siswa_page-0001.jpg', 'X', 'Bambang Saptaji', 'Programmer', 'JL Tukad Nyali', '08970695855', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Finsensius Ratuaki, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(8, '2026-04-03 16:38:18', 15, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(9, '2026-04-03 16:38:18', 16, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(10, '2026-04-03 16:38:18', 17, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(11, '2026-04-03 16:38:18', 18, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(12, '2026-04-03 16:38:18', 19, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(13, '2026-04-03 16:38:18', 20, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(14, '2026-04-03 16:38:18', 21, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.');
 
 -- --------------------------------------------------------
 
@@ -387,12 +448,11 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`nis`, `nama_siswa`, `jenis_kelamin`, `alamat`, `password`, `status`, `id_ortu_wali`, `id_kelas`) VALUES
-(7012, 'Abdullah Musa', 'Laki - Laki', 'Jl Psr Paseban Bl B Lt3, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 1, 1),
-(8312, 'Juni Budi', 'Laki - Laki', 'Jl Gn Krakatau 387 A, Sumatera Utara', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'lulus', 2, 2),
-(9123, 'Wahyuni Yuliana', 'Perempuan', 'Jl MH Thamrin Kav 28-30 Plaza, Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'pindah', 4, 3),
-(9124, 'Ryan', 'Laki - Laki', 'Psr Jatinegara Bl BKS/30, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 3, 4),
+(9124, 'Ryan', 'Laki - Laki', 'Psr Jajtinegara Bl BKS/30, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', '', 3, 4),
 (9125, 'Narin', 'Perempuan', 'Jl Janur 11 43 RT 003/07 Pd Kelapa, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 2, 5),
-(9126, 'Dayu', 'Perempuan', 'Jl Salemba Raya 2 Ged Kenari Baru Bl C/4, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 1, 6);
+(9126, 'Reza Rahardian', 'Laki - Laki', 'JL Pulet ', '$2y$10$WM001wl06K51hn8p556ec.7kMy7iGFcku83v8WWCgo98AAtfo.cP6', 'aktif', 36, 16),
+(9127, 'Abel', 'Laki - Laki', 'JL Tukad Nyali', '$2y$10$tk8dnLS.8o8z4JFyvQzGx.zYMQGs629Lxh3N2wA5sgZLvtC4Ku98S', 'aktif', 37, 25),
+(9128, 'Komang Niki Nugraha', 'Laki - Laki', 'JL. Tukad Unda', '$2y$10$0uIq43MwDZy.TXnxG5BpHOzF5veaJyg24p7fNFa5.DD37cUomIBnm', 'aktif', 38, 13);
 
 -- --------------------------------------------------------
 
@@ -409,17 +469,17 @@ CREATE TABLE `surat_keluar` (
   `tanggal_pembuatan_surat` date DEFAULT NULL,
   `id_profil_sekolah` int(2) DEFAULT NULL,
   `id_tahun_ajaran` int(3) DEFAULT NULL,
-  `tingkat` varchar(3) DEFAULT NULL
+  `tingkat` varchar(3) DEFAULT NULL,
+  `tanggal_pemanggilan` datetime NOT NULL,
+  `keperluan` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `surat_keluar`
 --
 
-INSERT INTO `surat_keluar` (`id_surat_keluar`, `no_surat`, `jenis_surat`, `id_surat_pindah`, `nis`, `tanggal_pembuatan_surat`, `id_profil_sekolah`, `id_tahun_ajaran`, `tingkat`) VALUES
-(1, '548/SMKTI/BG/XII/2025', 'Pindah Sekolah', 1, 7012, '2026-01-08', 1, 5, 'XI'),
-(2, '549/SMKTI/BG/XII/2025', 'Panggilan Orang Tua', NULL, 8312, '2026-01-08', 1, 5, 'XI'),
-(3, '550/SMKTI/BG/I/2026', 'Pindah Sekolah', 2, 9123, '2026-01-10', 1, 5, 'X');
+INSERT INTO `surat_keluar` (`id_surat_keluar`, `no_surat`, `jenis_surat`, `id_surat_pindah`, `nis`, `tanggal_pembuatan_surat`, `id_profil_sekolah`, `id_tahun_ajaran`, `tingkat`, `tanggal_pemanggilan`, `keperluan`) VALUES
+(21, '1/SMK TI/BG/IV/2026', 'Panggilan Orang Tua', NULL, 9124, '2026-04-03', 1, 5, 'XII', '2026-04-04 12:00:00', 'Tindak lanjut masalah bullying');
 
 -- --------------------------------------------------------
 
@@ -594,37 +654,37 @@ ALTER TABLE `tingkat`
 -- AUTO_INCREMENT for table `jenis_pelanggaran`
 --
 ALTER TABLE `jenis_pelanggaran`
-  MODIFY `id_jenis_pelanggaran` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_jenis_pelanggaran` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id_kelas` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `ortu_wali`
 --
 ALTER TABLE `ortu_wali`
-  MODIFY `id_ortu_wali` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_ortu_wali` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `pelanggaran_siswa`
 --
 ALTER TABLE `pelanggaran_siswa`
-  MODIFY `id_pelanggaran_siswa` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_pelanggaran_siswa` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `perjanjian_orang_tua`
 --
 ALTER TABLE `perjanjian_orang_tua`
-  MODIFY `id_perjanjian_ortu` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_perjanjian_ortu` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `perjanjian_siswa`
 --
 ALTER TABLE `perjanjian_siswa`
-  MODIFY `id_perjanjian_siswa` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_perjanjian_siswa` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `profil_sekolah`
@@ -642,7 +702,7 @@ ALTER TABLE `program_keahlian`
 -- AUTO_INCREMENT for table `surat_keluar`
 --
 ALTER TABLE `surat_keluar`
-  MODIFY `id_surat_keluar` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_surat_keluar` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `surat_pindah`
@@ -670,7 +730,7 @@ ALTER TABLE `tingkat`
 -- Constraints for table `kelas`
 --
 ALTER TABLE `kelas`
-  ADD CONSTRAINT `kelas_ibfk_1` FOREIGN KEY (`id_tingkat`) REFERENCES `tingkat` (`id_tingkat`),
+  ADD CONSTRAINT `kelas_ibfk_1` FOREIGN KEY (`id_tingkat`) REFERENCES `tingkat` (`id_tingkat`) ON DELETE CASCADE,
   ADD CONSTRAINT `kelas_ibfk_2` FOREIGN KEY (`id_program_keahlian`) REFERENCES `program_keahlian` (`id_program_keahlian`),
   ADD CONSTRAINT `kelas_ibfk_3` FOREIGN KEY (`kode_guru`) REFERENCES `guru` (`kode_guru`);
 
@@ -698,7 +758,7 @@ ALTER TABLE `perjanjian_siswa`
 --
 ALTER TABLE `siswa`
   ADD CONSTRAINT `siswa_ibfk_1` FOREIGN KEY (`id_ortu_wali`) REFERENCES `ortu_wali` (`id_ortu_wali`),
-  ADD CONSTRAINT `siswa_ibfk_2` FOREIGN KEY (`id_kelas`) REFERENCES `kelas` (`id_kelas`);
+  ADD CONSTRAINT `siswa_ibfk_2` FOREIGN KEY (`id_kelas`) REFERENCES `kelas` (`id_kelas`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `surat_keluar`
