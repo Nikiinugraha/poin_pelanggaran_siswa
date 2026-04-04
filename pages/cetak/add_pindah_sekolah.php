@@ -45,7 +45,7 @@ include ROOTPATH . "/includes/header.php";
         $row_ortu_wali = mysqli_fetch_assoc($result_ortu_wali);
         ?>
 
-        <form action="surat_pindah_sekolah.php" method="post">
+        <form action="surat_pindah_sekolah.php?from=list_pindah.php" method="post">
             <fieldset style="width:30%">
             <legend>Input</legend>
 

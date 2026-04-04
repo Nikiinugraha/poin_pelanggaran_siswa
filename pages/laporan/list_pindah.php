@@ -46,30 +46,22 @@ if (isset($_POST['upload']) && isset($_FILES["foto_dokumen"])) {
     $lokasi_file_foto = $folder_tujuan . $nama_file_foto;
 
     // Ambil tanggal surat dan jenis upload (siswa atau orang tua)
-    $tanggal_surat = $_POST['tanggal_surat'];
-    $jenis_upload  = $_POST['jenis_upload']; // nilai: "siswa" atau "perjanjian_orang_tua"
+    $id_surat_pindah = $_POST['id_surat_pindah']; 
 
     // Pindahkan file foto dari folder sementara (tmp) ke folder gambar
     if (move_uploaded_file($data_file_foto["tmp_name"], $lokasi_file_foto)) {
 
-        // Tentukan nama tabel yang akan diupdate berdasarkan jenis upload
-        // Jika jenis = "siswa" → update tabel perjanjian_siswa
-        // Jika jenis lain → update tabel perjanjian_orang_tua
-        if ($jenis_upload == "siswa") {
-            $nama_tabel = "surat_pindah";
-        } else {
-            $nama_tabel = "surat_pindah";
-        }
+        $nama_tabel = "surat_pindah";
 
         // Bersihkan data dari karakter berbahaya sebelum disimpan ke database
         $nama_file_foto_aman  = mysqli_real_escape_string($conn, $nama_file_foto);
-        $tanggal_surat_aman   = mysqli_real_escape_string($conn, $tanggal_surat);
+        $id_surat_pindah_aman = mysqli_real_escape_string($conn, $id_surat_pindah);
 
         // Simpan nama foto dan ubah status menjadi "Selesai" di database
         $hasil_update = mysqli_query($conn,
             "UPDATE $nama_tabel
              SET foto_dokumen = '$nama_file_foto_aman', status = 'Selesai'
-             WHERE tanggal = '$tanggal_surat_aman'"
+             WHERE id_surat_pindah = '$id_surat_pindah_aman'"
         );
 
         if ($hasil_update) {
@@ -132,15 +124,16 @@ if (isset($_GET['cari_daftar_siswa'])) {
             -- Bagian dalam: ambil data siswa dikelompokkan per NIS dan tanggal perjanjian
             -- GROUP BY nis, ps.tanggal: satu siswa bisa muncul >1 baris jika beda tanggal perjanjian
             -- Kompatibel dengan ONLY_FULL_GROUP_BY di Nginx/MySQL strict mode
-            SELECT siswa.*, ps.tanggal AS tanggal_surat, ps.status AS status_dokumen, ps.foto_dokumen
+            SELECT siswa.*, sk.tanggal_pembuatan_surat AS tanggal_surat, sp.status AS status_dokumen, sp.foto_dokumen, sk.id_surat_pindah
             FROM siswa
             JOIN pelanggaran_siswa USING(nis)
             JOIN jenis_pelanggaran USING(id_jenis_pelanggaran)
-            LEFT JOIN perjanjian_siswa ps USING(id_pelanggaran_siswa)
+            LEFT JOIN surat_keluar sk ON siswa.nis = sk.nis AND sk.jenis_surat = 'Pindah Sekolah'
+            LEFT JOIN surat_pindah sp USING(id_surat_pindah)
             WHERE siswa.status = 'aktif'
               AND (siswa.nama_siswa LIKE '%$kata_cari_siswa%' OR siswa.nis LIKE '%$kata_cari_siswa%')
-            GROUP BY siswa.nis, ps.tanggal, ps.status, ps.foto_dokumen
-            ORDER BY siswa.nis, ps.tanggal DESC
+            GROUP BY siswa.nis, sk.id_surat_pindah, sk.tanggal_pembuatan_surat, sp.status, sp.foto_dokumen
+            ORDER BY siswa.nis, sk.tanggal_pembuatan_surat DESC
         ) main
 
         JOIN (
@@ -160,14 +153,15 @@ if (isset($_GET['cari_daftar_siswa'])) {
     $sql_calon_perjanjian_siswa = "
         SELECT main.*, sub.total_poin
         FROM (
-            SELECT siswa.*, ps.tanggal AS tanggal_surat, ps.status AS status_dokumen, ps.foto_dokumen
+            SELECT siswa.*, sk.tanggal_pembuatan_surat AS tanggal_surat, sp.status AS status_dokumen, sp.foto_dokumen, sk.id_surat_pindah
             FROM siswa
             JOIN pelanggaran_siswa USING(nis)
             JOIN jenis_pelanggaran USING(id_jenis_pelanggaran)
-            LEFT JOIN perjanjian_siswa ps USING(id_pelanggaran_siswa)
+            LEFT JOIN surat_keluar sk ON siswa.nis = sk.nis AND sk.jenis_surat = 'Pindah Sekolah'
+            LEFT JOIN surat_pindah sp USING(id_surat_pindah)
             WHERE siswa.status = 'aktif'
-            GROUP BY siswa.nis, ps.tanggal, ps.status, ps.foto_dokumen
-            ORDER BY siswa.nis, ps.tanggal DESC
+            GROUP BY siswa.nis, sk.id_surat_pindah, sk.tanggal_pembuatan_surat, sp.status, sp.foto_dokumen
+            ORDER BY siswa.nis, sk.tanggal_pembuatan_surat DESC
         ) main
 
         JOIN (
@@ -463,7 +457,7 @@ $ikon_printer = '
                             if ($data_siswa['status_dokumen'] == NULL) { ?>
                                 <!-- Status: Belum ada surat perjanjian -->
                                 <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_siswa['nis'] ?>&tanggal=<?= $data_siswa['tanggal_surat'] ?>">Detail</a>
+                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_siswa['nis'] ?>&tanggal=<?= $data_siswa['tanggal_surat'] ?>&from=list_pindah.php">Detail</a>
                                 </button>
                                 <hr>
                                 <!-- Form untuk mencetak surat perjanjian baru -->
@@ -475,18 +469,13 @@ $ikon_printer = '
                             <?php } elseif ($data_siswa['status_dokumen'] == "Masih Proses") { ?>
                                 <!-- Status: Surat sudah dicetak, menunggu upload foto -->
                                 <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_siswa['nis'] ?>&tanggal=<?= $data_siswa['tanggal_surat'] ?>&from=list_pindah.php">Detail Pelanggaran</a>
-                                </button>
-                                <hr>
-                                <button class="btn-primary">
                                     <a href="/poin_pelanggaran_siswa/pages/cetak/surat_pindah_sekolah.php?nis=<?= $data_siswa['nis'] ?>&from=list_pindah.php">Cetak Surat</a>
                                 </button>
                                 <hr>
                                 <!-- Form upload foto dokumen yang sudah ditandatangani -->
                                 <form action="" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_siswa['tanggal_surat']) ?>">
-                                    <input type="hidden" name="jenis_upload" value="siswa">
-                                    <input type="file" name="foto_dokumen" accept="image/*" required>
+                                    <input type="hidden" name="id_surat_pindah" value="<?= htmlspecialchars($data_siswa['id_surat_pindah']) ?>">
+                                    <input type="file" name="foto_dokumen" accept="image/*, application/pdf " required>
                                     <input type="submit" name="upload" value="Upload" class="btn-warning" style="color:white;font-weight:bold;">
                                 </form>
 
@@ -509,24 +498,6 @@ $ikon_printer = '
 </center>
 
 <center>
-
-
-    <!-- Tombol cetak langsung surat pindah sekolah / manual -->
-    <button class="print-btn" onclick="window.location.href='/poin_pelanggaran_siswa/pages/cetak/add_pindah_sekolah.php'">
-        <!-- icon printer (gambar mesin pencetak) -->
-        <span class="printer-wrapper">
-            <span class="printer-container">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 92 75" height="20" width="20">
-                    <path stroke-width="5" stroke="black" d="M12 37.5H80C85.2467 37.5 89.5 41.7533 89.5 47V69C89.5 70.933 87.933 72.5 86 72.5H6C4.067 72.5 2.5 70.933 2.5 69V47C2.5 41.7533 6.75329 37.5 12 37.5Z"></path>
-                    <mask fill="white" id="path-2-inside-1_30_7"><path d="M12 12C12 5.37258 17.3726 0 24 0H57C70.2548 0 81 10.7452 81 24V29H12V12Z"></path></mask>
-                    <path mask="url(#path-2-inside-1_30_7)" fill="black" d="M7 12C7 2.61116 14.6112 -5 24 -5H57C73.0163 -5 86 7.98374 86 24H76C76 13.5066 67.4934 5 57 5H24C20.134 5 17 8.13401 17 12H7ZM81 29H12H81ZM7 29V12C7 2.61116 14.6112 -5 24 -5V5C20.134 5 17 8.13401 17 12V29H7ZM57 -5C73.0163 -5 86 7.98374 86 24V29H76V24C76 13.5066 67.4934 5 57 5V-5Z"></path>
-                    <circle fill="black" r="3" cy="49" cx="78"></circle>
-                </svg>
-            </span>
-            <span class="printer-page-wrapper"><span class="printer-page"></span></span>
-        </span>
-        &nbsp;&nbsp;Cetak Surat Pindah Sekolah
-    </button><br>
     
     <fieldset style="width: 70%;">
         <legend>Daftar Surat Pindah</legend>

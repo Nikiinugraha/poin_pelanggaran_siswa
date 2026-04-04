@@ -47,7 +47,7 @@ if(isset($_GET['no_surat'])){
         $alasan_pindah = $_POST['alasan_pindah'];
 
         // insert data ke database tabel surat_pindah
-        $insert_surat_pindah = mysqli_query($conn, "INSERT INTO surat_pindah VALUES (NULL, '$sekolah_tujuan', '$alasan_pindah', '$nama_ortu', '$alamat_ortu')");
+        $insert_surat_pindah = mysqli_query($conn, "INSERT INTO surat_pindah (id_surat_pindah, sekolah_tujuan, alasan_pindah, nama_ortu, alamat_ortu, status) VALUES (NULL, '$sekolah_tujuan', '$alasan_pindah', '$nama_ortu', '$alamat_ortu', 'Masih Proses')");
 
         // Mengambil ID terakhir yang di-generate oleh tabel surat_pindah
         $id_surat_pindah = mysqli_insert_id($conn); 

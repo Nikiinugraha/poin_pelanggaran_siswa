@@ -1,24 +1,14 @@
 <?php
-
-/**
- * Header File - Aplikasi Poin Pelanggaran Siswa
- *
- * Fungsi:
- * 1. Melakukan pengecekan session/login user
- * 2. Menampilkan navigasi utama aplikasi
- * 3. Mengalihkan user yang belum login ke halaman login
- *
- * File ini di-include oleh semua halaman yang memerlukan proteksi login
- */
-
-// Pengecekan session menggunakan cookie
-// Jika cookie username tidak ada, berarti user belum login
-if (!isset($_COOKIE['username'])) {
-    // Tampilkan alert dan redirect ke halaman login
-    echo '<script>alert("Anda harus login terlebih dahulu"); window.location.href="/poin_pelanggaran_siswa/login.php";</script>';
-    exit();  // Hentikan eksekusi script lebih lanjut
+// Memulai session untuk pengecekan login
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
-// Jika cookie ada, lanjutkan ke halaman yang diminta
+
+// Pengecekan session - Jika tidak ada session username, berarti belum login
+if (!isset($_SESSION['username'])) {
+    echo '<script>alert("Anda harus login terlebih dahulu"); window.location.href="/poin_pelanggaran_siswa/login.php";</script>';
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -34,25 +24,30 @@ if (!isset($_COOKIE['username'])) {
         <nav>
             <ul>
                 <li><a href="/poin_pelanggaran_siswa/pages/index.php">Dashboard</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle">Data Master</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/poin_pelanggaran_siswa/pages/siswa/list.php">Data Siswa</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/guru/list.php">Data Guru</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/jenis_pelanggaran/list.php">Data Pelanggaran</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/kelas/list.php">Data Kelas</a></li>
-                    </ul>
-                </li>
-                <li><a href="/poin_pelanggaran_siswa/pages/pelanggaran/add.php">Entri Pelanggaran</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle">Laporan</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_pelanggaran.php">Laporan Pelanggaran Siswa</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_panggilan_ortu.php">Laporan Surat Panggilan Ortu</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_perjanjian.php">Laporan Surat Perjanjian</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_pindah.php">Laporan Surat Pindah Sekolah</a></li>
-                    </ul>
-                </li>
+
+                <!-- Menu Khusus Guru / Guru BK (Siswa tidak boleh melihat ini) -->
+                <?php if ($_SESSION['role'] != 'siswa'): ?>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Data Master</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/poin_pelanggaran_siswa/pages/siswa/list.php">Data Siswa</a></li>
+                            <li><a href="/poin_pelanggaran_siswa/pages/guru/list.php">Data Guru</a></li>
+                            <li><a href="/poin_pelanggaran_siswa/pages/jenis_pelanggaran/list.php">Data Pelanggaran</a></li>
+                            <li><a href="/poin_pelanggaran_siswa/pages/kelas/list.php">Data Kelas</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/poin_pelanggaran_siswa/pages/pelanggaran/add.php">Entri Pelanggaran</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Laporan</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_pelanggaran.php">Laporan Pelanggaran Siswa</a></li>
+                            <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_panggilan_ortu.php">Laporan Surat Panggilan Ortu</a></li>
+                            <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_perjanjian.php">Laporan Surat Perjanjian</a></li>
+                            <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_pindah.php">Laporan Surat Pindah Sekolah</a></li>
+                        </ul>
+                    </li>
+                <?php endif; ?>
+
                 <li><a href="/poin_pelanggaran_siswa/logout.php">Logout</a></li>
             </ul>
         </nav>

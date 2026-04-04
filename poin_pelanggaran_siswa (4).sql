@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 04, 2026 at 07:06 AM
+-- Generation Time: Apr 04, 2026 at 06:04 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -249,7 +249,7 @@ CREATE TABLE `ortu_wali` (
 --
 
 INSERT INTO `ortu_wali` (`id_ortu_wali`, `ayah`, `ibu`, `wali`, `tempat_lahir_ayah`, `tempat_lahir_ibu`, `tempat_lahir_wali`, `tanggal_lahir_ayah`, `tanggal_lahir_ibu`, `tanggal_lahir_wali`, `pekerjaan_ayah`, `pekerjaan_ibu`, `pekerjaan_wali`, `no_telp_ayah`, `no_telp_ibu`, `no_telp_wali`, `alamat_ayah`, `alamat_ibu`, `alamat_wali`) VALUES
-(2, 'Lukman Halimah', 'Mega Rahma', NULL, 'Denpasar', '', '', '2026-04-04', NULL, NULL, 'Penjahit', 'Penjahit', NULL, '628621323300', '628621323300', NULL, 'Jalan Antasura, Perumahan Elit', 'Jalan Antasura, Perumahan Elit', NULL),
+(2, 'Lukman Halimah', 'Mega Rahma', NULL, 'Denpasar', 'Denpasar', '', '2026-04-04', '2026-04-16', NULL, 'Penjahit', 'Penjahit', NULL, '628621323300', '628621323300', NULL, 'Jalan Antasura, Perumahan Elit', 'Jalan Antasura, Perumahan Elit', NULL),
 (3, 'Calvin Connor', 'Natalia Glover', NULL, '', '', '', '2026-04-04', NULL, NULL, 'Pengelola Properti', 'Pengelola Properti', NULL, '6282540268936', '628785988574', NULL, 'Jalan Sesetan, Gang No 5', 'Jalan Sesetan, Gang No 5', ''),
 (20, 'Jak', 'Sri', '', '', '', '', '2026-04-04', NULL, NULL, 'Pelatih sepak bola', 'Menteri pribumi', '', '089706958484', '089706958484', '', 'JL Tukad Punggawa 22 panjer', 'JL Tukad Punggawa 22 Panjer', ''),
 (22, '', '', 'Komang Adi', '', '', '', '2026-04-04', NULL, NULL, '', '', 'Buruh', '', '', '0897068548383', '', '', 'JL Waturenggong'),
@@ -259,9 +259,12 @@ INSERT INTO `ortu_wali` (`id_ortu_wali`, `ayah`, `ibu`, `wali`, `tempat_lahir_ay
 (29, 'WQWWEWE', 'QWEWQWEE', '', '', '', '', '2026-04-04', NULL, NULL, 'ASDSDA', 'QDWWQQWD', '', '08970594003', '08786950904', '', 'SDADADADS', 'WDQSDWQDW', ''),
 (30, 'WQWWEWE', 'QWEWQWEE', '', '', '', '', '2026-04-04', NULL, NULL, 'ASDSDA', 'QDWWQQWD', '', '08970594003', '08786950904', '', 'SDADADADS', 'WDQSDWQDW', ''),
 (31, 'Suhandi', '', '', '', '', '', '2026-04-04', NULL, NULL, 'Pelatih Sepak Bola', '', '', '089685948383', '', '', 'JL Melaya Desa Adat Penarungan', '', ''),
-(36, 'Suhandi Junior', '', '', '', '', '', '2026-04-04', NULL, NULL, 'Pilot', '', '', '08970594233', '', '', 'JL Pulet ', '', ''),
+(36, 'Suhandi Junior', '', '', 'Denpasar', '', '', '2026-04-04', NULL, NULL, 'Pilot', '', '', '08970594233', '', '', 'JL Pulet ', '', ''),
 (37, 'Bambang Saptajia', '', '', '', '', '', '2026-04-04', NULL, NULL, 'Programmer', '', '', '08970695855', '', '', 'JL Tukad Nyali', '', ''),
-(38, 'Wayan Laksana', 'Kadek Siti Adnyani', '', '', '', '', '2026-04-04', NULL, NULL, 'Sopir', 'Ibu Rumah Tanggga', '', '0897069584352', '089706958412', '', 'JL. Tukad Unda', 'JL. Tukad Unda', '');
+(38, 'Wayan Laksana', 'Kadek Siti Adnyani', '', '', 'Malang', '', '2026-04-04', '1996-01-31', NULL, 'Sopir', 'Ibu Rumah Tanggga', '', '0897069584352', '089706958412', '', 'JL. Tukad Unda', 'JL. Tukad Unda', ''),
+(39, 'Eka', 'Eki', '', '', '', '', NULL, NULL, NULL, 'Programmer', 'Ibu Rumah Tangga', '', '089706958423', '087869509044', '', 'JL Babakan Sari', 'JL Babakan Sari', ''),
+(40, 'Arifin', '', '', 'Bojonegoro', '', '', '1986-06-04', NULL, NULL, 'Pilot', '', '', '089796958484', '', '', 'JL Tukad Batanghari No.2', '', ''),
+(41, '', '', '', '', '', '', NULL, NULL, NULL, '', '', '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -311,7 +314,18 @@ INSERT INTO `pelanggaran_siswa` (`id_pelanggaran_siswa`, `tanggal`, `nis`, `id_j
 (28, '2026-04-03 15:57:06', 9128, 5, 'anajsnaajsa'),
 (29, '2026-04-03 15:57:23', 9128, 5, 'sndbbsqkjqbk'),
 (30, '2026-04-03 15:57:30', 9128, 5, 'skdnaksninsiqn'),
-(31, '2026-04-03 15:57:38', 9128, 5, 'sbdaja');
+(31, '2026-04-03 15:57:38', 9128, 5, 'sbdaja'),
+(32, '2026-04-04 08:02:18', 9129, 2, 'sdadas'),
+(33, '2026-04-04 08:18:36', 9130, 5, 'AAJNDJADJN'),
+(34, '2026-04-04 08:18:45', 9130, 4, 'SMD D QJ'),
+(35, '2026-04-04 08:18:58', 9130, 4, 'sbdjbqii'),
+(36, '2026-04-04 08:19:07', 9130, 5, 's dja '),
+(37, '2026-04-04 08:19:15', 9130, 5, 'ajnajsnajnsasja'),
+(38, '2026-04-04 08:19:23', 9130, 5, 'aja sasi'),
+(39, '2026-04-04 17:15:59', 9128, 5, 'sccqw'),
+(40, '2026-04-04 17:16:06', 9128, 5, 'sdqqdq'),
+(41, '2026-04-04 17:16:20', 9128, 5, 'asdqqq'),
+(42, '2026-04-04 17:16:28', 9128, 5, 'sdqqdqw');
 
 -- --------------------------------------------------------
 
@@ -337,11 +351,31 @@ CREATE TABLE `perjanjian_orang_tua` (
 --
 
 INSERT INTO `perjanjian_orang_tua` (`id_perjanjian_ortu`, `tanggal`, `id_pelanggaran_siswa`, `status`, `foto_dokumen`, `tingkat`, `nama_ortu`, `pekerjaan_ortu`, `alamat_ortu`, `no_telp_ortu`) VALUES
-(3, '2026-04-04 12:27:29', 10, 'Masih Proses', NULL, 'XII', 'Lukman Halimah', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 0),
-(4, '2026-04-04 12:27:29', 11, 'Masih Proses', NULL, 'XII', 'Lukman Halimah', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 0),
-(5, '2026-04-04 12:27:29', 12, 'Masih Proses', NULL, 'XII', 'Lukman Halimah', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 0),
-(6, '2026-04-04 12:27:29', 13, 'Masih Proses', NULL, 'XII', 'Lukman Halimah', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 0),
-(7, '2026-04-04 12:27:29', 14, 'Masih Proses', NULL, 'XII', 'Lukman Halimah', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 0);
+(16, '2026-04-04 14:20:30', 33, 'Masih Proses', NULL, 'XII', 'Arifin', 'Pilot', 'JL Tukad Batanghari No.2', '089796958484'),
+(17, '2026-04-04 14:20:30', 34, 'Masih Proses', NULL, 'XII', 'Arifin', 'Pilot', 'JL Tukad Batanghari No.2', '089796958484'),
+(18, '2026-04-04 14:20:30', 35, 'Masih Proses', NULL, 'XII', 'Arifin', 'Pilot', 'JL Tukad Batanghari No.2', '089796958484'),
+(19, '2026-04-04 14:20:30', 36, 'Masih Proses', NULL, 'XII', 'Arifin', 'Pilot', 'JL Tukad Batanghari No.2', '089796958484'),
+(20, '2026-04-04 14:20:30', 37, 'Masih Proses', NULL, 'XII', 'Arifin', 'Pilot', 'JL Tukad Batanghari No.2', '089796958484'),
+(21, '2026-04-04 14:20:30', 38, 'Masih Proses', NULL, 'XII', 'Arifin', 'Pilot', 'JL Tukad Batanghari No.2', '089796958484'),
+(22, '2026-04-04 14:25:37', 15, 'Selesai', 'Reza Rahardian Pemanggilan Ortu.pdf', 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233'),
+(23, '2026-04-04 14:25:37', 16, 'Selesai', 'Reza Rahardian Pemanggilan Ortu.pdf', 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233'),
+(24, '2026-04-04 14:25:37', 17, 'Selesai', 'Reza Rahardian Pemanggilan Ortu.pdf', 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233'),
+(25, '2026-04-04 14:25:37', 18, 'Selesai', 'Reza Rahardian Pemanggilan Ortu.pdf', 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233'),
+(26, '2026-04-04 14:25:37', 19, 'Selesai', 'Reza Rahardian Pemanggilan Ortu.pdf', 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233'),
+(27, '2026-04-04 14:25:37', 20, 'Selesai', 'Reza Rahardian Pemanggilan Ortu.pdf', 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233'),
+(28, '2026-04-04 14:25:37', 21, 'Selesai', 'Reza Rahardian Pemanggilan Ortu.pdf', 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233'),
+(29, '2026-04-04 14:26:44', 2, 'Selesai', 'Narin_Ortu.pdf', 'XII', 'Mega Rahma', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300'),
+(30, '2026-04-04 14:26:44', 10, 'Selesai', 'Narin_Ortu.pdf', 'XII', 'Mega Rahma', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300'),
+(31, '2026-04-04 14:26:44', 11, 'Selesai', 'Narin_Ortu.pdf', 'XII', 'Mega Rahma', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300'),
+(32, '2026-04-04 14:26:44', 12, 'Selesai', 'Narin_Ortu.pdf', 'XII', 'Mega Rahma', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300'),
+(33, '2026-04-04 14:26:44', 13, 'Selesai', 'Narin_Ortu.pdf', 'XII', 'Mega Rahma', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300'),
+(34, '2026-04-04 14:26:44', 14, 'Selesai', 'Narin_Ortu.pdf', 'XII', 'Mega Rahma', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300'),
+(35, '2026-04-04 15:04:11', 26, 'Selesai', 'Perjanjian Ortu Niki.pdf', 'XI', 'Kadek Siti Adnyani', 'Ibu Rumah Tanggga', 'JL. Tukad Unda', '089706958412'),
+(36, '2026-04-04 15:04:11', 27, 'Selesai', 'Perjanjian Ortu Niki.pdf', 'XI', 'Kadek Siti Adnyani', 'Ibu Rumah Tanggga', 'JL. Tukad Unda', '089706958412'),
+(37, '2026-04-04 15:04:11', 28, 'Selesai', 'Perjanjian Ortu Niki.pdf', 'XI', 'Kadek Siti Adnyani', 'Ibu Rumah Tanggga', 'JL. Tukad Unda', '089706958412'),
+(38, '2026-04-04 15:04:11', 29, 'Selesai', 'Perjanjian Ortu Niki.pdf', 'XI', 'Kadek Siti Adnyani', 'Ibu Rumah Tanggga', 'JL. Tukad Unda', '089706958412'),
+(39, '2026-04-04 15:04:11', 30, 'Selesai', 'Perjanjian Ortu Niki.pdf', 'XI', 'Kadek Siti Adnyani', 'Ibu Rumah Tanggga', 'JL. Tukad Unda', '089706958412'),
+(40, '2026-04-04 15:04:11', 31, 'Selesai', 'Perjanjian Ortu Niki.pdf', 'XI', 'Kadek Siti Adnyani', 'Ibu Rumah Tanggga', 'JL. Tukad Unda', '089706958412');
 
 -- --------------------------------------------------------
 
@@ -370,18 +404,24 @@ CREATE TABLE `perjanjian_siswa` (
 --
 
 INSERT INTO `perjanjian_siswa` (`id_perjanjian_siswa`, `tanggal`, `id_pelanggaran_siswa`, `status`, `foto_dokumen`, `tingkat`, `nama_ortu`, `pekerjaan_ortu`, `alamat_ortu`, `no_telp_ortu`, `wali_kelas`, `guru_bk`, `wakasek_kesiswaan`) VALUES
-(1, '2026-01-02 09:26:31', 1, 'Masih Proses', NULL, 'X', '', '', '', '', '', '', ''),
-(4, '2026-04-03 16:07:20', 22, 'Selesai', 'Aplikasi Poin Pelanggaran Siswa_page-0001.jpg', 'X', 'Bambang Saptaji', 'Programmer', 'JL Tukad Nyali', '08970695855', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Finsensius Ratuaki, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
-(5, '2026-04-03 16:07:20', 23, 'Selesai', 'Aplikasi Poin Pelanggaran Siswa_page-0001.jpg', 'X', 'Bambang Saptaji', 'Programmer', 'JL Tukad Nyali', '08970695855', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Finsensius Ratuaki, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
-(6, '2026-04-03 16:07:20', 24, 'Selesai', 'Aplikasi Poin Pelanggaran Siswa_page-0001.jpg', 'X', 'Bambang Saptaji', 'Programmer', 'JL Tukad Nyali', '08970695855', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Finsensius Ratuaki, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
-(7, '2026-04-03 16:07:20', 25, 'Selesai', 'Aplikasi Poin Pelanggaran Siswa_page-0001.jpg', 'X', 'Bambang Saptaji', 'Programmer', 'JL Tukad Nyali', '08970695855', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Finsensius Ratuaki, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
-(8, '2026-04-03 16:38:18', 15, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
-(9, '2026-04-03 16:38:18', 16, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
-(10, '2026-04-03 16:38:18', 17, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
-(11, '2026-04-03 16:38:18', 18, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
-(12, '2026-04-03 16:38:18', 19, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
-(13, '2026-04-03 16:38:18', 20, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
-(14, '2026-04-03 16:38:18', 21, 'Masih Proses', NULL, 'XI', 'Suhandi Junior', 'Pilot', 'JL Pulet ', '08970594233', 'Luh Putu Trisma Prabawati, S.Kom.', 'Ni Putu Chintya Pradnya Suari, S.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.');
+(19, '2026-04-04 13:45:58', 1, 'Masih Proses', NULL, 'XII', 'Calvin Connor', 'Pengelola Properti', 'Jalan Sesetan, Gang No 5', '6282540268936', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(20, '2026-04-04 13:45:58', 4, 'Masih Proses', NULL, 'XII', 'Calvin Connor', 'Pengelola Properti', 'Jalan Sesetan, Gang No 5', '6282540268936', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(21, '2026-04-04 13:45:58', 5, 'Masih Proses', NULL, 'XII', 'Calvin Connor', 'Pengelola Properti', 'Jalan Sesetan, Gang No 5', '6282540268936', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(22, '2026-04-04 13:45:58', 6, 'Masih Proses', NULL, 'XII', 'Calvin Connor', 'Pengelola Properti', 'Jalan Sesetan, Gang No 5', '6282540268936', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(23, '2026-04-04 13:45:58', 7, 'Masih Proses', NULL, 'XII', 'Calvin Connor', 'Pengelola Properti', 'Jalan Sesetan, Gang No 5', '6282540268936', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(24, '2026-04-04 13:45:58', 8, 'Masih Proses', NULL, 'XII', 'Calvin Connor', 'Pengelola Properti', 'Jalan Sesetan, Gang No 5', '6282540268936', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(25, '2026-04-04 13:45:58', 9, 'Masih Proses', NULL, 'XII', 'Calvin Connor', 'Pengelola Properti', 'Jalan Sesetan, Gang No 5', '6282540268936', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(26, '2026-04-04 13:52:09', 2, 'Selesai', 'Narin.pdf', 'XII', 'Mega Rahma', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 'A.A Gede Putra Dwi Artajaya, S.Si., M.Kom.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(27, '2026-04-04 13:52:09', 10, 'Selesai', 'Narin.pdf', 'XII', 'Mega Rahma', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 'A.A Gede Putra Dwi Artajaya, S.Si., M.Kom.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(28, '2026-04-04 13:52:09', 11, 'Selesai', 'Narin.pdf', 'XII', 'Mega Rahma', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 'A.A Gede Putra Dwi Artajaya, S.Si., M.Kom.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(29, '2026-04-04 13:52:09', 12, 'Selesai', 'Narin.pdf', 'XII', 'Mega Rahma', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 'A.A Gede Putra Dwi Artajaya, S.Si., M.Kom.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(30, '2026-04-04 13:52:09', 13, 'Selesai', 'Narin.pdf', 'XII', 'Mega Rahma', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 'A.A Gede Putra Dwi Artajaya, S.Si., M.Kom.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(31, '2026-04-04 13:52:09', 14, 'Selesai', 'Narin.pdf', 'XII', 'Mega Rahma', 'Penjahit', 'Jalan Antasura, Perumahan Elit', '628621323300', 'A.A Gede Putra Dwi Artajaya, S.Si., M.Kom.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(32, '2026-04-04 14:02:30', 32, 'Selesai', 'Rama.pdf', 'XII', 'Eki', 'Ibu Rumah Tangga', 'JL Babakan Sari', '087869509044', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Ida Gusti Ayu Rinjani, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(33, '2026-04-04 15:23:59', 22, 'Masih Proses', NULL, 'X', 'Bambang Saptajia', 'Programmer', 'JL Tukad Nyali', '08970695855', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Finsensius Ratuaki, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(34, '2026-04-04 15:23:59', 23, 'Masih Proses', NULL, 'X', 'Bambang Saptajia', 'Programmer', 'JL Tukad Nyali', '08970695855', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Finsensius Ratuaki, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(35, '2026-04-04 15:23:59', 24, 'Masih Proses', NULL, 'X', 'Bambang Saptajia', 'Programmer', 'JL Tukad Nyali', '08970695855', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Finsensius Ratuaki, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.'),
+(36, '2026-04-04 15:23:59', 25, 'Masih Proses', NULL, 'X', 'Bambang Saptajia', 'Programmer', 'JL Tukad Nyali', '08970695855', 'Tjok Istri Agung Rai Sintha Devi, S.Pd.', 'Finsensius Ratuaki, M.Pd.', 'Bagus Putu Eka Wijaya, S.Kom.');
 
 -- --------------------------------------------------------
 
@@ -452,7 +492,10 @@ INSERT INTO `siswa` (`nis`, `nama_siswa`, `jenis_kelamin`, `alamat`, `password`,
 (9125, 'Narin', 'Perempuan', 'Jl Janur 11 43 RT 003/07 Pd Kelapa, Dki Jakarta', '$2y$10$.V6ZwUrLKYZ1hOOLJxylxOsblZuqOiPaHbZvi9aEWlVmRyl.aXgwG', 'aktif', 2, 5),
 (9126, 'Reza Rahardian', 'Laki - Laki', 'JL Pulet ', '$2y$10$WM001wl06K51hn8p556ec.7kMy7iGFcku83v8WWCgo98AAtfo.cP6', 'aktif', 36, 16),
 (9127, 'Abel', 'Laki - Laki', 'JL Tukad Nyali', '$2y$10$tk8dnLS.8o8z4JFyvQzGx.zYMQGs629Lxh3N2wA5sgZLvtC4Ku98S', 'aktif', 37, 25),
-(9128, 'Komang Niki Nugraha', 'Laki - Laki', 'JL. Tukad Unda', '$2y$10$0uIq43MwDZy.TXnxG5BpHOzF5veaJyg24p7fNFa5.DD37cUomIBnm', 'aktif', 38, 13);
+(9128, 'Komang Niki Nugraha', 'Laki - Laki', 'JL. Tukad Unda', '$2y$10$0uIq43MwDZy.TXnxG5BpHOzF5veaJyg24p7fNFa5.DD37cUomIBnm', 'aktif', 38, 13),
+(9129, 'Rama Eka Raditya', 'Laki - Laki', 'JL Babakan Sari', '$2y$10$umnELF/BDvNcW9081XZIsOK1XQjGpaaTnTycEgJ0/Odon8scVO5Ga', 'aktif', 39, 4),
+(9130, 'Raffi Azka', 'Laki - Laki', 'JL Kapten Japa', '$2y$10$77cz0YjYbw7URpGSkZaEDemFLAJNAAUcDGGVR5RVhktjdobl8isCW', 'aktif', 40, 4),
+(9131, 'Dodek', 'Laki - Laki', 'sadba dkkjd', '$2y$10$kfvgyEu1SFMeksLrUNEF2OOIRCpNrjA8u4q67DwO.dcHvNU84LP3C', 'aktif', 41, 5);
 
 -- --------------------------------------------------------
 
@@ -479,7 +522,8 @@ CREATE TABLE `surat_keluar` (
 --
 
 INSERT INTO `surat_keluar` (`id_surat_keluar`, `no_surat`, `jenis_surat`, `id_surat_pindah`, `nis`, `tanggal_pembuatan_surat`, `id_profil_sekolah`, `id_tahun_ajaran`, `tingkat`, `tanggal_pemanggilan`, `keperluan`) VALUES
-(21, '1/SMK TI/BG/IV/2026', 'Panggilan Orang Tua', NULL, 9124, '2026-04-03', 1, 5, 'XII', '2026-04-04 12:00:00', 'Tindak lanjut masalah bullying');
+(28, '4/SMK TI/BG/IV/2026', 'Pindah Sekolah', 8, 9128, '2026-04-04', 1, 5, 'XI', '0000-00-00 00:00:00', ''),
+(29, '5/SMK TI/BG/IV/2026', 'Pindah Sekolah', 9, 9129, '2026-04-04', 1, 5, 'XII', '0000-00-00 00:00:00', '');
 
 -- --------------------------------------------------------
 
@@ -490,17 +534,20 @@ INSERT INTO `surat_keluar` (`id_surat_keluar`, `no_surat`, `jenis_surat`, `id_su
 CREATE TABLE `surat_pindah` (
   `id_surat_pindah` int(5) NOT NULL,
   `sekolah_tujuan` varchar(100) DEFAULT NULL,
-  `alasan_pindah` text DEFAULT NULL
+  `alasan_pindah` text DEFAULT NULL,
+  `nama_ortu` varchar(50) DEFAULT NULL,
+  `alamat_ortu` varchar(100) DEFAULT NULL,
+  `foto_dokumen` varchar(100) DEFAULT NULL,
+  `status` enum('Masih Proses','Selesai','','') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `surat_pindah`
 --
 
-INSERT INTO `surat_pindah` (`id_surat_pindah`, `sekolah_tujuan`, `alasan_pindah`) VALUES
-(1, 'SMAN 1 Surakarta', 'Mengikuti perpindahan dinas orang tua'),
-(2, 'SMKS Harapan', 'Mengikuti perpindahan dinas orang tua'),
-(3, 'SMKN 2 Denpasar', 'Mengikuti perpindahan dinas orang tua');
+INSERT INTO `surat_pindah` (`id_surat_pindah`, `sekolah_tujuan`, `alasan_pindah`, `nama_ortu`, `alamat_ortu`, `foto_dokumen`, `status`) VALUES
+(8, 'SMA Elektronika Surabaya', 'saadda', 'Kadek Siti Adnyani', 'JL. Tukad Unda', NULL, NULL),
+(9, 'ssdfasdd', 'asfqdad', 'Eki', 'JL Babakan Sari', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -666,25 +713,25 @@ ALTER TABLE `kelas`
 -- AUTO_INCREMENT for table `ortu_wali`
 --
 ALTER TABLE `ortu_wali`
-  MODIFY `id_ortu_wali` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id_ortu_wali` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `pelanggaran_siswa`
 --
 ALTER TABLE `pelanggaran_siswa`
-  MODIFY `id_pelanggaran_siswa` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id_pelanggaran_siswa` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `perjanjian_orang_tua`
 --
 ALTER TABLE `perjanjian_orang_tua`
-  MODIFY `id_perjanjian_ortu` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_perjanjian_ortu` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `perjanjian_siswa`
 --
 ALTER TABLE `perjanjian_siswa`
-  MODIFY `id_perjanjian_siswa` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_perjanjian_siswa` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `profil_sekolah`
@@ -702,13 +749,13 @@ ALTER TABLE `program_keahlian`
 -- AUTO_INCREMENT for table `surat_keluar`
 --
 ALTER TABLE `surat_keluar`
-  MODIFY `id_surat_keluar` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_surat_keluar` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `surat_pindah`
 --
 ALTER TABLE `surat_pindah`
-  MODIFY `id_surat_pindah` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_surat_pindah` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `tahun_ajaran`
