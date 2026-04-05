@@ -32,15 +32,13 @@ $back_page = isset($_GET['from']) ? $_GET['from'] : 'list_pelanggaran.php';
 <!-- tombol kembali -->
 <center class="no-print">
      
-    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-        <form action="/poin_pelanggaran_siswa/pages/laporan/<?= $back_page ?>" style="margin: 0;">
-            <button type="submit">
-                <svg height="16" width="16" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1024 1024">
-                    <path d="M874.690416 495.52477c0 11.2973-9.168824 20.466124-20.466124 20.466124l-604.773963 0 188.083679 188.083679c7.992021 7.992021 7.992021 20.947078 0 28.939099-4.001127 3.990894-9.240455 5.996574-14.46955 5.996574-5.239328 0-10.478655-1.995447-14.479783-5.996574l-223.00912-223.00912c-3.837398-3.837398-5.996574-9.046027-5.996574-14.46955 0-5.433756 2.159176-10.632151 5.996574-14.46955l223.019353-223.029586c7.992021-7.992021 20.957311-7.992021 28.949332 0 7.992021 8.002254 7.992021 20.957311 0 28.949332l-188.073446 188.073446 604.753497 0C865.521592 475.058646 874.690416 484.217237 874.690416 495.52477z"></path>
-                </svg>
-                <span>Kembali</span>
-            </button>
-        </form>
+    <div style="display: flex; justify-content: center; align-items:center; gap:15px; margin: 25px 0;">
+        <a href="/poin_pelanggaran_siswa/pages/laporan/<?= $back_page ?>" class="btn-back">
+            <svg height="18" width="18" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                <path d="M874.69 495.52c0 11.3-9.17 20.47-20.47 20.47H249.45l188.08 188.08c8 8 8 20.95 0 28.94a20.47 20.47 0 0 1-28.95 0l-223.01-223.01c-3.84-3.84-6-9.05-6-14.47 0-5.43 2.16-10.63 6-14.47l223.02-223.03c8-8 20.96-8 28.95 0a20.47 20.47 0 0 1 0 28.95l-188.07 188.07h604.75c11.3 0 20.47 9.16 20.47 20.47z"></path>
+            </svg>
+            <span>Kembali</span>
+        </a>
         <button class="print-btn" onclick="window.print()">
             <span class="printer-wrapper">
                 <span class="printer-container">

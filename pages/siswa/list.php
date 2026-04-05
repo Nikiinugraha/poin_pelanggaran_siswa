@@ -20,7 +20,7 @@ JOIN guru USING(kode_guru)');
 <div class="container">
     <div class="header-table">
         <h2>Daftar Siswa</h2>
-        <a href="add.php">Tambah Data Siswa</a>
+        <a href="add.php" class="btn-add"><i class="fas fa-plus-circle"></i> Tambah Data Siswa</a>
     </div>
 
     <div class="table-wrapper">
@@ -129,6 +129,57 @@ JOIN guru USING(kode_guru)');
     </div>
 </div>
 
+<!-- Modal Catat Pelanggaran -->
+<div id="violationModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header danger-header" style="background:#e11d48; color:white;">
+            <h3><i class="fas fa-file-signature"></i> Catat Pelanggaran Siswa</h3>
+            <span class="close-btn" onclick="closeModal('violationModal')">&times;</span>
+        </div>
+        <div class="modal-body" style="padding: 25px;">
+            <form action="/poin_pelanggaran_siswa/process/pelanggaran_process.php" method="POST">
+                <input type="hidden" name="action" value="add">
+                
+                <div style="text-align: left; margin-bottom: 20px;">
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 8px;">NIS & Nama Siswa</label>
+                    <div style="display: flex; gap: 10px; align-items: center; background: #f8fafc; padding: 12px; border-radius: 10px; border: 1.5px solid #e2e8f0;">
+                        <input type="text" name="nis" id="viol-nis" readonly style="background: transparent; border: none; font-weight: 800; color: #1e293b; width: 80px; font-size: 0.95rem;">
+                        <span style="color: #cbd5e1;">|</span>
+                        <span id="viol-name" style="font-weight: 600; color: #475569; font-size: 0.95rem;">NAMA SISWA</span>
+                    </div>
+                </div>
+
+                <div style="text-align: left; margin-bottom: 20px;">
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 8px;">Kategori Pelanggaran</label>
+                    <datalist id="list-jenis">
+                        <?php
+                        $query_j = mysqli_query($conn, "SELECT jenis, poin FROM jenis_pelanggaran");
+                        while ($j = mysqli_fetch_assoc($query_j)) {
+                            echo "<option value='" . $j['jenis'] . "'>Poin: " . $j['poin'] . "</option>";
+                        }
+                        ?>
+                    </datalist>
+                    <input list="list-jenis" name="jenis_pelanggaran" class="form-control" placeholder="Cari ketegori pelanggaran..." required style="width: 100%; box-sizing: border-box; padding: 12px; border-radius: 10px; border: 1.5px solid #e2e8f0; font-size: 0.95rem;">
+                </div>
+
+                <div style="text-align: left; margin-bottom: 25px;">
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 8px;">Keterangan Kejadian</label>
+                    <textarea name="keterangan" class="form-control" placeholder="Lokasi, waktu, dan detail kejadian..." required style="width: 100%; box-sizing: border-box; padding: 12px; border-radius: 10px; border: 1.5px solid #e2e8f0; min-height: 100px; resize: vertical; font-size: 0.95rem;"></textarea>
+                </div>
+
+                <div style="background: #fff1f2; padding: 12px; border-radius: 10px; border-left: 4px solid #e11d48; margin-bottom: 25px; text-align: left;">
+                    <p style="font-size: 0.8rem; color: #9f1239; margin: 0;"><i class="fas fa-circle-info"></i> <strong>Perhatian:</strong> Poin akumulasi akan bertambah secara otomatis.</p>
+                </div>
+
+                <div class="modal-actions-centered" style="display: flex; gap: 12px; justify-content: center;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('violationModal')">Batal</button>
+                    <button type="submit" class="btn-danger-large" style="background: #e11d48; color: white;">Simpan Pelanggaran</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Konfirmasi Hapus -->
 <div id="deleteModal" class="modal">
     <div class="modal-content small-modal">
@@ -194,6 +245,12 @@ function showDeleteModal(nis, name) {
     document.getElementById('del-nis').value = nis;
     document.getElementById('del-siswa-name').innerText = name;
     document.getElementById('deleteModal').style.display = "block";
+}
+
+function showViolationModal(nis, name) {
+    document.getElementById('viol-nis').value = nis;
+    document.getElementById('viol-name').innerText = name;
+    document.getElementById('violationModal').style.display = "block";
 }
 
 function showInfoModal(message, type = 'success') {

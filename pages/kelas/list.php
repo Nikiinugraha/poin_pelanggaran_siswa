@@ -1,64 +1,177 @@
 <?php
-
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
-
 include ROOTPATH . '/config/config.php';
 include ROOTPATH . '/includes/header.php';
 
 $result = mysqli_query($conn, "SELECT id_kelas, tingkat, program_keahlian, rombel, nama_pengguna FROM kelas JOIN tingkat using(id_tingkat) JOIN program_keahlian using(id_program_keahlian) JOIN guru using(kode_guru) ORDER BY id_tingkat DESC, id_program_keahlian ASC, rombel ASC");
 ?>
 
-<h2>Data Kelas</h2>
+<link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/kelas/list_kelas.css">
 
-<a href="/poin_pelanggaran_siswa/pages/kelas/add.php">Tambah Data Kelas</a>
+<div class="container">
+    <div class="header-table">
+        <h2><i class="fas fa-school"></i> Data Manajemen Kelas</h2>
+        <a href="add.php" class="btn-add">
+            <i class="fas fa-plus-circle"></i> Tambah Data Kelas
+        </a>
+    </div>
 
-<table border="1" cellpadding="10">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Kelas</th>
-            <th>Wali Kelas</th>
-            <th>Guru BK</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-            <?php
-            $no = 1;
-            while ($row = mysqli_fetch_assoc($result)) {
-            ?>
-        <tr>
-            <td><?= $no++ ?></td>
-            <td><?php echo htmlspecialchars($row['tingkat'] . ' ' . $row['program_keahlian'] . ' ' . $row['rombel']); ?> </td>
-            <td><?= htmlspecialchars($row['nama_pengguna']) ?></td>
-            <td><?php
-                        if( $row['tingkat'] == 'XII'){
-                            $row2 = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama_pengguna FROM guru WHERE jabatan = 'Guru BK XII'"));
-                            echo htmlspecialchars($row2['nama_pengguna']);
-                        }else if( $row['tingkat'] == 'XI'){
-                            $row2 = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama_pengguna FROM guru WHERE jabatan = 'Guru BK XI'"));
-                            echo htmlspecialchars($row2['nama_pengguna']);
-                        }else{
-                            $row2 = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama_pengguna FROM guru WHERE jabatan = 'Guru BK X'"));
-                            echo htmlspecialchars($row2['nama_pengguna']);
-                        }
-                        ?></td>
-            <td>
+    <div class="table-wrapper">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 50px; text-align: center;">No</th>
+                        <th>Identitas Kelas</th>
+                        <th>Wali Kelas</th>
+                        <th>Guru BK Terkait</th>
+                        <th style="width: 120px; text-align: center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $no = 1;
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $class_name = htmlspecialchars($row['tingkat'] . ' ' . $row['program_keahlian'] . ' ' . $row['rombel']);
+                    ?>
+                        <tr>
+                            <td style="text-align: center; color: #94a3b8; font-weight: 600;"><?= $no++ ?></td>
+                            <td>
+                                <span class="class-badge"><?= $class_name ?></span>
+                            </td>
+                            <td>
+                                <div class="guru-name">
+                                    <i class="fas fa-user-tie"></i>
+                                    <?= htmlspecialchars($row['nama_pengguna']) ?>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="guru-name">
+                                    <i class="fas fa-user-shield"></i>
+                                    <?php
+                                    if ($row['tingkat'] == 'XII') {
+                                        $row2 = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama_pengguna FROM guru WHERE jabatan = 'Guru BK XII'"));
+                                        echo htmlspecialchars($row2['nama_pengguna'] ?? 'Belum Ditentukan');
+                                    } else if ($row['tingkat'] == 'XI') {
+                                        $row2 = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama_pengguna FROM guru WHERE jabatan = 'Guru BK XI'"));
+                                        echo htmlspecialchars($row2['nama_pengguna'] ?? 'Belum Ditentukan');
+                                    } else {
+                                        $row2 = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nama_pengguna FROM guru WHERE jabatan = 'Guru BK X'"));
+                                        echo htmlspecialchars($row2['nama_pengguna'] ?? 'Belum Ditentukan');
+                                    }
+                                    ?>
+                                </div>
+                            </td>
+                            <td class="action-buttons">
+                                <a href="edit.php?id_kelas=<?= $row['id_kelas'] ?>" class="btn-edit" title="Edit Data">
+                                    <i class="fas fa-pen-to-square"></i>
+                                </a>
+                                <button type="button" class="btn-delete" title="Hapus Data" onclick="showDeleteModal('<?= $row['id_kelas'] ?>', '<?= $class_name ?>')">
+                                    <i class="fas fa-trash-can"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-           
-                <form action="/poin_pelanggaran_siswa/process/kelas_process.php" method="POST"
-                    onsubmit="return confirm('Yakin ingin menghapus kelas ini?')">
-                    <input type="hidden" name="action" value="delete">
-                    <input type="hidden" name="id_kelas" value="<?= $row['id_kelas'] ?>">
-                    <input type="submit" value="Delete">
-                </form>
-                <a href="/poin_pelanggaran_siswa/pages/kelas/edit.php?id_kelas=<?= $row['id_kelas'] ?>">Edit</a>
-            </td>
-        </tr>
-            <?php
-            }
-            ?>
-    </tbody>
-</table>
+<!-- Modal Konfirmasi Hapus -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header danger">
+            <h3><i class="fas fa-trash-arrow-up"></i> Konfirmasi Hapus Kelas</h3>
+            <span class="close-btn" onclick="closeModal('deleteModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="visual-icon danger-text">
+                <i class="fas fa-circle-exclamation"></i>
+            </div>
+            <p>Apakah Anda yakin ingin menghapus data kelas:</p>
+            <h4 id="del-name" style="color: #e11d48; margin: 10px 0;">NAMA KELAS</h4>
+            <p style="font-size: 0.85rem; color: #64748b;">Pastikan tidak ada siswa yang terdaftar di kelas ini sebelum menghapus.</p>
+            <form action="/poin_pelanggaran_siswa/process/kelas_process.php" method="POST" style="margin-top: 25px;">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="id_kelas" id="del-id">
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('deleteModal')">Batal</button>
+                    <button type="submit" class="btn-danger-large">Hapus Permanen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Informasi -->
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <div id="info-header" class="modal-header">
+            <h3><i id="info-icon" class="fas fa-circle-check"></i> <span id="info-title">Pemberitahuan</span></h3>
+            <span class="close-btn" onclick="closeModal('infoModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div id="info-visual" class="visual-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p id="info-message" style="margin: 20px 0; font-size: 1rem; color: #334155;">Pesan diproses di sini.</p>
+            <button class="btn-primary-block" onclick="closeModal('infoModal')">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function showDeleteModal(id, name) {
+    document.getElementById('del-id').value = id;
+    document.getElementById('del-name').innerText = name;
+    document.getElementById('deleteModal').style.display = "block";
+}
+
+function showInfoModal(message, type = 'success') {
+    const title = type === 'success' ? 'Berhasil' : 'Peringatan';
+    const header = document.getElementById('info-header');
+    const visual = document.getElementById('info-visual');
+    const icon = document.getElementById('info-icon');
+    
+    document.getElementById('info-title').innerText = title;
+    document.getElementById('info-message').innerText = message;
+    
+    if (type === 'error') {
+        header.className = 'modal-header danger';
+        visual.className = 'visual-icon danger-text';
+        visual.innerHTML = '<i class="fas fa-circle-xmark"></i>';
+        icon.className = 'fas fa-triangle-exclamation';
+    } else {
+        header.className = 'modal-header success';
+        visual.className = 'visual-icon success-text';
+        visual.innerHTML = '<i class="fas fa-circle-check"></i>';
+        icon.className = 'fas fa-circle-check';
+    }
+    
+    document.getElementById('infoModal').style.display = "block";
+}
+
+function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target.className === 'modal') {
+        event.target.style.display = "none";
+    }
+}
+
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('success')) {
+        showInfoModal(urlParams.get('success'), 'success');
+    } else if (urlParams.has('error')) {
+        showInfoModal(urlParams.get('error'), 'error');
+    }
+}
+</script>
 
 <?php include ROOTPATH . '/includes/footer.php'; ?>

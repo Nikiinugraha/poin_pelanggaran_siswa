@@ -1,8 +1,32 @@
-/* Container untuk menyeimbangkan letak tombol di tengah halaman */
-.print-btn-container {
+/* Base style tombol kembali yang serasi dengan tombol cetak */
+.btn-back {
     display: flex;
+    align-items: center;
     justify-content: center;
-    margin: 20px 0;
+    gap: 12px;
+    padding: 12px 24px;
+    background: #f1f5f9;
+    color: #475569;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none; /* Biar enak kalau pakai <a> */
+}
+
+.btn-back:hover {
+    background: #e2e8f0;
+    border-color: #1C6EA4;
+    color: #1C6EA4;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.btn-back svg {
+    fill: currentColor;
 }
 
 /* Base style tombol cetak yang lebih premium */

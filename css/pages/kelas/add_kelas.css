@@ -1,4 +1,4 @@
-/* Violation Type Add/Edit Page Styling */
+/* Class Add/Edit Page Styling */
 .container {
     padding: 20px;
     animation: fadeIn 0.5s ease-out;
@@ -11,7 +11,7 @@
 
 .page-header {
     margin: 0 auto 30px;
-    max-width: 780px;
+    max-width: 880px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -33,7 +33,7 @@
 }
 
 .page-header h2 i {
-    color: #e11d48; /* Red for violations */
+    color: #4f46e5; /* Indigo for classes */
 }
 
 .btn-back {
@@ -48,7 +48,7 @@
 }
 
 .btn-back:hover {
-    color: #e11d48;
+    color: #4f46e5;
 }
 
 /* Form Card Styling */
@@ -57,25 +57,35 @@
     border-radius: 24px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.06);
     padding: 40px;
-    max-width: 700px;
+    max-width: 800px;
     margin: 0 auto;
-    border-top: 4px solid #e11d48; /* Highlight top with red */
+    border-top: 5px solid #4f46e5;
 }
 
 .form-section-title {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: #334155;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     padding-bottom: 15px;
     border-bottom: 2px solid #f8fafc;
 }
 
+.form-section-title i {
+    color: #4f46e5;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 5px;
 }
 
 .form-group label {
@@ -100,18 +110,29 @@
 
 .form-control:focus {
     outline: none;
-    border-color: #e11d48;
+    border-color: #4f46e5;
     background: white;
-    box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.1);
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+.search-hint {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .form-actions {
-    margin-top: 20px;
+    margin-top: 40px;
+    padding-top: 25px;
+    border-top: 2px solid #f8fafc;
 }
 
 .btn-primary-large {
     width: 100%;
-    background-color: #e11d48;
+    background-color: #4f46e5;
     color: white;
     border: none;
     padding: 16px;
@@ -124,17 +145,21 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.2);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
 }
 
 .btn-primary-large:hover {
-    background-color: #be123c;
+    background-color: #4338ca;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(225, 29, 72, 0.3);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
     .form-card {
         padding: 25px;
     }

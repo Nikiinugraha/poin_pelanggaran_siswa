@@ -15,6 +15,10 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
+    background: white;
+    padding: 20px 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
 .header-table h2 {

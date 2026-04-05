@@ -24,7 +24,13 @@ if ($nis > 0) {
 }
 
 if (!$siswa) {
-    echo '<div class="container"><h2>Siswa tidak ditemukan.</h2></div>';
+    echo '<div class="container" style="text-align: center; margin-top: 50px;">
+            <div class="form-card">
+                <i class="fas fa-circle-exclamation" style="font-size: 3rem; color: #ef4444; margin-bottom: 20px;"></i>
+                <h2>Data Siswa tidak ditemukan.</h2>
+                <a href="list.php" class="btn-primary" style="display: inline-flex; margin-top: 20px;">Kembali ke Daftar</a>
+            </div>
+          </div>';
     include ROOTPATH . '/includes/footer.php';
     exit;
 }
@@ -33,7 +39,7 @@ if (!$siswa) {
 $current_class = (isset($siswa['tingkat'])) ? $siswa['tingkat'] . ' ' . $siswa['program_keahlian'] . ' ' . $siswa['rombel'] : '';
 ?>
 
-<link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/siswa/add_siswa.css">
+<link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/siswa/edit_siswa.css">
 
 <div class="container">
     <div class="page-header">
@@ -47,10 +53,10 @@ $current_class = (isset($siswa['tingkat'])) ? $siswa['tingkat'] . ' ' . $siswa['
             <input type="hidden" name="old_nis" value="<?php echo $siswa['nis']; ?>" />
             <input type="hidden" name="id_ortu_wali" value="<?php echo $siswa['id_ortu_wali']; ?>" />
 
-            <!-- Bagian 1: Identitas Siswa -->
+            <!-- Bagian 1: Identitas Utama Siswa -->
             <div class="form-section">
                 <div class="form-section-title">
-                    <i class="fas fa-id-card"></i> Identitas Siswa
+                    <i class="fas fa-id-card"></i> Identitas Utama
                 </div>
                 <div class="form-grid">
                     <div class="form-group">
@@ -65,7 +71,7 @@ $current_class = (isset($siswa['tingkat'])) ? $siswa['tingkat'] . ' ' . $siswa['
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Kelas</label>
+                        <label>Kelas Terpadu</label>
                         <datalist id="kelas_list">
                             <?php
                             $q_kelas = mysqli_query($conn, "SELECT * FROM kelas JOIN program_keahlian USING(id_program_keahlian) JOIN tingkat USING(id_tingkat)");
@@ -74,36 +80,44 @@ $current_class = (isset($siswa['tingkat'])) ? $siswa['tingkat'] . ' ' . $siswa['
                             }
                             ?>
                         </datalist>
-                        <input list="kelas_list" class="form-control" name="kelas" value="<?php echo $current_class; ?>" required />
+                        <input list="kelas_list" class="form-control" name="kelas" value="<?php echo $current_class; ?>" placeholder="Pilih Kelas..." autocomplete="off" required />
                     </div>
                     <div class="form-group">
-                        <label>Status Siswa</label>
+                        <label>Status Keaktifan</label>
                         <select name="status" class="form-control" required>
-                            <option value="aktif" <?php echo ($siswa['status'] == 'aktif') ? 'selected' : ''; ?>>Aktif</option>
+                            <option value="aktif" <?php echo ($siswa['status'] == 'aktif') ? 'selected' : ''; ?>>Siswa Aktif</option>
                             <option value="tidak_aktif" <?php echo ($siswa['status'] == 'tidak_aktif') ? 'selected' : ''; ?>>Tidak Aktif</option>
-                            <option value="lulus" <?php echo ($siswa['status'] == 'lulus') ? 'selected' : ''; ?>>Lulus</option>
-                            <option value="pindah" <?php echo ($siswa['status'] == 'pindah') ? 'selected' : ''; ?>>Pindah</option>
+                            <option value="lulus" <?php echo ($siswa['status'] == 'lulus') ? 'selected' : ''; ?>>Lulus Alumni</option>
+                            <option value="pindah" <?php echo ($siswa['status'] == 'pindah') ? 'selected' : ''; ?>>Mutasi / Pindah</option>
                         </select>
                     </div>
                     <div class="form-group" style="grid-column: span 2;">
                         <label>Nama Lengkap Siswa</label>
-                        <input type="text" class="form-control" name="nama_siswa" value="<?php echo htmlspecialchars($siswa['nama_siswa']); ?>" required />
+                        <input type="text" class="form-control" name="nama_siswa" value="<?php echo htmlspecialchars($siswa['nama_siswa']); ?>" placeholder="Gelar Opsional..." required />
                     </div>
-                </div>
-                <div class="form-group" style="margin-top: 20px;">
-                    <label>Alamat Lengkap Siswa</label>
-                    <textarea name="alamat_siswa" class="form-control" required><?php echo htmlspecialchars($siswa['alamat']); ?></textarea>
                 </div>
             </div>
 
-            <!-- Bagian 2: Data Orang Tua -->
+            <!-- Bagian 2: Domisili & Kontak -->
             <div class="form-section">
                 <div class="form-section-title">
-                    <i class="fas fa-users"></i> Data Orang Tua / Wali
+                    <i class="fas fa-location-dot"></i> Domisili & Kontak Siswa
+                </div>
+                <div class="form-group" style="margin-right: 0;">
+                    <label>Alamat Lengkap (KTP / Domisili)</label>
+                    <textarea name="alamat_siswa" class="form-control" placeholder="Jalan, No Rumah, RT/RW, Kec..." required><?php echo htmlspecialchars($siswa['alamat']); ?></textarea>
+                </div>
+            </div>
+
+            <!-- Bagian 3: Data Orang Tua / Wali -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="fas fa-users"></i> Informasi Keluarga / Wali
                 </div>
 
-                <!-- Ayah -->
+                <!-- Sub-grid Ayah -->
                 <div class="parent-sub-grid">
+                    <div class="parent-sub-grid-title"><i class="fas fa-user-tie"></i> Data Ayah Kandung</div>
                     <div class="form-group">
                         <label>Nama Ayah</label>
                         <input type="text" class="form-control" name="ayah" value="<?php echo htmlspecialchars($siswa['ayah']); ?>" />
@@ -116,14 +130,15 @@ $current_class = (isset($siswa['tingkat'])) ? $siswa['tingkat'] . ' ' . $siswa['
                         <label>Pekerjaan Ayah</label>
                         <input type="text" class="form-control" name="pekerjaan_ayah" value="<?php echo htmlspecialchars($siswa['pekerjaan_ayah']); ?>" />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="grid-column: span 1.5;">
                         <label>Alamat Ayah</label>
                         <input type="text" class="form-control" name="alamat_ayah" value="<?php echo htmlspecialchars($siswa['alamat_ayah']); ?>" />
                     </div>
                 </div>
 
-                <!-- Ibu -->
+                <!-- Sub-grid Ibu -->
                 <div class="parent-sub-grid">
+                    <div class="parent-sub-grid-title"><i class="fas fa-person-breastfeeding"></i> Data Ibu Kandung</div>
                     <div class="form-group">
                         <label>Nama Ibu</label>
                         <input type="text" class="form-control" name="ibu" value="<?php echo htmlspecialchars($siswa['ibu']); ?>" />
@@ -136,16 +151,17 @@ $current_class = (isset($siswa['tingkat'])) ? $siswa['tingkat'] . ' ' . $siswa['
                         <label>Pekerjaan Ibu</label>
                         <input type="text" class="form-control" name="pekerjaan_ibu" value="<?php echo htmlspecialchars($siswa['pekerjaan_ibu']); ?>" />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="grid-column: span 1.5;">
                         <label>Alamat Ibu</label>
                         <input type="text" class="form-control" name="alamat_ibu" value="<?php echo htmlspecialchars($siswa['alamat_ibu']); ?>" />
                     </div>
                 </div>
 
-                <!-- Wali -->
+                <!-- Sub-grid Wali -->
                 <div class="parent-sub-grid">
+                    <div class="parent-sub-grid-title"><i class="fas fa-user-shield"></i> Data Wali (Opsional)</div>
                     <div class="form-group">
-                        <label>Nama Wali (Opsional)</label>
+                        <label>Nama Wali</label>
                         <input type="text" class="form-control" name="wali" value="<?php echo htmlspecialchars($siswa['wali']); ?>" />
                     </div>
                     <div class="form-group">
@@ -156,7 +172,7 @@ $current_class = (isset($siswa['tingkat'])) ? $siswa['tingkat'] . ' ' . $siswa['
                         <label>Pekerjaan Wali</label>
                         <input type="text" class="form-control" name="pekerjaan_wali" value="<?php echo htmlspecialchars($siswa['pekerjaan_wali']); ?>" />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="grid-column: span 1.5;">
                         <label>Alamat Wali</label>
                         <input type="text" class="form-control" name="alamat_wali" value="<?php echo htmlspecialchars($siswa['alamat_wali']); ?>" />
                     </div>
@@ -165,7 +181,7 @@ $current_class = (isset($siswa['tingkat'])) ? $siswa['tingkat'] . ' ' . $siswa['
 
             <div class="form-actions">
                 <button type="submit" class="btn-primary">
-                    <i class="fas fa-save"></i> Perbarui Data Siswa
+                    <i class="fas fa-save"></i> Simpan Perubahan Data
                 </button>
             </div>
         </form>

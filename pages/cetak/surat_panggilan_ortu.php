@@ -33,7 +33,7 @@ if(isset($_GET['no_surat'])){
         $jam = $_POST['jam'];
 
         // mengubah format tanggal dan jam digabung dan dipisah dengan spasi mengikuti format datetime di database
-        echo $tanggal_pemanggilan = implode(" ", [$tanggal, $jam]);
+       $tanggal_pemanggilan = implode(" ", [$tanggal, $jam]);
 
         $tanggal_pembuatan_surat = date("Y-m-d");
         $id_profil_sekolah = 1;

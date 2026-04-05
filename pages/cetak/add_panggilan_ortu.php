@@ -11,83 +11,84 @@ include ROOTPATH . "/includes/header.php";
 ?>
 
 
-<center>
-    <h2>Surat Panggilan Orang Tua</h2>
+<link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/cetak/add_panggilan_ortu.css">
 
-
-    <!-- Form Pilih NIS -->
-    <form action="" method="post">
-        <!-- datalist ini berfungsi untuk menampilkan data nis dan nama siswa yang akan dipilih -->
-        <datalist id="nis" name="nis">
-            <?php 
-            $result = mysqli_query($conn, "SELECT nis, nama_siswa FROM siswa");
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo "<option value='" . $row['nis'] . "'>" . $row['nis'] . " - " . $row['nama_siswa'] . "</option>";
-            }
-            ?>
-        </datalist>
-        <!-- input ini berfungsi untuk menampilkan data nis dan nama siswa yang akan dipilih -->
-        <input type="text" name="nis" value="<?php if(isset($_POST['nis'])) { echo $_POST['nis']; } else { echo ""; } ?>" list="nis" placeholder="pilih NIS" autocomplete="off">
-
-        <input class="btn-warning" style="color:#fff; font-weight:bold" type="submit" value="cek">
-    </form>
-
-
-    <br><br>
-    
-    
+<div class="add-surat-wrapper">
+    <div class="page-header-premium">
+        <h2 class="animate-title">Surat Panggilan Orang Tua</h2>
+        <div class="header-line"></div>
+    </div>
 
     <?php
-    // jika nis sudah diinput
     if(isset($_POST['nis'])) {
-        $nis = $_POST['nis'];
-
-        // query untuk menampilkan data siswa dan orang tua
+        $nis = mysqli_real_escape_string($conn, $_POST['nis']);
         $result_ortu_wali = mysqli_query($conn, "SELECT * FROM siswa JOIN ortu_wali USING(id_ortu_wali) WHERE nis = '$nis'");
-        $row_ortu_wali = mysqli_fetch_assoc($result_ortu_wali);
+        
+        if($row_ortu_wali = mysqli_fetch_assoc($result_ortu_wali)) {
         ?>
 
-        <!-- form input data orang tua -->
-        <form action="/poin_pelanggaran_siswa/pages/cetak/surat_panggilan_ortu.php" method="post">
-            <fieldset style="width:20%">
-            <legend>Input</legend>
-            <!-- input ini berfungsi untuk menyimpan data nis -->
-            <input type="hidden" name="nis" value="<?php echo $nis; ?>">
+        <div class="step-card detail-section animate-slide-up"> 
+            <div class="form-header-with-info">
+                <h3>Detail Pemanggilan</h3>
+                <div class="student-info-bubble">
+                    <span class="info-label">Siswa:</span>
+                    <span class="info-name"><?= htmlspecialchars($row_ortu_wali['nama_siswa']) ?></span>
+                </div>
+            </div>
 
-            <table cellspacing="10">
-                <tr>
-                    <td>No Surat</td>
-                    <td>:</td>
-                    <td><input type="number" name="no_surat" required></td>
-                </tr>
-                <tr>
-                    <td>Tanggal</td>
-                    <td>:</td>
-                    <td><input type="date" name="tanggal" required></td>
-                </tr>
-                <tr>
-                    <td>Jam</td>
-                    <td>:</td>
-                    <td><input type="time" name="jam" value="08:00" required></td>
-                </tr>
-                <tr>
-                    <td>Keperluan</td>
-                    <td>:</td>
-                    <td><textarea name="keperluan" id="" required></textarea></td>
-                </tr>
-            </table>
-            <br>
-            <!-- tombol ini berfungsi untuk mencetak surat akan di kirim ke surat_panggilan_ortu.php-->
-            <input type="submit" value="cetak surat">
-            </fieldset>
-        </form>
+            <form action="/poin_pelanggaran_siswa/pages/cetak/surat_panggilan_ortu.php" method="post" class="detail-form-premium">
+                <input type="hidden" name="nis" value="<?php echo $nis; ?>">
 
+                <div class="form-grid-premium">
+                    <div class="form-group">
+                        <label for="no_surat">Nomor Surat</label>
+                        <div class="input-field-wrapper">
+                            <i class="fas fa-hashtag"></i>
+                            <input type="number" name="no_surat" id="no_surat" required placeholder="001">
+                        </div>
+                    </div>
 
-    <?php
+                    <div class="form-group">
+                        <label for="tanggal">Tanggal Pemanggilan</label>
+                        <div class="input-field-wrapper">
+                            <i class="far fa-calendar-alt"></i>
+                            <input type="date" name="tanggal" id="tanggal" required value="<?= date('Y-m-d', strtotime('+1 day')) ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="jam">Waktu / Jam</label>
+                        <div class="input-field-wrapper">
+                            <i class="far fa-clock"></i>
+                            <input type="time" name="jam" id="jam" value="08:00" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="keperluan">Keperluan / Perihal</label>
+                        <div class="input-field-wrapper align-top">
+                            <i class="fas fa-pen-nib"></i>
+                            <textarea name="keperluan" id="keperluan" required placeholder="Contoh: Menindaklanjuti poin pelanggaran siswa..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-print-action">
+                        <span class="btn-text">BUAT & CETAK SURAT</span>
+                        <i class="fas fa-print"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <?php
+        } else {
+            echo "<div class='error-toast animate-bounce'><i class='fas fa-exclamation-triangle'></i> Data siswa tidak ditemukan!</div>";
+        }
     }
     ?>
-    
-</center>
+</div>
 
 
 <?php 

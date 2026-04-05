@@ -3,7 +3,6 @@
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] .  '/poin_pelanggaran_siswa');
 
 include ROOTPATH . '/config/config.php';
-include ROOTPATH . '/includes/header.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 

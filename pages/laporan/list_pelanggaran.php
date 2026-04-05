@@ -1,163 +1,164 @@
 <?php
-// Menentukan lokasi root folder proyek di server
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
-
-// Menghubungkan ke file konfigurasi (koneksi database)
 include ROOTPATH . "/config/config.php";
-
-// Menyertakan tampilan header (bagian atas halaman)
 include ROOTPATH . "/includes/header.php";
 
-// jika ada(isset) tombol ditekan dengan method GET berisi value cari maka jalankan perintah dalam if
-if(isset($_GET['cari'])){
-    $cari = $_GET['cari'];
+// Logika Pencarian
+$cari = isset($_GET['cari']) ? $_GET['cari'] : '';
 
-    // Menggunakan subquery untuk mengambil satu tanggal yang paling terakhir jika ada data tanggal yang lebih dari satu (karena penggunaan GROUP BY nis), kita bisa menggunakan fungsi agregasi SQL yaitu MAX(). Mengganti kolom tanggal menjadi MAX(tanggal) as tanggal. Fungsi ini akan memeriksa seluruh data tanggal dari setiap nis yang sama, dan mengembalikan satu tanggal dengan nilai paling besar (yang berarti tanggal yang paling terakhir atau terbaru) sambil mencari hasil inputan user dicocokkan dengan nama siswa atau nis.
-    $result = mysqli_query($conn, "SELECT ps.id_pelanggaran_siswa, s.nama_siswa, ps.tanggal, jp.jenis, ps.nis FROM pelanggaran_siswa ps JOIN siswa s USING(nis) JOIN jenis_pelanggaran jp USING(id_jenis_pelanggaran) WHERE ps.tanggal = (SELECT MAX(tanggal) FROM pelanggaran_siswa WHERE nis = ps.nis) AND (nama_siswa like '%".$cari."%' OR nis like '%".$cari."%') ORDER BY ps.tanggal DESC");	
-    
-// else akan berjalan atau tampil ketika tombol cari belum ditekan 
-}else{
-    // Menggunakan subquery untuk mengambil satu tanggal yang paling terakhir jika ada data tanggal yang lebih dari satu (karena penggunaan GROUP BY nis), kita bisa menggunakan fungsi agregasi SQL yaitu MAX(). Mengganti kolom tanggal menjadi MAX(tanggal) as tanggal. Fungsi ini akan memeriksa seluruh data tanggal dari setiap nis yang sama, dan mengembalikan satu tanggal dengan nilai paling besar (yang berarti tanggal yang paling terakhir atau terbaru).
-    $result = mysqli_query($conn, "SELECT ps.id_pelanggaran_siswa, s.nama_siswa, ps.tanggal, jp.jenis, ps.nis FROM pelanggaran_siswa ps JOIN siswa s USING(nis) JOIN jenis_pelanggaran jp USING(id_jenis_pelanggaran) WHERE ps.tanggal = (SELECT MAX(tanggal) FROM pelanggaran_siswa WHERE nis = ps.nis) ORDER BY ps.tanggal DESC");
-    
+$sql = "SELECT ps.id_pelanggaran_siswa, s.nama_siswa, ps.tanggal, ps.nis 
+        FROM pelanggaran_siswa ps 
+        JOIN siswa s USING(nis) 
+        WHERE ps.tanggal = (SELECT MAX(tanggal) FROM pelanggaran_siswa WHERE nis = ps.nis)";
+
+if (!empty($cari)) {
+    $sql .= " AND (nama_siswa LIKE '%$cari%' OR nis LIKE '%$cari%')";
 }
 
+$sql .= " ORDER BY ps.tanggal DESC";
+$result = mysqli_query($conn, $sql);
 
+// Array bulan dalam bahasa Indonesia
+$bulan_id = [
+    "01" => "Jan", "02" => "Feb", "03" => "Mar", "04" => "Apr", 
+    "05" => "Mei", "06" => "Jun", "07" => "Jul", "08" => "Agu", 
+    "09" => "Sep", "10" => "Okt", "11" => "Nov", "12" => "Des"
+];
+
+// Definisi Indikator Poin
+$point_indicators = [
+    ['min' => 100, 'max' => 149, 'class' => 'poin-high', 'label' => 'Sangat Tinggi', 'desc' => 'Surat DO/Dikeluarkan dari Sekolah'],
+    ['min' => 50, 'max' => 99, 'class' => 'poin-warning', 'label' => 'Waspada', 'desc' => 'Surat Panggilan Orang Tua 3'],
+    ['min' => 25, 'max' => 49, 'class' => 'poin-med', 'label' => 'Perhatian', 'desc' => 'Surat Panggilan Orang Tua 2'],
+    ['min' => 1, 'max' => 24, 'class' => 'poin-low', 'label' => 'Ringan', 'desc' => 'Pembinaan Wali Kelas']
+];
 ?>
 
+<link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/laporan/list_pelanggaran.css">
 
+<div class="container">
+    <div class="report-header">
+        <div class="header-main">
+            <h2><i class="fas fa-file-circle-exclamation"></i> Laporan Pelanggaran Siswa</h2>
+            <p class="header-subtitle">Pantau akumulasi poin pelanggaran dan status kedisiplinan siswa secara real-time.</p>
+        </div>
+        
+        <form action="list_pelanggaran.php" method="GET" class="search-form">
+            <datalist id="nama_siswa">
+                <?php
+                $result_s = mysqli_query($conn, "SELECT nama_siswa, nis FROM siswa");
+                while ($rs = mysqli_fetch_assoc($result_s)) {
+                    echo "<option value='" . $rs['nis'] . "'>" . htmlspecialchars($rs['nama_siswa']) . "</option>";
+                }
+                ?>
+            </datalist>
+            <div class="search-group">
+                <input type="text" name="cari" class="search-input" value="<?= htmlspecialchars($cari) ?>" placeholder="NIS atau Nama Siswa..." list="nama_siswa" autocomplete="off">
+                <button type="submit" class="btn-search">
+                    <i class="fas fa-magnifying-glass"></i> Cari
+                </button>
+            </div>
+            <?php if(!empty($cari)): ?>
+                <a href="list_pelanggaran.php" class="btn-reset">Reset</a>
+            <?php endif; ?>
+        </form>
+    </div>
 
-<center>
-    <fieldset style="width: 70%;">
-        <legend>Daftar Pelanggaran Per Siswa</legend>
-        <div class="scroll">
-            <table border="1" cellpadding="10" cellspacing="0" width="100%">
+    <!-- Poin Indicator Legend -->
+    <div class="legend-card">
+        <div class="legend-header">
+            <h3><i class="fas fa-circle-info"></i> Indikator Poin Pelanggaran</h3>
+        </div>
+        <div class="legend-grid">
+            <?php foreach($point_indicators as $indicator): ?>
+                <div class="legend-item">
+                    <div class="legend-badge-wrapper">
+                        <span class="legend-badge <?= $indicator['class'] ?>"><?= $indicator['min'] . ($indicator['max'] < 999 ? ' - ' . $indicator['max'] : '+') ?></span>
+                    </div>
+                    <div class="legend-info">
+                        <strong><?= $indicator['label'] ?></strong>
+                        <span><?= $indicator['desc'] ?></span>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <div class="table-responsive">
+            <table>
                 <thead>
                     <tr>
-                        <th colspan="7" align="right">
-                            <h3 style="float:left; margin: 0;">Daftar Pelanggaran Per Siswa</h3>
-                            <form action="list_pelanggaran.php" method="get">
-                                <!-- menampilkan data nis dan nama siswa -->
-                                <datalist id="nama_siswa">
-                                    <?php
-                                    $result_siswa = mysqli_query($conn, "SELECT nama_siswa, nis FROM pelanggaran_siswa JOIN siswa USING(nis) JOIN jenis_pelanggaran USING(id_jenis_pelanggaran) GROUP BY nis");
-                                    while ($row_siswa = mysqli_fetch_assoc($result_siswa)) {
-                                        echo "<option value='" . $row_siswa['nis'] . "'>";
-                                        echo "<option value='" . $row_siswa['nama_siswa'] . "'>";
-                                    }
-                                    ?>
-                                </datalist>
-                                <input type="text" value="<?php if(isset($_GET['cari'])) { echo $_GET['cari']; } else { echo ""; } ?>" name="cari" placeholder="Masukkan NIS / Nama Siswa" list="nama_siswa" style="padding: 8px 15px;width: 200px;border-radius: 5px;" autocomplete="off">
-                                <input type="submit" class="btn-warning" style="color:white; font-weight:bold;" value="Cari">
-                                <a href="list_pelanggaran.php" class="btn-danger" style="text-decoration: none; color: white; font-family:'Arial'; font-size:13px;">Reset</a>
-                            </form>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>No</th>
-                        <th>Tanggal</th>
-                        <th>NIS</th>
-                        <th>Nama Siswa</th>
-                        <th>Jenis Pelanggaran</th>
-                        <th>Point</th>
-                        <th>Aksi</th>
+                        <th style="width: 50px; text-align: center;">No</th>
+                        <th style="width: 140px;">Waktu Terakhir</th>
+                        <th>Identitas Siswa</th>
+                        <th>Ringkasan Pelanggaran</th>
+                        <th style="width: 100px; text-align: center;">Total Poin</th>
+                        <th style="width: 120px; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php 
-                    $no = 1;
-                    if(mysqli_num_rows($result)==0){
-                        echo "
-                        <tr><td colspan='7' align='center'>Data Tidak Ditemukan</td></tr>";
-                    }else{
-                        while ($row = mysqli_fetch_assoc($result)){
+                    if(mysqli_num_rows($result) == 0): ?>
+                        <tr><td colspan="6" style="text-align: center; padding: 40px; color: #94a3b8;"><i class="fas fa-magnifying-glass" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i> Data tidak ditemukan</td></tr>
+                    <?php else: 
+                        $no = 1;
+                        while ($row = mysqli_fetch_assoc($result)): 
+                            // Format Tanggal
+                            $dt = strtotime($row['tanggal']);
+                            $tgl = date("d", $dt) . " " . $bulan_id[date("m", $dt)] . " " . date("Y", $dt);
+                            $jam = date("H:i", $dt);
+
+                            // Ambil detail pelanggaran (gabungan)
+                            $ps_sql = "SELECT DISTINCT jenis FROM pelanggaran_siswa JOIN jenis_pelanggaran USING(id_jenis_pelanggaran) WHERE nis = '$row[nis]'";
+                            $ps_res = mysqli_query($conn, $ps_sql);
+                            $list_j = [];
+                            while($dj = mysqli_fetch_assoc($ps_res)) { $list_j[] = htmlspecialchars($dj['jenis']); }
+                            $string_pelanggaran = implode(", ", $list_j);
+
+                            // Hitung Total Poin
+                            $poin_sql = "SELECT SUM(poin) as total FROM pelanggaran_siswa JOIN jenis_pelanggaran USING(id_jenis_pelanggaran) WHERE nis = '$row[nis]'";
+                            $total_poin = mysqli_fetch_assoc(mysqli_query($conn, $poin_sql))['total'];
+                            
+                            // Poin Level Class
+                            $level = 'poin-none';
+                            if($total_poin >= 150) $level = 'poin-critical';
+                            elseif($total_poin >= 100) $level = 'poin-high';
+                            elseif($total_poin >= 50) $level = 'poin-warning';
+                            elseif($total_poin >= 25) $level = 'poin-med';
+                            elseif($total_poin > 0) $level = 'poin-low';
                     ?>
-                    <tr>
-                        <td align="center"><?= $no++?></td>
-                        <td align="center">
-                            <?php
-                            // ubah format tanggal dari YYYY-MM-DD H:i:s menjadi DD-MM-YYYY H:i:s
-                            $datetime = date("d-m-Y H:i:s", strtotime($row['tanggal']));
-                            // memecah tanggal dan jam
-                            $tanggal = explode(" ", $datetime);
-                            // memecah jam
-                            $jam = $tanggal[1];
-                            // memecah tanggal
-                            $tanggal = explode("-", $tanggal[0]);
-                            // array bulan dalam bahasa indonesia
-                            $bulan = array(
-                                "01" => "Januari",
-                                "02" => "Pebruari",
-                                "03" => "Maret",
-                                "04" => "April",
-                                "05" => "Mei",
-                                "06" => "Juni",
-                                "07" => "Juli",
-                                "08" => "Agustus",
-                                "09" => "September",
-                                "10" => "Oktober",
-                                "11" => "November",
-                                "12" => "Desember"
-                            );
-                            // menggabungkan tanggal dan bulan dalam bahasa indonesia
-                            $tanggal = $tanggal[0] . " " . $bulan[$tanggal[1]] . " " . $tanggal[2];
-                            // tampilkan tanggal yang sudah dimodifikasi menjadi bahasa indonesia agar mudah dibaca
-                            echo $tanggal;
-                            echo "<br>";
-                            echo $jam;
-                            ?>
-                        </td>
-                        <td align="center"><?= htmlspecialchars($row['nis']) ?></td>
-                        <td><?= htmlspecialchars($row['nama_siswa']) ?></td>
-                        <td align="center">
-                            <?php
-                            // 1. Ambil data jenis pelanggaran siswa dari database (gunakan DISTINCT agar jenis yang sama hanya tampil 1x)
-                            $query_pelanggaran = mysqli_query($conn, "SELECT DISTINCT jenis FROM pelanggaran_siswa JOIN jenis_pelanggaran USING(id_jenis_pelanggaran) WHERE nis = '$row[nis]'");
-                            
-                            // 2. Siapkan tempat penampungan (array) kosong untuk menyimpan daftar nama pelanggaran
-                            $daftar_pelanggaran = [];
-                            
-                            // 3. Ambil data satu per satu dan masukkan ke tempat penampungan
-                            while($data_pelanggaran = mysqli_fetch_assoc($query_pelanggaran)){
-                                // htmlspecialchars digunakan untuk keamanan agar teks aman saat ditampilkan
-                                $daftar_pelanggaran[] = htmlspecialchars($data_pelanggaran['jenis']);
-                            }
-                            
-                            // 4. Jika daftar pelanggaran ada (tidak kosong), maka tampilkan ke layar
-                            if(!empty($daftar_pelanggaran)){
-                                // Gabungkan semua pelanggaran dengan koma dan spasi, lalu akhiri dengan tanda titik
-                                echo implode(', ', $daftar_pelanggaran) . '.';
-                            }
-                            ?>
-                        </td>
-                        <?php
-                        // menghitung total poin dari kolom poin menggunakan fungsi SUM() pada mysql
-                        $poin_persiswa = mysqli_fetch_assoc(mysqli_query($conn, "SELECT SUM(poin) FROM pelanggaran_siswa JOIN siswa USING(nis) JOIN jenis_pelanggaran USING(id_jenis_pelanggaran) WHERE nis = '$row[nis]'"))['SUM(poin)'];
-                        ?>
-                        <td align="center"><?= htmlspecialchars($poin_persiswa) ?></td>
-                        <td>
-                            <!-- tombol untuk menampilkan detail pelanggaran dengan mengirim nis terpilih melalui method GET -->
-                            <button class="btn-primary"><a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?=$row['nis']?>&from=list_pelanggaran.php">Detail</a></button>
-                        </td>
-                    </tr>
-                    <?php
-                        } 
-                        }
-                    ?>
+                        <tr>
+                            <td style="text-align: center; color: #94a3b8; font-weight: 600;"><?= $no++ ?></td>
+                            <td>
+                                <div class="date-box">
+                                    <span class="date-text"><?= $tgl ?></span>
+                                    <span class="time-text"><i class="far fa-clock"></i> <?= $jam ?> WIB</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; flex-direction: column;">
+                                    <span class="student-name"><?= htmlspecialchars($row['nama_siswa']) ?></span>
+                                    <span class="nis-badge" style="width: fit-content; margin-top: 5px;"><?= htmlspecialchars($row['nis']) ?></span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="violation-list"><?= $string_pelanggaran ?>.</span>
+                            </td>
+                            <td style="text-align: center;">
+                                <span class="poin-badge <?= $level ?>"><?= $total_poin ?></span>
+                            </td>
+                            <td style="text-align: center;">
+                                <a href="detail_pelanggaran.php?nis=<?= $row['nis'] ?>&from=list_pelanggaran.php" class="btn-detail">
+                                    <i class="fas fa-circle-info"></i> Detail
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endwhile; endif; ?>
                 </tbody>
             </table>
         </div>
-    </fieldset>
-</center>
+    </div>
+</div>
 
-
-
-
-
-
-
-
-
-<?php 
-include "../../includes/footer.php"; 
-?>
+<?php include "../../includes/footer.php"; ?>

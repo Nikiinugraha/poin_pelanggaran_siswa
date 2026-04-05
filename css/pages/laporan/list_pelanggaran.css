@@ -1,0 +1,284 @@
+/* Violation Report List Styling */
+.container {
+    padding: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header & Search Area */
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    background: white;
+    padding: 25px 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.header-main h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 1.6rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-subtitle {
+    margin: 5px 0 0 0;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.header-main h2 i {
+    color: #e11d48; /* Red for violations */
+}
+
+.search-group {
+    display: flex;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.search-group:focus-within {
+    border-color: #1C6EA4;
+    box-shadow: 0 0 0 4px rgba(28, 110, 164, 0.1);
+    background: white;
+}
+
+.search-input {
+    padding: 12px 18px;
+    border: none;
+    background: transparent;
+    color: #0f172a;
+    font-size: 0.9rem;
+    width: 250px;
+}
+
+.search-input:focus {
+    outline: none;
+}
+
+.btn-search {
+    background-color: #1C6EA4;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-search:hover {
+    background-color: #15527a;
+}
+
+.btn-reset {
+    background-color: #f1f5f9;
+    color: #64748b;
+    border: 1.5px solid #e2e8f0;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.btn-reset:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}
+
+/* Legend Styling */
+.legend-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border-left: 5px solid #1C6EA4;
+}
+
+.legend-header {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.legend-header h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.legend-badge-wrapper {
+    min-width: 80px;
+}
+
+.legend-badge {
+    display: block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.legend-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.legend-info strong {
+    font-size: 0.85rem;
+    color: #1e293b;
+}
+
+.legend-info span {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+/* Table Card */
+.table-wrapper {
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.table-responsive { overflow-x: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table thead th {
+    background-color: #f8fafc;
+    padding: 18px 20px;
+    text-align: left;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    font-weight: 700;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+table tbody td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Data Elements */
+.nis-badge {
+    font-family: 'JetBrains Mono', monospace;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.student-name {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.poin-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    min-width: 35px;
+    text-align: center;
+}
+
+/* Point Color Levels */
+.poin-none { background: #f8fafc; color: #94a3b8; border: 1px solid #e2e8f0; }
+.poin-low { background: #ecfdf5; color: #059669; }
+.poin-med { background: #fffbeb; color: #d97706; }
+.poin-warning { background: #fff7ed; color: #ea580c; }
+.poin-high { background: #fff1f2; color: #e11d48; }
+.poin-critical { background: #450a0a; color: white; box-shadow: 0 0 10px rgba(69, 10, 10, 0.3); }
+
+.violation-list {
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    display: block;
+}
+
+.date-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.date-text { font-weight: 600; color: #475569; }
+.time-text { font-size: 0.8rem; color: #94a3b8; }
+
+/* Action Button */
+.btn-detail {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-detail:hover {
+    background: #0369a1;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .report-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+    .search-input { width: 100%; }
+}

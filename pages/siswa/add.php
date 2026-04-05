@@ -9,7 +9,7 @@ include ROOTPATH . '/includes/header.php';
 <link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/siswa/add_siswa.css">
 
 <div class="container">
-    <div class="page-header">
+    <div class="page-header" style="max-width: 1000px; margin: 0 auto 30px;">
         <h2><i class="fas fa-user-plus"></i> Tambah Data Siswa</h2>
         <a href="list.php" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</a>
     </div>
