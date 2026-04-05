@@ -1,122 +1,175 @@
 <?php
-// Menentukan path utama proyek (lokasi folder 'indomaret_RPL4' di dalam web server)
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
-?>
-
-<?php
-
-// Memanggil file konfigurasi database (berisi koneksi ke MySQL)
 include ROOTPATH . '/config/config.php';
-
-// Memanggil file header agar tampilan atas halaman muncul (judul, menu, dll)
 include ROOTPATH . '/includes/header.php';
-// Mengecek apakah parameter 'nis' dikirim lewat URL
-if (isset($_GET['nis'])) {
-    // Jika ada, simpan nilainya ke variabel $nis
-    $nis = $_GET['nis'];
-} else {
-    // Jika tidak ada, beri nilai default 0
-    $nis = 0;
-}
 
-// Menyiapkan variabel $cashier untuk menampung data kasir
+// Mendapatkan NIS dari URL
+$nis = isset($_GET['nis']) ? $_GET['nis'] : 0;
 $siswa = null;
 
-// Jika nis lebih dari 0, lakukan pencarian data kasir di database
 if ($nis > 0) {
-    // Jalankan query untuk mengambil data kasir berdasarkan id
-    $result = mysqli_query($conn, "SELECT * FROM siswa WHERE nis= $nis");
-
-    // Jika hasil ditemukan dan ada datanya, simpan ke variabel $cashier
+    // Query lengkap untuk mengambil data siswa, orang tua, dan detail kelas
+    $sql = "SELECT s.*, o.*, k.rombel, t.tingkat, p.program_keahlian 
+            FROM siswa s 
+            LEFT JOIN ortu_wali o ON s.id_ortu_wali = o.id_ortu_wali
+            LEFT JOIN kelas k ON s.id_kelas = k.id_kelas
+            LEFT JOIN tingkat t ON k.id_tingkat = t.id_tingkat
+            LEFT JOIN program_keahlian p ON k.id_program_keahlian = p.id_program_keahlian
+            WHERE s.nis = '$nis'";
+    
+    $result = mysqli_query($conn, $sql);
     if ($result && mysqli_num_rows($result) > 0) {
         $siswa = mysqli_fetch_assoc($result);
     }
 }
 
-// Jika data siswa tidak ditemukan, tampilkan pesan dan hentikan proses
 if (!$siswa) {
-    echo '<p>Siswa not found.</p>';
-    include ROOTPATH . '/includes/footer.php';  // tampilkan footer
-    exit;  // hentikan eksekusi kode
+    echo '<div class="container"><h2>Siswa tidak ditemukan.</h2></div>';
+    include ROOTPATH . '/includes/footer.php';
+    exit;
 }
+
+// Format string kelas untuk input list
+$current_class = (isset($siswa['tingkat'])) ? $siswa['tingkat'] . ' ' . $siswa['program_keahlian'] . ' ' . $siswa['rombel'] : '';
 ?>
 
-<!-- Menengahkan seluruh isi halaman -->
-<center>
+<link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/siswa/add_siswa.css">
 
-    <!-- Judul halaman form -->
-    <h2>Edit Siswa <?php echo htmlspecialchars($siswa['nis']); ?> </h2>
+<div class="container">
+    <div class="page-header">
+        <h2><i class="fas fa-user-edit"></i> Edit Data Siswa</h2>
+        <a href="list.php" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</a>
+    </div>
 
-    <!-- Formulir untuk mengedit data kasir -->
-    <!-- action: file tujuan yang memproses data -->
-    <!-- method="post": mengirim data secara tersembunyi -->
-    <form action="/poin_pelanggaran_siswa/process/siswa_process.php" method="post">
-
-        <!-- Tabel untuk menata posisi input -->
-        <table cellpadding="10">
-
-            <!-- Input tersembunyi untuk memberitahu proses adalah 'edit' -->
+    <div class="form-card">
+        <form action="/poin_pelanggaran_siswa/process/siswa_process.php" method="POST">
             <input type="hidden" name="action" value="edit" />
+            <input type="hidden" name="old_nis" value="<?php echo $siswa['nis']; ?>" />
+            <input type="hidden" name="id_ortu_wali" value="<?php echo $siswa['id_ortu_wali']; ?>" />
 
-            <!-- Input tersembunyi untuk mengirim ID kasir yang sedang diedit -->
-            <input type="hidden" name="nis" value="<?php echo htmlspecialchars($siswa['nis']); ?>" />
+            <!-- Bagian 1: Identitas Siswa -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="fas fa-id-card"></i> Identitas Siswa
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>NIS (Nomor Induk Siswa)</label>
+                        <input type="number" class="form-control" name="nis" value="<?php echo $siswa['nis']; ?>" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Jenis Kelamin</label>
+                        <select name="jenis_kelamin" class="form-control" required>
+                            <option value="Laki - Laki" <?php echo ($siswa['jenis_kelamin'] == 'Laki - Laki') ? 'selected' : ''; ?>>Laki - Laki</option>
+                            <option value="Perempuan" <?php echo ($siswa['jenis_kelamin'] == 'Perempuan') ? 'selected' : ''; ?>>Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Kelas</label>
+                        <datalist id="kelas_list">
+                            <?php
+                            $q_kelas = mysqli_query($conn, "SELECT * FROM kelas JOIN program_keahlian USING(id_program_keahlian) JOIN tingkat USING(id_tingkat)");
+                            while ($k = mysqli_fetch_assoc($q_kelas)) {
+                                echo "<option value='" . $k['tingkat'] . ' ' . $k['program_keahlian'] . ' ' . $k['rombel'] . "'></option>";
+                            }
+                            ?>
+                        </datalist>
+                        <input list="kelas_list" class="form-control" name="kelas" value="<?php echo $current_class; ?>" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Status Siswa</label>
+                        <select name="status" class="form-control" required>
+                            <option value="aktif" <?php echo ($siswa['status'] == 'aktif') ? 'selected' : ''; ?>>Aktif</option>
+                            <option value="tidak_aktif" <?php echo ($siswa['status'] == 'tidak_aktif') ? 'selected' : ''; ?>>Tidak Aktif</option>
+                            <option value="lulus" <?php echo ($siswa['status'] == 'lulus') ? 'selected' : ''; ?>>Lulus</option>
+                            <option value="pindah" <?php echo ($siswa['status'] == 'pindah') ? 'selected' : ''; ?>>Pindah</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Nama Lengkap Siswa</label>
+                        <input type="text" class="form-control" name="nama_siswa" value="<?php echo htmlspecialchars($siswa['nama_siswa']); ?>" required />
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 20px;">
+                    <label>Alamat Lengkap Siswa</label>
+                    <textarea name="alamat_siswa" class="form-control" required><?php echo htmlspecialchars($siswa['alamat']); ?></textarea>
+                </div>
+            </div>
 
-            <tr>
-                <td>
-                    <label for="nis">NIS</label>
-                    <input type="text" name="nis" value="<?php echo htmlspecialchars($siswa['nis']); ?>" required />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="nama_siswa">Nama</label>
-                    <input type="text" name="nama_siswa" value="<?php echo htmlspecialchars($siswa['nama_siswa']); ?>" required />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="jenis_kelamin">Jenis Kelamin</label>
-                </td>
-            </tr>
-            <tr>
-                <td><input type="radio" name="jenis_kelamin" value="Laki - Laki" <?php echo ($siswa['jenis_kelamin'] == 'Laki - Laki') ? 'checked' : ''; ?> required />Laki - Laki
-                    <input type="radio" name="jenis_kelamin" value="Perempuan" <?php echo ($siswa['jenis_kelamin'] == 'Perempuan') ? 'checked' : ''; ?> required />Perempuan
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="alamat">Alamat</label>
-                    <input type="text" name="alamat" value="<?php echo htmlspecialchars($siswa['alamat']); ?>" required />
-                </td>
-            </tr>
-            <!-- Baris kedua: tombol untuk menyimpan perubahan -->
-            <tr>
-                <td>
-                    <!-- Tombol untuk mengirim data ke file proses -->
-                    <button type="submit" style="float:right">Update</button>
-                </td>
-            </tr>
-        </table>
-    </form>
+            <!-- Bagian 2: Data Orang Tua -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="fas fa-users"></i> Data Orang Tua / Wali
+                </div>
 
-</center>
+                <!-- Ayah -->
+                <div class="parent-sub-grid">
+                    <div class="form-group">
+                        <label>Nama Ayah</label>
+                        <input type="text" class="form-control" name="ayah" value="<?php echo htmlspecialchars($siswa['ayah']); ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label>No. Telp Ayah</label>
+                        <input type="text" class="form-control" name="telp_ayah" value="<?php echo $siswa['no_telp_ayah']; ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label>Pekerjaan Ayah</label>
+                        <input type="text" class="form-control" name="pekerjaan_ayah" value="<?php echo htmlspecialchars($siswa['pekerjaan_ayah']); ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat Ayah</label>
+                        <input type="text" class="form-control" name="alamat_ayah" value="<?php echo htmlspecialchars($siswa['alamat_ayah']); ?>" />
+                    </div>
+                </div>
 
-<?php
-// Menyertakan footer agar bagian bawah halaman tampil
-include ROOTPATH . '/includes/footer.php';
-?>
+                <!-- Ibu -->
+                <div class="parent-sub-grid">
+                    <div class="form-group">
+                        <label>Nama Ibu</label>
+                        <input type="text" class="form-control" name="ibu" value="<?php echo htmlspecialchars($siswa['ibu']); ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label>No. Telp Ibu</label>
+                        <input type="text" class="form-control" name="telp_ibu" value="<?php echo $siswa['no_telp_ibu']; ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label>Pekerjaan Ibu</label>
+                        <input type="text" class="form-control" name="pekerjaan_ibu" value="<?php echo htmlspecialchars($siswa['pekerjaan_ibu']); ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat Ibu</label>
+                        <input type="text" class="form-control" name="alamat_ibu" value="<?php echo htmlspecialchars($siswa['alamat_ibu']); ?>" />
+                    </div>
+                </div>
 
-<!-- 
-💡 Ringkasan Fungsi Kode:
-	1.	Bagian awal (PHP atas)
-        🔹 Menentukan lokasi proyek, menyambung ke database, dan memanggil header.
-        🔹 Mengecek apakah ada parameter id di URL.
-        🔹 Mengambil data kasir dari tabel kasir berdasarkan id.
-	2.	Bagian HTML (form edit)
-        🔹 Menampilkan form dengan data kasir yang sudah ada.
-        🔹 User bisa mengubah nama kasir dan menekan tombol Update.
-	3.	Bagian akhir (PHP bawah)
-        🔹 Menampilkan footer dan mengakhiri halaman.
+                <!-- Wali -->
+                <div class="parent-sub-grid">
+                    <div class="form-group">
+                        <label>Nama Wali (Opsional)</label>
+                        <input type="text" class="form-control" name="wali" value="<?php echo htmlspecialchars($siswa['wali']); ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label>No. Telp Wali</label>
+                        <input type="text" class="form-control" name="telp_wali" value="<?php echo $siswa['no_telp_wali']; ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label>Pekerjaan Wali</label>
+                        <input type="text" class="form-control" name="pekerjaan_wali" value="<?php echo htmlspecialchars($siswa['pekerjaan_wali']); ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat Wali</label>
+                        <input type="text" class="form-control" name="alamat_wali" value="<?php echo htmlspecialchars($siswa['alamat_wali']); ?>" />
+                    </div>
+                </div>
+            </div>
 
-Dengan struktur ini, halaman edit.php berfungsi untuk menampilkan data kasir yang akan diedit, dan setelah tombol Update ditekan, data dikirim ke cashiers_process.php untuk diproses di server. 
--->
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i> Perbarui Data Siswa
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<?php include ROOTPATH . '/includes/footer.php'; ?>

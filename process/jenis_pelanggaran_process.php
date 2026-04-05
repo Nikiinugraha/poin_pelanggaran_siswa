@@ -16,21 +16,29 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $query = mysqli_query($conn, "INSERT INTO jenis_pelanggaran (jenis, poin) VALUES ('$jenis', '$poin')");
 
         if($query){
-            header("Location: ../pages/jenis_pelanggaran/list.php");
+            header("Location: ../pages/jenis_pelanggaran/list.php?success=Jenis pelanggaran berhasil ditambahkan!");
         } else {
-            echo "Gagal Menambah Data Jenis Pelanggaran";
+            header("Location: ../pages/jenis_pelanggaran/list.php?error=Gagal menambah jenis pelanggaran.");
         }
     }
 
     if($action == 'delete') {
         $id = $_POST['id'];
 
+        // Cek apakah jenis pelanggaran sudah digunakan pada data pelanggaran siswa
+        $check_usage = mysqli_query($conn, "SELECT id_jenis_pelanggaran FROM pelanggaran_siswa WHERE id_jenis_pelanggaran = '$id' LIMIT 1");
+        
+        if (mysqli_num_rows($check_usage) > 0) {
+            header("Location: ../pages/jenis_pelanggaran/list.php?error=Data jenis pelanggaran tidak dapat dihapus dikarenakan sudah digunakan pada data pelanggaran siswa!");
+            exit;
+        }
+
         $query = mysqli_query($conn, "DELETE FROM jenis_pelanggaran WHERE id_jenis_pelanggaran = '$id'");
 
         if($query){
-            header("Location: ../pages/jenis_pelanggaran/list.php");
+            header("Location: ../pages/jenis_pelanggaran/list.php?success=Jenis pelanggaran berhasil dihapus!");
         } else {
-            echo "Gagal Menghapus Data Jenis Pelanggaran";
+            header("Location: ../pages/jenis_pelanggaran/list.php?error=Gagal menghapus jenis pelanggaran.");
         }
     }
 
@@ -42,9 +50,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $query = mysqli_query($conn, "UPDATE jenis_pelanggaran SET jenis = '$jenis', poin = '$poin' WHERE id_jenis_pelanggaran = '$id'");
 
         if($query){
-            header("Location: ../pages/jenis_pelanggaran/list.php");
+            header("Location: ../pages/jenis_pelanggaran/list.php?success=Perubahan jenis pelanggaran berhasil disimpan!");
         } else {
-            echo "Gagal Mengedit Data Jenis Pelanggaran";
+            header("Location: ../pages/jenis_pelanggaran/list.php?error=Gagal mengupdate jenis pelanggaran.");
         }
     }
 }

@@ -10,8 +10,9 @@
     <!-- Memanggil library ikon FontAwesome (v6+) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Memanggil file CSS utama halaman login -->
+    <!-- Memanggil file CSS utama halaman login dan aturan responsif -->
     <link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/login.css">
+    <link rel="stylesheet" href="/poin_pelanggaran_siswa/css/layout/responsive.css">
 </head>
 
 <body class="login-body">

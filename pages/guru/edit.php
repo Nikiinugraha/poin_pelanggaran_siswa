@@ -1,143 +1,106 @@
 <?php
-// Menentukan path utama proyek (lokasi folder 'indomaret_RPL4' di dalam web server)
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
-?>
-
-<?php
-
-// Memanggil file konfigurasi database (berisi koneksi ke MySQL)
 include ROOTPATH . '/config/config.php';
-
-// Memanggil file header agar tampilan atas halaman muncul (judul, menu, dll)
 include ROOTPATH . '/includes/header.php';
-// Mengecek apakah parameter 'kode_guru' dikirim lewat URL
-if (isset($_GET['kode_guru'])) {
-    // Jika ada, simpan nilainya ke variabel $kode_guru
-    $kode_guru = $_GET['kode_guru'];
-} else {
-    // Jika tidak ada, beri nilai default 0
-    $kode_guru = 0;
+
+// Mendapatkan Kode Guru dari URL
+$kode_guru = isset($_GET['kode_guru']) ? $_GET['kode_guru'] : 0;
+$guru = null;
+
+if ($kode_guru != "0") {
+    // Jalankan query untuk mengambil data guru
+    $sql = "SELECT * FROM guru WHERE kode_guru = '$kode_guru'";
+    $result = mysqli_query($conn, $sql);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $guru = mysqli_fetch_assoc($result);
+    }
 }
 
-// Menyiapkan variabel $guru untuk menampung data guru
-$guru = null;
-$kode_guru = $_GET["kode_guru"];
-$guru = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM guru WHERE kode_guru = $kode_guru"));
-
+if (!$guru) {
+    echo '<div class="container"><h2>Guru tidak ditemukan.</h2></div>';
+    include ROOTPATH . '/includes/footer.php';
+    exit;
+}
 ?>
 
-<!-- Menengahkan seluruh isi halaman -->
-<center>
+<link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/guru/edit_guru.css">
 
-    <!-- Judul halaman form -->
-    <h2>Edit Data <?php echo htmlspecialchars($guru['kode_guru']); ?> </h2>
+<div class="container">
+    <div class="page-header">
+        <h2><i class="fas fa-user-pen"></i> Edit Data Guru</h2>
+        <a href="list.php" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Kembali ke Daftar
+        </a>
+    </div>
 
-    <!-- Formulir untuk mengedit data kasir -->
-    <!-- action: file tujuan yang memproses data -->
-    <!-- method="post": mengirim data secara tersembunyi -->
-    <form action="/poin_pelanggaran_siswa/process/guru_process.php" method="POST">
+    <div class="form-card">
+        <form action="/poin_pelanggaran_siswa/process/guru_process.php" method="POST">
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="kode_guru" value="<?= htmlspecialchars($guru['kode_guru']); ?>" />
 
-        <!-- Tabel untuk menata posisi input -->
-        <table cellpadding="10">
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="fas fa-id-badge"></i> Ubah Profil & Akun Guru
+                </div>
+                
+                <div class="form-grid">
+                    <!-- Row 1 -->
+                    <div class="form-group">
+                        <label>Kode Guru (ID)</label>
+                        <input type="text" class="form-control" value="<?= htmlspecialchars($guru['kode_guru']); ?>" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" name="username" value="<?= htmlspecialchars($guru['username']); ?>" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Role / Hak Akses</label>
+                        <select name="role" class="form-control" required>
+                            <option value="guru" <?= ($guru['role'] == 'guru') ? 'selected' : ''; ?>>Guru (Mata Pelajaran)</option>
+                            <option value="bk" <?= ($guru['role'] == 'bk') ? 'selected' : ''; ?>>BK (Bimbingan Konseling)</option>
+                        </select>
+                    </div>
 
-            <!-- Input tersembunyi untuk memberitahu proses adalah 'edit' -->
-            <input type="hidden" name="action" value="edit" />
+                    <!-- Row 2 -->
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Nama Lengkap Guru</label>
+                        <input type="text" class="form-control" name="nama_pengguna" value="<?= htmlspecialchars($guru['nama_pengguna']); ?>" required />
+                    </div>
+                    <div class="form-group">
+                        <label>No. Telepon / WhatsApp</label>
+                        <input type="text" class="form-control" name="telp" value="<?= htmlspecialchars($guru['telp']); ?>" required />
+                    </div>
 
-            <!-- Input tersembunyi untuk mengirim ID kasir yang sedang diedit -->
-            <input type="hidden" name="kode_guru" value="<?php echo htmlspecialchars($guru['kode_guru']); ?>" />
+                    <!-- Row 3 -->
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Jabatan Struktur</label>
+                        <select name="jabatan" class="form-control" required>
+                            <?php 
+                            $jabatans = ["Guru Mapel", "Kepala Sekolah", "Waka Kurikulum", "Waka Kesiswaan", "Waka Sarana Prasarana", "Waka Humas", "Komka AN", "Komka RPL", "Komka DKV", "Komka TKJ", "Komka BD", "Guru BK XII", "Guru BK XI", "Guru BK X"];
+                            foreach($jabatans as $j) {
+                                $sel = ($guru['jabatan'] == $j) ? 'selected' : '';
+                                echo "<option value='$j' $sel>$j</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status Keaktifan</label>
+                        <select name="aktif" class="form-control" required>
+                            <option value="Y" <?= ($guru['aktif'] == 'Y') ? 'selected' : ''; ?>>Aktif (Bisa Login)</option>
+                            <option value="N" <?= ($guru['aktif'] == 'N') ? 'selected' : ''; ?>>Non-Aktif (Akses Dicabut)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-            <tr>
-                <td>
-                    <label>Kode Guru</label>
-                </td>
-                <td>
-                    <input type="text" name="kode_guru" autocomplete="off" readonly value="<?php echo htmlspecialchars($guru['kode_guru']); ?>" required />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Nama Pengguna</label>
-                </td>
-                <td>
-                    <input type="text" name="nama_pengguna" autocomplete="off" value="<?php echo htmlspecialchars($guru['nama_pengguna']); ?>" required />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Username</label>
-                </td>
-                <td>
-                    <input type="text" name="username" value="<?php echo htmlspecialchars($guru['username']); ?>" required />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Jabatan</label>
-                </td>
-                <td>
-                    <input type="text" name="jabatan" value="<?php echo htmlspecialchars($guru['jabatan']); ?>" required />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Telp</label>
-                </td>
-                <td>
-                    <input type="text" name="telp" value="<?php echo htmlspecialchars($guru['telp']); ?>" required />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Role</label>
-                </td>
-                <td>
-                    <select name="role" id="" style="width: 100%;">
-                        <option <?php if ($guru['role'] == 'Guru') { echo "selected"; } ?> value="Guru">Guru</option>
-                        <option <?php if ($guru['role'] == 'BK') { echo "selected"; } ?> value="BK">BK</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Status</label>
-                </td>
-                <td>
-                    <?php $status = $guru['aktif'] == 'Y' ? 'Aktif' : 'Tidak Aktif'; ?>
-                    <select name="aktif" id="" style="width: 100%;">
-                        <option value="Y">Aktif</option>
-                        <option value="N">Tidak Aktif</option>
-                    </select>
-                </td>
-            </tr>
-            <!-- Baris kedua: tombol untuk menyimpan perubahan -->
-            <tr>
-                <td></td>
-                <td>
-                    <!-- Tombol untuk mengirim data ke file proses -->
-                    <button type="submit" style="float:right">Simpan Perubahan</button>
-                </td>
-            </tr>
-        </table>
-    </form>
+            <div class="form-actions">
+                <button type="submit" class="btn-primary-large">
+                    <i class="fas fa-save"></i> Simpan Perubahan Data
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
-</center>
-
-<?php
-// Menyertakan footer agar bagian bawah halaman tampil
-include ROOTPATH . '/includes/footer.php';
-?>
-
-<!-- 
-💡 Ringkasan Fungsi Kode:
-	1.	Bagian awal (PHP atas)
-        🔹 Menentukan lokasi proyek, menyambung ke database, dan memanggil header.
-        🔹 Mengecek apakah ada parameter id di URL.
-        🔹 Mengambil data kasir dari tabel kasir berdasarkan id.
-	2.	Bagian HTML (form edit)
-        🔹 Menampilkan form dengan data kasir yang sudah ada.
-        🔹 User bisa mengubah nama kasir dan menekan tombol Update.
-	3.	Bagian akhir (PHP bawah)
-        🔹 Menampilkan footer dan mengakhiri halaman.
-
-Dengan struktur ini, halaman edit.php berfungsi untuk menampilkan data kasir yang akan diedit, dan setelah tombol Update ditekan, data dikirim ke cashiers_process.php untuk diproses di server. 
--->
+<?php include ROOTPATH . '/includes/footer.php'; ?>

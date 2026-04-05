@@ -6,93 +6,137 @@ include ROOTPATH . '/includes/header.php';
 ?>
 
 
-<h2>Tambah Data Siswa</h2>
-<form action="/poin_pelanggaran_siswa/process/siswa_process.php" method="POST">
-    <fieldset>
-        <legend>Data Siswa</legend>
-        <table cellpadding="10">
+<link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/siswa/add_siswa.css">
+
+<div class="container">
+    <div class="page-header">
+        <h2><i class="fas fa-user-plus"></i> Tambah Data Siswa</h2>
+        <a href="list.php" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</a>
+    </div>
+
+    <div class="form-card">
+        <form action="/poin_pelanggaran_siswa/process/siswa_process.php" method="POST">
             <input type="hidden" name="action" value="add" />
-            <tr>
-                <td><label>NIS</label></td>
-                <td><input type="number" autocomplete="off" name="nis"/></td>
-            </tr>
-            <tr>
-                <td><label>Nama Siswa</label></td>
-                <td><input type="text" autocomplete="off" name="nama_siswa" required /></td>
-            </tr>
-            <tr>
-                <!-- Datalist berisi jenis kelamin -->
-                <td><label>Jenis Kelamin</label></td>
-                <td><input type="radio" name="jenis_kelamin" value="Laki - Laki" required />Laki - Laki
-                    <input type="radio" name="jenis_kelamin" value="Perempuan" required />Perempuan
-                </td>
-            </tr>
-            <tr>
-                <td><label>Alamat</label></td>
-                <td><textarea name="alamat_siswa" autocomplete="off" required></textarea></td>
-            </tr>
-            <tr>
-                <td><label for="kelas">Kelas</label></td>
 
-                <td>
-                    <datalist id="kelas">
-                        <?php
-                        // Mengambil semua data kelas dari tabel 'kelas' JOIN 'program_keahlian', 'tingkat'
-                        $query_kelas = mysqli_query($conn, "SELECT * FROM kelas JOIN program_keahlian USING(id_program_keahlian) JOIN tingkat USING(id_tingkat)");
-                        while ($kelas = mysqli_fetch_assoc($query_kelas)) {
-                            echo "<option value='" . $kelas['tingkat'] . ' ' . $kelas['program_keahlian'] . ' ' . $kelas['rombel'] . "'></option>";
-                        }
-                        ?>
-                    </datalist>
-                    <input list="kelas" id="kelas" name="kelas" placeholder="Kelas" autocomplete="off" required />
-                </td>
-            </tr>
-        </table>
-    </fieldset>
+            <!-- Bagian 1: Data Identitas Siswa -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="fas fa-id-card"></i> Data Identitas Siswa
+                </div>
+                <div class="form-grid">
+                    <!-- Row 1: NIS, Jenis Kelamin, & Kelas (Compact Fields) -->
+                    <div class="form-group">
+                        <label>Nomor Induk Siswa (NIS)</label>
+                        <input type="number" class="form-control" autocomplete="off" name="nis" placeholder="Masukkan NIS" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Jenis Kelamin</label>
+                        <select name="jenis_kelamin" class="form-control" required>
+                            <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
+                            <option value="Laki - Laki">Laki - Laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Kelas</label>
+                        <datalist id="kelas">
+                            <?php
+                            $query_kelas = mysqli_query($conn, "SELECT * FROM kelas JOIN program_keahlian USING(id_program_keahlian) JOIN tingkat USING(id_tingkat)");
+                            while ($kelas = mysqli_fetch_assoc($query_kelas)) {
+                                echo "<option value='" . $kelas['tingkat'] . ' ' . $kelas['program_keahlian'] . ' ' . $kelas['rombel'] . "'></option>";
+                            }
+                            ?>
+                        </datalist>
+                        <input list="kelas" class="form-control" id="kelas_input" name="kelas" placeholder="Pilih Kelas" autocomplete="off" required />
+                    </div>
 
-    <fieldset>
-        <legend>Data Orang Tua</legend>
-        <table cellpadding="10">
+                    <!-- Row 2: Nama Lengkap (Full Width) -->
+                    <div class="form-group" style="grid-column: span 3;">
+                        <label>Nama Lengkap Siswa</label>
+                        <input type="text" class="form-control" autocomplete="off" name="nama_siswa" placeholder="Masukkan Nama Lengkap" required />
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 20px;">
+                    <label>Alamat Lengkap Siswa</label>
+                    <textarea name="alamat_siswa" class="form-control" placeholder="Masukkan Alamat Lengkap" autocomplete="off" required></textarea>
+                </div>
+            </div>
 
-            <tr>
-                <td><label>Nama Ayah</label></td>
-                <td><input type="text" name="ayah" /></td>
-                <td><label>No Telpon Ayah</label></td>
-                <td><input type="text" name="telp_ayah" /></td>
-                <td><label>Alamat Ayah</label></td>
-                <td><input type="text" name="alamat_ayah" /></td>
-                <td><label>Pekerjaan Ayah</label></td>
-                <td><input type="text" name="pekerjaan_ayah" /></td>
-            </tr>
-            <tr>
-                <td><label>Nama Ibu</label></td>
-                <td><input type="text" name="ibu" /></td>
-                <td><label>No Telpon Ibu</label></td>
-                <td><input type="text" name="telp_ibu" /></td>
-                <td><label>Alamat Ibu</label></td>
-                <td><input type="text" name="alamat_ibu" /></td>
-                <td><label>Pekerjaan Ibu</label></td>
-                <td><input type="text" name="pekerjaan_ibu" /></td>
+            <!-- Bagian 2: Data Orang Tua / Wali -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="fas fa-users"></i> Data Orang Tua / Wali
+                </div>
 
-            </tr>
-            <tr>
-                <td><label>Nama Wali</label></td>
-                <td><input type="text" name="wali" /></td>
-                <td><label>No Telpon Wali</label></td>
-                <td><input type="text" name="telp_wali" /></td>
-                <td><label>Alamat Wali</label></td>
-                <td><input type="text" name="alamat_wali" /></td>
-                <td><label>Pekerjaan Wali</label></td>
-                <td><input type="text" name="pekerjaan_wali" /></td>
-            </tr>
-    </fieldset>
-    <tr>
-        <td>
-            <button type="submit" style="float:right">Simpan</button>
-        </td>
-    </tr>
-    </table>
+                <!-- Info Ayah -->
+                <div class="parent-sub-grid">
+                    <div class="form-group">
+                        <label>Nama Ayah</label>
+                        <input type="text" class="form-control" name="ayah" placeholder="Nama Ayah" />
+                    </div>
+                    <div class="form-group">
+                        <label>No. Telpon Ayah</label>
+                        <input type="text" class="form-control" name="telp_ayah" placeholder="08xxx" />
+                    </div>
+                    <div class="form-group">
+                        <label>Pekerjaan Ayah</label>
+                        <input type="text" class="form-control" name="pekerjaan_ayah" placeholder="Pekerjaan" />
+                    </div>
+                    <div class="form-group" style="grid-column: span 1;">
+                        <label>Alamat Ayah</label>
+                        <input type="text" class="form-control" name="alamat_ayah" placeholder="Alamat " />
+                    </div>
+                </div>
 
+                <!-- Info Ibu -->
+                <div class="parent-sub-grid">
+                    <div class="form-group">
+                        <label>Nama Ibu</label>
+                        <input type="text" class="form-control" name="ibu" placeholder="Nama Ibu" />
+                    </div>
+                    <div class="form-group">
+                        <label>No. Telpon Ibu</label>
+                        <input type="text" class="form-control" name="telp_ibu" placeholder="08xxx" />
+                    </div>
+                    <div class="form-group">
+                        <label>Pekerjaan Ibu</label>
+                        <input type="text" class="form-control" name="pekerjaan_ibu" placeholder="Pekerjaan" />
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat Ibu</label>
+                        <input type="text" class="form-control" name="alamat_ibu" placeholder="Alamat " />
+                    </div>
+                </div>
 
-</form>
+                <!-- Info Wali -->
+                <div class="parent-sub-grid">
+                    <div class="form-group">
+                        <label>Nama Wali (Opsional)</label>
+                        <input type="text" class="form-control" name="wali" placeholder="Nama Wali" />
+                    </div>
+                    <div class="form-group">
+                        <label>No. Telpon Wali</label>
+                        <input type="text" class="form-control" name="telp_wali" placeholder="08xxx" />
+                    </div>
+                    <div class="form-group">
+                        <label>Pekerjaan Wali</label>
+                        <input type="text" class="form-control" name="pekerjaan_wali" placeholder="Pekerjaan" />
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat Wali</label>
+                        <input type="text" class="form-control" name="alamat_wali" placeholder="Alamat Wali" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="reset" class="btn-back" style="background:none; border:none; cursor:pointer;">Reset Form</button>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i> Simpan Data Siswa
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <?php include ROOTPATH . '/includes/footer.php'; ?>

@@ -64,14 +64,16 @@ if ($role === 'siswa'):
         WHERE p.nis = '$username' 
         ORDER BY p.tanggal DESC 
     ");
-    // 6. Kumpulan Pesan Motivasi (Dynamic Quote)
+    // 6. Kumpulan Pesan Motivasi (Dynamic Quote dari Tokoh Terkenal)
     $quotes = [
         ["text" => "Kedisiplinan adalah jembatan antara cita-cita dan pencapaian.", "author" => "Jim Rohn"],
-        ["text" => "Kejujuran adalah langkah pertama menuju kesuksesan yang sejati.", "author" => "Anonim"],
+        ["text" => "Kejujuran adalah bab pertama dalam buku kebijaksanaan.", "author" => "Thomas Jefferson"],
         ["text" => "Masa depanmu ditentukan oleh apa yang kamu lakukan hari ini, bukan besok.", "author" => "Robert Kiyosaki"],
         ["text" => "Integritas adalah melakukan hal yang benar, bahkan ketika tidak ada orang yang melihat.", "author" => "C.S. Lewis"],
-        ["text" => "Karakter yang baik jauh lebih berharga daripada kecerdasan tanpa moral.", "author" => "Anonim"],
-        ["text" => "Kesuksesan berawal dari ketaatan pada aturan kecil yang dilakukan secara konsisten.", "author" => "Anonim"]
+        ["text" => "Pendidikan adalah senjata paling mematikan untuk mengubah dunia.", "author" => "Nelson Mandela"],
+        ["text" => "Kita adalah apa yang kita kerjakan berulang-ulang. Keunggulan bukanlah tindakan, melainkan kebiasaan.", "author" => "Aristoteles"],
+        ["text" => "Jenius adalah 1% inspirasi dan 99% kerja keras.", "author" => "Thomas Alva Edison"],
+        ["text" => "Hiduplah seolah kamu akan mati besok. Belajarlah seolah kamu akan hidup selamanya.", "author" => "Mahatma Gandhi"]
     ];
     $random_quote = $quotes[array_rand($quotes)];
 ?>
@@ -92,14 +94,20 @@ if ($role === 'siswa'):
                 </div>
             </div>
         </div>
-        <!-- Dynamic Calendar Widget -->
+        <!-- Dynamic Calendar Widget (Localized Indonesian) -->
+        <?php
+            $months = ["Jan" => "Jan", "Feb" => "Feb", "Mar" => "Mar", "Apr" => "Apr", "May" => "Mei", "Jun" => "Jun", "Jul" => "Jul", "Aug" => "Agu", "Sep" => "Sep", "Oct" => "Okt", "Nov" => "Nov", "Dec" => "Des"];
+            $days = ["Sunday" => "Minggu", "Monday" => "Senin", "Tuesday" => "Selasa", "Wednesday" => "Rabu", "Thursday" => "Kamis", "Friday" => "Jumat", "Saturday" => "Sabtu"];
+            $curr_month = $months[date('M')];
+            $curr_day = $days[date('l')];
+        ?>
         <div class="calendar-widget">
             <div class="cal-header">
-                <?php echo date('M'); ?>
+                <?php echo $curr_month; ?>
             </div>
             <div class="cal-body">
                 <span class="cal-date"><?php echo date('d'); ?></span>
-                <span class="cal-day"><?php echo date('l'); ?></span>
+                <span class="cal-day"><?php echo $curr_day; ?></span>
             </div>
         </div>
     </div>

@@ -43,11 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $query = mysqli_query($conn, "UPDATE guru SET nama_pengguna = '$nama_pengguna', username = '$username', jabatan = '$jabatan', telp = '$telp', role = '$role', aktif = '$aktif' WHERE kode_guru = '$kode_guru'");
 
         if ($query) {
-            header("Location: ../pages/guru/list.php");
+            header("Location: ../pages/guru/list.php?success=Data guru berhasil diperbarui!");
         } else {
-            echo "Gagal Mengedit Data Guru";
+            header("Location: ../pages/guru/list.php?error=Gagal mengedit data guru.");
         }
     }
-
-
-}
+};
