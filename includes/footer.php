@@ -1,9 +1,7 @@
-    </main>
-    <footer style="margin-top:50px; padding:10px; background-color:#f0f0f0; bottom:0;">
-        <center>
-            <p>Copyright &copy; 2026 Aplikasi Poin Pelanggaran Siswa</p>
-        </center>
-    </footer>
-    </body>
-
+        </main>
+        <footer class="app-footer">
+            <p>&copy; 2026 <strong>Sistem Poin Pelanggaran Siswa</strong>. Hak Cipta Terlindungi.</p>
+        </footer>
+    </div> <!-- End of content-wrapper -->
+</body>
 </html>

@@ -5,7 +5,7 @@
     <!-- Metadata dasar halaman: karakter, viewport untuk mobile, dan judul -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk ke Sistem | E-Pooint</title>
+    <title>Masuk ke Sistem | Sistem Poin Pelanggaran Siswa</title>
 
     <!-- Memanggil library ikon FontAwesome (v6+) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -27,9 +27,6 @@
                 <p class="brand-subtitle">
                     Platform Pemantauan Kedisiplinan Siswa yang Terintegrasi, Transparan, dan Modern.
                 </p>
-                <div class="brand-footer">
-                    <p>&copy; 2026 SMKS TI Bali Global Denpasar. Hak Cipta Terlindungi.</p>
-                </div>
             </div>
         </section>
 
@@ -38,8 +35,24 @@
             <div class="login-card">
                 <header class="login-card-header">
                     <h2>Selamat Datang</h2>
-                    <p>Silakan masukkan akun Anda untuk mulai mengelola data kedisiplinan.</p>
+                    <p>Silakan pilih kategori akun Anda.</p>
                 </header>
+
+                <!-- Role Selector -->
+                <div class="role-selector">
+                    <button type="button" class="role-btn active" data-role="siswa">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Siswa</span>
+                    </button>
+                    <button type="button" class="role-btn" data-role="guru">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Guru</span>
+                    </button>
+                    <button type="button" class="role-btn" data-role="bk">
+                        <i class="fas fa-user-shield"></i>
+                        <span>BK</span>
+                    </button>
+                </div>
 
                 <div class="login-card-body">
                     <!-- Form Utama Login -->
@@ -51,11 +64,13 @@
                             <input type="password" name="fake_pass">
                         </div>
                         
+                        <input type="hidden" name="role" id="roleInput" value="siswa">
+                        
                         <div class="form-group">
-                            <label for="username">Username atau NIS</label>
+                            <label for="username" id="usernameLabel">Nomor Induk Siswa (NIS)</label>
                             <div class="input-wrapper">
-                                <i class="fas fa-user" aria-hidden="true"></i>
-                                <input type="text" id="username" name="username" placeholder="Masukkan Username/NIS" required>
+                                <i class="fas fa-id-card" id="userIcon" aria-hidden="true"></i>
+                                <input type="text" id="username" name="username" placeholder="Masukkan NIS Anda" required>
                             </div>
                         </div>
 
@@ -87,6 +102,39 @@
             const passwordInput = document.querySelector('#password');
             const toggleBtn = document.querySelector('#togglePassword');
             const eyeIcon = document.querySelector('#eyeIcon');
+            const roleBtns = document.querySelectorAll('.role-btn');
+            const roleInput = document.getElementById('roleInput');
+            const usernameLabel = document.getElementById('usernameLabel');
+            const usernameInput = document.getElementById('username');
+            const userIcon = document.getElementById('userIcon');
+
+            // Handle Role Selection
+            roleBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update Active UI
+                    roleBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    // Update Role Value
+                    const role = btn.getAttribute('data-role');
+                    roleInput.value = role;
+
+                    // Dynamic UI Updates
+                    if (role === 'siswa') {
+                        usernameLabel.textContent = 'Nomor Induk Siswa (NIS)';
+                        usernameInput.placeholder = 'Masukkan NIS Anda';
+                        userIcon.className = 'fas fa-id-card';
+                    } else if (role === 'guru') {
+                        usernameLabel.textContent = 'Kode Guru atau Username Guru';
+                        usernameInput.placeholder = 'Masukkan Username';
+                        userIcon.className = 'fas fa-chalkboard-teacher';
+                    } else if (role === 'bk') {
+                        usernameLabel.textContent = 'Username Petugas BK';
+                        usernameInput.placeholder = 'Masukkan Username BK';
+                        userIcon.className = 'fas fa-user-shield';
+                    }
+                });
+            });
 
             toggleBtn.addEventListener('click', function() {
                 // Berpindah antara tipe password dan text
