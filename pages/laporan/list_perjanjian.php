@@ -335,571 +335,424 @@ $hasil_laporan_perjanjian_ortu = mysqli_query($conn, $sql_laporan_perjanjian_ort
 include ROOTPATH . "/includes/header.php";
 ?>
 
-<!-- ICON PRINTER (SVG) disimpan dalam variabel PHP agar tidak perlu ditulis ulang -->
-<?php
-$ikon_printer = '
-<span class="printer-wrapper">
-    <span class="printer-container">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 92 75" height="20px" width="20px">
-            <path stroke-width="5" stroke="black" d="M12 37.5H80C85.2467 37.5 89.5 41.7533 89.5 47V69C89.5 70.933 87.933 72.5 86 72.5H6C4.067 72.5 2.5 70.933 2.5 69V47C2.5 41.7533 6.75329 37.5 12 37.5Z"></path>
-            <mask fill="white" id="path-2-inside-1_30_7"><path d="M12 12C12 5.37258 17.3726 0 24 0H57C70.2548 0 81 10.7452 81 24V29H12V12Z"></path></mask>
-            <path mask="url(#path-2-inside-1_30_7)" fill="black" d="M7 12C7 2.61116 14.6112 -5 24 -5H57C73.0163 -5 86 7.98374 86 24H76C76 13.5066 67.4934 5 57 5H24C20.134 5 17 8.13401 17 12H7ZM81 29H12H81ZM7 29V12C7 2.61116 14.6112 -5 24 -5V5C20.134 5 17 8.13401 17 12V29H7ZM57 -5C73.0163 -5 86 7.98374 86 24V29H76V24C76 13.5066 67.4934 5 57 5V-5Z"></path>
-            <circle fill="black" r="3" cy="49" cx="78"></circle>
-        </svg>
-    </span>
-    <span class="printer-page-wrapper"><span class="printer-page"></span></span>
-</span>';
-?>
+<link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/laporan/list_perjanjian.css">
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     BAGIAN 1: TABEL CALON PEMBUAT SURAT PERJANJIAN SISWA (25-50 poin)
-     Siswa yang poinnya sudah 25-50 perlu membuat surat perjanjian
-════════════════════════════════════════════════════════════════════ -->
-<center>
+<div class="container">
+    <header class="page-header">
+        <div class="header-title-group">
+            <h2><i class="fas fa-file-signature"></i> Daftar Surat Perjanjian</h2>
+            <p class="header-subtitle">Kelola surat pernyataan kedisiplinan siswa berdasarkan akumulasi poin pelanggaran.</p>
+        </div>
+        <div class="header-actions">
+            <!-- Header actions if any -->
+        </div>
+    </header>
 
-    <!-- Tombol untuk langsung mencetak surat perjanjian siswa baru -->
-    <button class="print-btn" onclick="window.location.href='/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php?from=list_perjanjian.php'">
-        <?= $ikon_printer ?>
-        &nbsp;&nbsp;Cetak Surat Perjanjian Siswa
-    </button><br>
+    <div class="action-banners">
+        <a href="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php?from=list_perjanjian.php" class="btn-banner">
+            <div class="banner-info">
+                <div class="banner-icon"><i class="fas fa-user-edit"></i></div>
+                <div class="banner-text">
+                    <h4>Cetak Perjanjian Siswa</h4>
+                    <p>Siswa dengan akumulasi 25-50 poin</p>
+                </div>
+            </div>
+            <i class="fas fa-arrow-right banner-arrow"></i>
+        </a>
+        <a href="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php" class="btn-banner">
+            <div class="banner-info">
+                <div class="banner-icon"><i class="fas fa-users"></i></div>
+                <div class="banner-text">
+                    <h4>Cetak Perjanjian Ortu</h4>
+                    <p>Siswa dengan akumulasi 50-100 poin</p>
+                </div>
+            </div>
+            <i class="fas fa-arrow-right banner-arrow"></i>
+        </a>
+    </div>
 
-    <fieldset style="width: 70%;">
-        <legend>Daftar Pelanggaran Per Siswa</legend>
-        <div class="scroll">
-            <table border="1" cellpadding="10" cellspacing="0" width="100%">
+    <!-- ═══════════════════════════════════════════════════════════════════
+         BAGIAN 1: TABEL CALON PEMBUAT SURAT PERJANJIAN SISWA (25-50 poin)
+    ════════════════════════════════════════════════════════════════════ -->
+    <div class="card-section">
+        <div class="card-header">
+            <h3><i class="fas fa-user-clock"></i> Daftar Siswa di atas 25 Poin</h3>
+            
+            <form action="list_perjanjian.php" method="get" class="card-actions">
+                <datalist id="pilihan_siswa_25_50">
+                    <?php
+                    $query_pilihan_siswa = mysqli_query($conn, "SELECT nama_siswa, nis FROM siswa JOIN pelanggaran_siswa USING(nis) JOIN jenis_pelanggaran USING(id_jenis_pelanggaran) WHERE siswa.status = 'aktif' GROUP BY nis, nama_siswa HAVING SUM(poin) BETWEEN 25 AND 50");
+                    while ($baris_pilihan = mysqli_fetch_assoc($query_pilihan_siswa)) {
+                        echo "<option value='" . htmlspecialchars($baris_pilihan['nis']) . "'>";
+                        echo "<option value='" . htmlspecialchars($baris_pilihan['nama_siswa']) . "'>";
+                    }
+                    ?>
+                </datalist>
+
+                <div class="search-group">
+                    <input type="text" name="cari_daftar_siswa" value="<?= isset($_GET['cari_daftar_siswa']) ? htmlspecialchars($_GET['cari_daftar_siswa']) : '' ?>" placeholder="NIS atau Nama Siswa..." list="pilihan_siswa_25_50" autocomplete="off" class="search-input">
+                    <button type="submit" class="btn-search"><i class="fas fa-search"></i></button>
+                </div>
+                <a href="list_perjanjian.php" class="btn-reset">Reset</a>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table>
                 <thead>
                     <tr>
-                        <th colspan="6" align="right">
-                            <h3 style="float:left; margin: 0;">Daftar Siswa di atas 25 Poin</h3>
-
-                            <!-- Form pencarian siswa berdasarkan NIS atau nama -->
-                            <form action="list_perjanjian.php" method="get">
-
-                                <!-- Datalist = daftar pilihan yang muncul saat mengetik di kotak pencarian -->
-                                <datalist id="pilihan_siswa_25_50">
-                                    <?php
-                                    // Ambil daftar NIS dan nama siswa yang poinnya antara 25-50
-                                    // untuk ditampilkan sebagai pilihan autocomplete di kotak pencarian
-                                    $query_pilihan_siswa = mysqli_query($conn,
-                                        "SELECT nama_siswa, nis
-                                         FROM siswa
-                                         JOIN pelanggaran_siswa USING(nis)
-                                         JOIN jenis_pelanggaran USING(id_jenis_pelanggaran)
-                                         LEFT JOIN perjanjian_siswa ps USING(id_pelanggaran_siswa)
-                                         WHERE siswa.status = 'aktif'
-                                         GROUP BY nis, nama_siswa
-                                         HAVING SUM(poin) BETWEEN 25 AND 50"
-                                    );
-                                    while ($baris_pilihan = mysqli_fetch_assoc($query_pilihan_siswa)) {
-                                        // Tampilkan NIS sebagai pilihan
-                                        echo "<option value='" . htmlspecialchars($baris_pilihan['nis']) . "'>";
-                                        // Tampilkan nama siswa sebagai pilihan
-                                        echo "<option value='" . htmlspecialchars($baris_pilihan['nama_siswa']) . "'>";
-                                    }
-                                    ?>
-                                </datalist>
-
-                                <input type="text"
-                                       name="cari_daftar_siswa"
-                                       value="<?= isset($_GET['cari_daftar_siswa']) ? htmlspecialchars($_GET['cari_daftar_siswa']) : '' ?>"
-                                       placeholder="Masukkan NIS / Nama Siswa"
-                                       list="pilihan_siswa_25_50"
-                                       style="padding:8px 15px;width:200px;border-radius:5px;"
-                                       autocomplete="off">
-                                <input type="submit" class="btn-warning" style="color:white;font-weight:bold;" value="Cari">
-                                <a href="list_perjanjian.php" class="btn-danger"
-                                   style="text-decoration:none;color:white;font-family:'Arial';font-size:13px;">Reset</a>
-                            </form>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>No</th>
-                        <th>NIS</th>
+                        <th style="width: 50px; text-align: center;">No</th>
+                        <th style="width: 120px;">NIS</th>
                         <th>Nama Siswa</th>
                         <th>Jenis Pelanggaran</th>
-                        <th>Poin</th>
-                        <th>Aksi</th>
+                        <th style="width: 100px; text-align: center;">Poin</th>
+                        <th style="width: 200px;">Status & Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $nomor_urut = 1;
-
-                    // Cek dulu apakah query berhasil dijalankan (tidak error)
-                    // dan apakah ada data yang ditemukan
                     if (!$hasil_calon_perjanjian_siswa || mysqli_num_rows($hasil_calon_perjanjian_siswa) == 0) {
-                        echo "<tr><td colspan='6' align='center'>Data Tidak Ditemukan</td></tr>";
-                        // Jika query gagal total (misalnya syntax error), tampilkan pesan error
-                        if (!$hasil_calon_perjanjian_siswa) {
-                            echo "<tr><td colspan='6' style='color:red;'>Query Error: " . mysqli_error($conn) . "</td></tr>";
-                        }
+                        echo "<tr><td colspan='6' align='center' style='padding: 40px; color: #94a3b8;'>Data tidak ditemukan</td></tr>";
                     } else {
-                        // Ambil data satu per satu dari hasil query
                         while ($data_siswa = mysqli_fetch_assoc($hasil_calon_perjanjian_siswa)) {
                     ?>
                     <tr>
-                        <td align="center"><?= $nomor_urut++ ?></td>
-                        <td align="center"><?= htmlspecialchars($data_siswa['nis']) ?></td>
-                        <td><?= htmlspecialchars($data_siswa['nama_siswa']) ?></td>
-                        <td align="center" width="400px">
-                            <?php
-                            // Tampilkan semua jenis pelanggaran siswa ini (dipisah koma)
-                            // Memanggil fungsi yang sudah dibuat di atas
-                            tampilkanJenisPelanggaran($conn, $data_siswa['nis']);
-                            ?>
-                        </td>
-                        <td align="center"><?= htmlspecialchars($data_siswa['total_poin']) ?></td>
+                        <td style="text-align: center; color: #94a3b8; font-weight: 600;"><?= $nomor_urut++ ?></td>
+                        <td><span class="nis-badge"><?= htmlspecialchars($data_siswa['nis']) ?></span></td>
+                        <td style="font-weight: 700; color: #1e293b;"><?= htmlspecialchars($data_siswa['nama_siswa']) ?></td>
+                        <td><span style="font-size: 0.85rem; color: #64748b;"><?php tampilkanJenisPelanggaran($conn, $data_siswa['nis']); ?></span></td>
+                        <td style="text-align: center;"><span class="poin-badge"><?= htmlspecialchars($data_siswa['total_poin']) ?></span></td>
                         <td>
-                            <?php
-                            // Tampilkan tombol aksi berbeda berdasarkan status dokumen perjanjian:
-                            // - NULL       = belum ada surat → tampilkan tombol "Detail" dan "Cetak"
-                            // - Masih Proses = sudah cetak, belum upload foto → tampilkan tombol upload
-                            // - Selesai    = sudah upload foto → tampilkan link lihat gambar
+                            <div class="action-stack">
+                                <?php if ($data_siswa['status_dokumen'] == NULL) { ?>
+                                    <span class="status-badge status-pending"><i class="fas fa-hourglass-start"></i> Belum Ada Surat</span>
+                                    <div style="display: flex; gap: 5px;">
+                                        <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_siswa['nis'] ?>&tanggal=<?= $data_siswa['tanggal_surat'] ?>&from=list_perjanjian.php" class="btn-action btn-detail" title="Detail"><i class="fas fa-eye"></i> Detail</a>
+                                        <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php?from=list_perjanjian.php" method="post" style="margin: 0;">
+                                            <input type="hidden" name="nis" value="<?= $data_siswa['nis'] ?>">
+                                            <button type="submit" class="btn-action btn-print-mini"><i class="fas fa-print"></i> Cetak</button>
+                                        </form>
+                                    </div>
 
-                            if ($data_siswa['status_dokumen'] == NULL) { ?>
-                                <!-- Status: Belum ada surat perjanjian -->
-                                <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_siswa['nis'] ?>&tanggal=<?= $data_siswa['tanggal_surat'] ?>">Detail</a>
-                                </button>
-                                <hr>
-                                <!-- Form untuk mencetak surat perjanjian baru -->
-                                <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php?from=list_perjanjian.php" method="post">
-                                    <input type="hidden" name="nis" value="<?= $data_siswa['nis'] ?>">
-                                    <input type="submit" value="Cetak" style="padding:10px 15px;font-weight:bold;background-color:#fff;border-radius:5px;border:1px solid #ccc;">
-                                </form>
+                                <?php } elseif ($data_siswa['status_dokumen'] == "Masih Proses") { ?>
+                                    <span class="status-badge status-process"><i class="fas fa-spinner fa-spin"></i> Menunggu Upload</span>
+                                    <div style="display: flex; gap: 5px; margin-bottom: 8px;">
+                                        <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_siswa['nis'] ?>&tanggal=<?= $data_siswa['tanggal_surat'] ?>&from=list_perjanjian.php" class="btn-action btn-detail" title="Detail"><i class="fas fa-eye"></i></a>
+                                        <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_siswa.php?nis=<?= $data_siswa['nis'] ?>&from=list_perjanjian.php" class="btn-action btn-print-mini" title="Cetak Surat"><i class="fas fa-print"></i></a>
+                                    </div>
+                                    <form action="" method="post" enctype="multipart/form-data" class="upload-mini">
+                                        <span>Upload Bukti TTD:</span>
+                                        <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_siswa['tanggal_surat']) ?>">
+                                        <input type="hidden" name="jenis_upload" value="siswa">
+                                        <div style="display: flex; gap: 5px; align-items: center;">
+                                            <input type="file" name="foto_dokumen" accept="image/*" required>
+                                            <button type="submit" name="upload" class="btn-action btn-upload" style="padding: 5px 10px;"><i class="fas fa-cloud-arrow-up"></i></button>
+                                        </div>
+                                    </form>
 
-                            <?php } elseif ($data_siswa['status_dokumen'] == "Masih Proses") { ?>
-                                <!-- Status: Surat sudah dicetak, menunggu upload foto -->
-                                <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_siswa['nis'] ?>&tanggal=<?= $data_siswa['tanggal_surat'] ?>&from=list_perjanjian.php">Detail Pelanggaran</a>
-                                </button>
-                                <hr>
-                                <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_siswa.php?nis=<?= $data_siswa['nis'] ?>&from=list_perjanjian.php">Cetak Surat</a>
-                                </button>
-                                <hr>
-                                <!-- Form upload foto dokumen yang sudah ditandatangani -->
-                                <form action="" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_siswa['tanggal_surat']) ?>">
-                                    <input type="hidden" name="jenis_upload" value="siswa">
-                                    <input type="file" name="foto_dokumen" accept="image/*" required>
-                                    <input type="submit" name="upload" value="Upload" class="btn-warning" style="color:white;font-weight:bold;">
-                                </form>
-
-                            <?php } elseif ($data_siswa['status_dokumen'] == "Selesai") { ?>
-                                <!-- Status: Selesai, foto sudah diupload → tampilkan link foto -->
-                                <a href="/poin_pelanggaran_siswa/gambar/<?= htmlspecialchars($data_siswa['foto_dokumen']) ?>"
-                                   target="_blank" class="btn-primary"
-                                   style="text-decoration:none;color:white;font-family:'Arial';font-size:13px;">Lihat Gambar</a>
-                            <?php } ?>
+                                <?php } elseif ($data_siswa['status_dokumen'] == "Selesai") { ?>
+                                    <span class="status-badge status-success"><i class="fas fa-check-circle"></i> Selesai</span>
+                                    <a href="/poin_pelanggaran_siswa/assets/images/<?= htmlspecialchars($data_siswa['foto_dokumen']) ?>" target="_blank" class="btn-action btn-view"><i class="fas fa-image"></i> Lihat Dokumen</a>
+                                <?php } ?>
+                            </div>
                         </td>
                     </tr>
-                    <?php
-                        } // akhir while
-                    } // akhir else
-                    ?>
+                    <?php } } ?>
                 </tbody>
             </table>
         </div>
-    </fieldset>
-</center>
+    </div>
+
 
 
 <br><br>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     BAGIAN 2: TABEL CALON PEMBUAT SURAT PERJANJIAN ORTU (50-100 poin)
-     Siswa yang poinnya sudah 50-100 perlu membuat surat perjanjian
-     yang ditandatangani juga oleh orang tua/wali
-════════════════════════════════════════════════════════════════════ -->
-<center>
+    <!-- ═══════════════════════════════════════════════════════════════════
+         BAGIAN 2: TABEL CALON PEMBUAT SURAT PERJANJIAN ORTU (50-100 poin)
+    ════════════════════════════════════════════════════════════════════ -->
+    <div class="card-section">
+        <div class="card-header">
+            <h3><i class="fas fa-users-cog"></i> Daftar Siswa di atas 50 Poin</h3>
+            
+            <form action="list_perjanjian.php" method="get" class="card-actions">
+                <datalist id="pilihan_siswa_50_100">
+                    <?php
+                    $query_pilihan_ortu = mysqli_query($conn, "SELECT nama_siswa, nis FROM siswa JOIN pelanggaran_siswa USING(nis) JOIN jenis_pelanggaran USING(id_jenis_pelanggaran) WHERE siswa.status = 'aktif' GROUP BY nis, nama_siswa HAVING SUM(poin) BETWEEN 50 AND 100");
+                    while ($baris_pilihan_ortu = mysqli_fetch_assoc($query_pilihan_ortu)) {
+                        echo "<option value='" . htmlspecialchars($baris_pilihan_ortu['nis']) . "'>";
+                        echo "<option value='" . htmlspecialchars($baris_pilihan_ortu['nama_siswa']) . "'>";
+                    }
+                    ?>
+                </datalist>
 
-    <!-- Tombol untuk langsung mencetak surat perjanjian orang tua baru -->
-    <button class="print-btn" onclick="window.location.href='/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php'">
-        <?= $ikon_printer ?>
-        &nbsp;&nbsp;Cetak Surat Perjanjian Ortu/Wali
-    </button><br>
+                <div class="search-group">
+                    <input type="text" name="cari_daftar_ortu" value="<?= isset($_GET['cari_daftar_ortu']) ? htmlspecialchars($_GET['cari_daftar_ortu']) : '' ?>" placeholder="NIS atau Nama Siswa..." list="pilihan_siswa_50_100" autocomplete="off" class="search-input">
+                    <button type="submit" class="btn-search"><i class="fas fa-search"></i></button>
+                </div>
+                <a href="list_perjanjian.php" class="btn-reset">Reset</a>
+            </form>
+        </div>
 
-    <fieldset style="width: 70%;">
-        <legend>Daftar Surat Perjanjian Ortu/Wali</legend>
-        <div class="scroll">
-            <table border="1" cellpadding="10" cellspacing="0" width="100%">
+        <div class="table-responsive">
+            <table>
                 <thead>
                     <tr>
-                        <th colspan="6" align="right">
-                            <h3 style="float:left; margin: 0;">Daftar Siswa di atas 50 Poin</h3>
-
-                            <!-- Form pencarian siswa ortu berdasarkan NIS atau nama -->
-                            <form action="list_perjanjian.php" method="get">
-                                <datalist id="pilihan_siswa_50_100">
-                                    <?php
-                                    // Ambil daftar NIS dan nama siswa yang poinnya antara 50-100
-                                    $query_pilihan_ortu = mysqli_query($conn,
-                                        "SELECT nama_siswa, nis
-                                         FROM siswa
-                                         JOIN pelanggaran_siswa USING(nis)
-                                         JOIN jenis_pelanggaran USING(id_jenis_pelanggaran)
-                                         WHERE siswa.status = 'aktif'
-                                         GROUP BY nis, nama_siswa
-                                         HAVING SUM(poin) BETWEEN 50 AND 100"
-                                    );
-                                    while ($baris_pilihan_ortu = mysqli_fetch_assoc($query_pilihan_ortu)) {
-                                        echo "<option value='" . htmlspecialchars($baris_pilihan_ortu['nis']) . "'>";
-                                        echo "<option value='" . htmlspecialchars($baris_pilihan_ortu['nama_siswa']) . "'>";
-                                    }
-                                    ?>
-                                </datalist>
-                                <input type="text"
-                                       name="cari_daftar_ortu"
-                                       value="<?= isset($_GET['cari_daftar_ortu']) ? htmlspecialchars($_GET['cari_daftar_ortu']) : '' ?>"
-                                       placeholder="Masukkan NIS / Nama Siswa"
-                                       list="pilihan_siswa_50_100"
-                                       style="padding:8px 15px;width:200px;border-radius:5px;"
-                                       autocomplete="off">
-                                <input type="submit" class="btn-warning" style="color:white;font-weight:bold;" value="Cari">
-                                <a href="list_perjanjian.php" class="btn-danger"
-                                   style="text-decoration:none;color:white;font-family:'Arial';font-size:13px;">Reset</a>
-                            </form>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>No</th>
-                        <th>NIS</th>
+                        <th style="width: 50px; text-align: center;">No</th>
+                        <th style="width: 120px;">NIS</th>
                         <th>Nama Siswa</th>
                         <th>Jenis Pelanggaran</th>
-                        <th>Poin</th>
-                        <th>Aksi</th>
+                        <th style="width: 100px; text-align: center;">Poin</th>
+                        <th style="width: 200px;">Status & Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $nomor_urut = 1;
-
                     if (!$hasil_calon_perjanjian_ortu || mysqli_num_rows($hasil_calon_perjanjian_ortu) == 0) {
-                        echo "<tr><td colspan='6' align='center'>Data Tidak Ditemukan</td></tr>";
-                        if (!$hasil_calon_perjanjian_ortu) {
-                            echo "<tr><td colspan='6' style='color:red;'>Query Error: " . mysqli_error($conn) . "</td></tr>";
-                        }
+                        echo "<tr><td colspan='6' align='center' style='padding: 40px; color: #94a3b8;'>Data tidak ditemukan</td></tr>";
                     } else {
                         while ($data_ortu = mysqli_fetch_assoc($hasil_calon_perjanjian_ortu)) {
                     ?>
                     <tr>
-                        <td align="center"><?= $nomor_urut++ ?></td>
-                        <td align="center"><?= htmlspecialchars($data_ortu['nis']) ?></td>
-                        <td align="center"><?= htmlspecialchars($data_ortu['nama_siswa']) ?></td>
-                        <td align="center" width="400px">
-                            <?php tampilkanJenisPelanggaran($conn, $data_ortu['nis']); ?>
-                        </td>
-                        <td><?= htmlspecialchars($data_ortu['total_poin']) ?></td>
+                        <td style="text-align: center; color: #94a3b8; font-weight: 600;"><?= $nomor_urut++ ?></td>
+                        <td><span class="nis-badge"><?= htmlspecialchars($data_ortu['nis']) ?></span></td>
+                        <td style="font-weight: 700; color: #1e293b;"><?= htmlspecialchars($data_ortu['nama_siswa']) ?></td>
+                        <td><span style="font-size: 0.85rem; color: #64748b;"><?php tampilkanJenisPelanggaran($conn, $data_ortu['nis']); ?></span></td>
+                        <td style="text-align: center;"><span class="poin-badge"><?= htmlspecialchars($data_ortu['total_poin']) ?></span></td>
                         <td>
-                            <?php if ($data_ortu['status_dokumen'] == NULL) { ?>
-                                <!-- Status: Belum ada surat → tampilkan tombol cetak panggilan & perjanjian -->
-                                <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_ortu['nis'] ?>&tanggal=<?= $data_ortu['tanggal_surat'] ?>&from=list_panggilan_ortu.php">Detail</a>
-                                </button>
+                            <div class="action-stack">
+                                <?php if ($data_ortu['status_dokumen'] == NULL) { ?>
+                                    <span class="status-badge status-pending"><i class="fas fa-hourglass-start"></i> Belum Ada Surat</span>
+                                    <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                                        <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_ortu['nis'] ?>&tanggal=<?= $data_ortu['tanggal_surat'] ?>&from=list_perjanjian.php" class="btn-action btn-detail" title="Detail"><i class="fas fa-eye"></i> Detail</a>
+                                        
+                                        <?php
+                                        $cek_surat_panggilan = mysqli_query($conn, "SELECT nis FROM surat_keluar WHERE nis = '" . mysqli_real_escape_string($conn, $data_ortu['nis']) . "' AND jenis_surat = 'Panggilan Orang Tua'");
+                                        if (mysqli_num_rows($cek_surat_panggilan) == 0) { ?>
+                                            <form action="/poin_pelanggaran_siswa/pages/cetak/add_panggilan_ortu.php?from=list_perjanjian.php" method="post" style="margin: 0;">
+                                                <input type="hidden" name="nis" value="<?= $data_ortu['nis'] ?>">
+                                                <button type="submit" class="btn-action btn-print-mini" title="Cetak Panggilan"><i class="fas fa-envelope"></i> Panggilan</button>
+                                            </form>
+                                        <?php } ?>
 
-                                <?php
-                                // Cek apakah surat panggilan ortu sudah pernah dicetak
-                                $cek_surat_panggilan = mysqli_query($conn,
-                                    "SELECT nis FROM surat_keluar
-                                     WHERE nis = '" . mysqli_real_escape_string($conn, $data_ortu['nis']) . "'
-                                     AND jenis_surat = 'Panggilan Orang Tua'"
-                                );
-                                // Jika belum pernah dicetak (jumlah = 0), tampilkan tombol cetak
-                                if (mysqli_num_rows($cek_surat_panggilan) == 0) { ?>
-                                    <hr>
-                                    <form action="/poin_pelanggaran_siswa/pages/cetak/add_panggilan_ortu.php?from=list_perjanjian.php" method="post">
-                                        <input type="hidden" name="nis" value="<?= $data_ortu['nis'] ?>">
-                                        <input type="submit" value="Cetak Panggilan Ortu" style="padding:10px 15px;font-weight:bold;background-color:#fff;border-radius:5px;border:1px solid #ccc;">
+                                        <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php?from=list_perjanjian.php" method="post" style="margin: 0;">
+                                            <input type="hidden" name="nis" value="<?= $data_ortu['nis'] ?>">
+                                            <button type="submit" class="btn-action btn-print-mini" title="Cetak Perjanjian"><i class="fas fa-file-contract"></i> Perjanjian</button>
+                                        </form>
+                                    </div>
+
+                                <?php } elseif ($data_ortu['status_dokumen'] == "Masih Proses") { ?>
+                                    <span class="status-badge status-process"><i class="fas fa-spinner fa-spin"></i> Menunggu Upload</span>
+                                    <div style="display: flex; gap: 5px; margin-bottom: 8px;">
+                                        <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_ortu['nis'] ?>&tanggal=<?= $data_ortu['tanggal_surat'] ?>&from=list_perjanjian.php" class="btn-action btn-detail" title="Detail"><i class="fas fa-eye"></i></a>
+                                        <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $data_ortu['nis'] ?>&from=list_perjanjian.php" class="btn-action btn-print-mini" title="Cetak Surat"><i class="fas fa-print"></i></a>
+                                    </div>
+                                    <form action="" method="post" enctype="multipart/form-data" class="upload-mini">
+                                        <span>Upload Bukti TTD Ortu:</span>
+                                        <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_ortu['tanggal_surat']) ?>">
+                                        <input type="hidden" name="jenis_upload" value="perjanjian_orang_tua">
+                                        <div style="display: flex; gap: 5px; align-items: center;">
+                                            <input type="file" name="foto_dokumen" accept="image/*, application/pdf" required>
+                                            <button type="submit" name="upload" class="btn-action btn-upload"><i class="fas fa-cloud-arrow-up"></i></button>
+                                        </div>
                                     </form>
+
+                                <?php } elseif ($data_ortu['status_dokumen'] == "Selesai") { ?>
+                                    <span class="status-badge status-success"><i class="fas fa-check-circle"></i> Selesai</span>
+                                    <a href="/poin_pelanggaran_siswa/assets/images/<?= htmlspecialchars($data_ortu['foto_dokumen']) ?>" target="_blank" class="btn-action btn-view"><i class="fas fa-image"></i> Lihat Dokumen</a>
                                 <?php } ?>
-
-                                <?php
-                                // Cek apakah surat perjanjian ortu sudah pernah dicetak
-                                $cek_surat_perjanjian_ortu = mysqli_query($conn,
-                                    "SELECT nis FROM surat_keluar
-                                     WHERE nis = '" . mysqli_real_escape_string($conn, $data_ortu['nis']) . "'
-                                     AND jenis_surat = 'Perjanjian Ortu'"
-                                );
-                                if (mysqli_num_rows($cek_surat_perjanjian_ortu) == 0) { ?>
-                                    <hr>
-                                    <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php?from=list_perjanjian.php" method="post">
-                                        <input type="hidden" name="nis" value="<?= $data_ortu['nis'] ?>">
-                                        <input type="submit" value="Cetak Perjanjian Ortu" style="padding:10px 15px;font-weight:bold;background-color:#fff;border-radius:5px;border:1px solid #ccc;">
-                                    </form>
-                                <?php } ?>
-
-                            <?php } elseif ($data_ortu['status_dokumen'] == "Masih Proses") { ?>
-                                <!-- Status: Surat sudah dicetak, menunggu upload foto -->
-                                <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_ortu['nis'] ?>&tanggal=<?= $data_ortu['tanggal_surat'] ?>&from=list_perjanjian.php">Detail Pelanggaran</a>
-                                </button>
-                                <hr>
-                                <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $data_ortu['nis'] ?>&from=list_perjanjian.php">Cetak Surat</a>
-                                </button>
-                                <hr>
-                                <form action="" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_ortu['tanggal_surat']) ?>">
-                                    <input type="hidden" name="jenis_upload" value="perjanjian_orang_tua">
-                                    <input type="file" name="foto_dokumen" accept="image/*, application/pdf" required>
-                                    <input type="submit" name="upload" value="Upload" class="btn-warning" style="color:white;font-weight:bold;">
-                                </form>
-
-                            <?php } elseif ($data_ortu['status_dokumen'] == "Selesai") { ?>
-                                <!-- Status: Selesai → tampilkan link foto dokumen -->
-                                <a href="/poin_pelanggaran_siswa/gambar/<?= htmlspecialchars($data_ortu['foto_dokumen']) ?>"
-                                   target="_blank" class="btn-primary"
-                                   style="text-decoration:none;color:white;font-family:'Arial';font-size:13px;">Lihat Gambar</a>
-                            <?php } ?>
+                            </div>
                         </td>
                     </tr>
-                    <?php
-                        } // akhir while
-                    } // akhir else
-                    ?>
+                    <?php } } ?>
                 </tbody>
             </table>
         </div>
-    </fieldset>
-</center>
+    </div>
 
+    <div style="height: 40px;"></div>
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h2 style="color: #64748b; font-size: 1.5rem; font-weight: 800; border-bottom: 2px solid #e2e8f0; display: inline-block; padding-bottom: 10px;">Laporan Riwayat Perjanjian</h2>
+    </div>
 
-<br><br>
-<hr>
+    <!-- ═══════════════════════════════════════════════════════════════════
+         BAGIAN 3: LAPORAN - Daftar surat perjanjian SISWA yang sudah dicetak
+    ════════════════════════════════════════════════════════════════════ -->
+    <div class="card-section" style="border-top: 4px solid #3b82f6;">
+        <div class="card-header">
+            <h3><i class="fas fa-history"></i> Riwayat Perjanjian Siswa</h3>
+            
+            <form action="list_perjanjian.php" method="get" class="card-actions">
+                <datalist id="pilihan_laporan_siswa">
+                    <?php
+                    $query_pilihan_laporan_siswa = mysqli_query($conn, "SELECT DISTINCT s.nis, s.nama_siswa FROM perjanjian_siswa ps JOIN pelanggaran_siswa pel USING(id_pelanggaran_siswa) JOIN siswa s USING(nis)");
+                    while ($baris = mysqli_fetch_assoc($query_pilihan_laporan_siswa)) {
+                        echo "<option value='" . htmlspecialchars($baris['nis']) . "'>";
+                        echo "<option value='" . htmlspecialchars($baris['nama_siswa']) . "'>";
+                    }
+                    ?>
+                </datalist>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     BAGIAN 3: LAPORAN - Daftar surat perjanjian SISWA yang sudah dicetak
-════════════════════════════════════════════════════════════════════ -->
-<center>
-    <h1>Laporan Surat Perjanjian</h1>
+                <div class="search-group">
+                    <input type="text" name="cari_laporan_siswa" value="<?= isset($_GET['cari_laporan_siswa']) ? htmlspecialchars($_GET['cari_laporan_siswa']) : '' ?>" placeholder="NIS atau Nama Siswa..." list="pilihan_laporan_siswa" autocomplete="off" class="search-input">
+                    <button type="submit" class="btn-search"><i class="fas fa-search"></i></button>
+                </div>
+                <a href="list_perjanjian.php" class="btn-reset">Reset</a>
+            </form>
+        </div>
 
-    <fieldset style="width: 70%;">
-        <legend>Daftar Surat Perjanjian Siswa</legend>
-        <div class="scroll">
-            <table border="1" cellpadding="10" cellspacing="0" width="100%">
+        <div class="table-responsive">
+            <table>
                 <thead>
                     <tr>
-                        <th colspan="6" align="right">
-                            <h3 style="float:left; margin: 0;">Daftar Siswa Sudah Cetak Surat Perjanjian Siswa</h3>
-                            <form action="list_perjanjian.php" method="get">
-                                <datalist id="pilihan_laporan_siswa">
-                                    <?php
-                                    // Ambil daftar siswa yang sudah pernah membuat perjanjian siswa
-                                    $query_pilihan_laporan_siswa = mysqli_query($conn,
-                                        "SELECT DISTINCT s.nis, s.nama_siswa
-                                         FROM perjanjian_siswa ps
-                                         JOIN pelanggaran_siswa pel USING(id_pelanggaran_siswa)
-                                         JOIN siswa s USING(nis)"
-                                    );
-                                    while ($baris = mysqli_fetch_assoc($query_pilihan_laporan_siswa)) {
-                                        echo "<option value='" . htmlspecialchars($baris['nis']) . "'>";
-                                        echo "<option value='" . htmlspecialchars($baris['nama_siswa']) . "'>";
-                                    }
-                                    ?>
-                                </datalist>
-                                <input type="text"
-                                       name="cari_laporan_siswa"
-                                       value="<?= isset($_GET['cari_laporan_siswa']) ? htmlspecialchars($_GET['cari_laporan_siswa']) : '' ?>"
-                                       placeholder="Masukkan NIS / Nama Siswa"
-                                       list="pilihan_laporan_siswa"
-                                       style="padding:8px 15px;width:200px;border-radius:5px;"
-                                       autocomplete="off">
-                                <input type="submit" class="btn-warning" style="color:white;font-weight:bold;" value="Cari">
-                                <a href="list_perjanjian.php" class="btn-danger"
-                                   style="text-decoration:none;color:white;font-family:'Arial';font-size:13px;">Reset</a>
-                            </form>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>No</th>
-                        <th>Tanggal Pembuatan Surat</th>
-                        <th>NIS</th>
+                        <th style="width: 50px; text-align: center;">No</th>
+                        <th>Tanggal Pembuatan</th>
+                        <th style="width: 120px;">NIS</th>
                         <th>Nama Siswa</th>
-                        <th>Tingkat</th>
-                        <th>Aksi</th>
+                        <th style="width: 80px; text-align: center;">Tingkat</th>
+                        <th style="width: 200px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $nomor_urut = 1;
                     if (!$hasil_laporan_perjanjian_siswa || mysqli_num_rows($hasil_laporan_perjanjian_siswa) == 0) {
-                        echo "<tr><td colspan='6' align='center'>Data Tidak Ditemukan</td></tr>";
-                        if (!$hasil_laporan_perjanjian_siswa) {
-                            echo "<tr><td colspan='6' style='color:red;'>Query Error: " . mysqli_error($conn) . "</td></tr>";
-                        }
+                        echo "<tr><td colspan='6' align='center' style='padding: 30px; color: #94a3b8;'>Belum ada data riwayat</td></tr>";
                     } else {
                         while ($data_laporan_siswa = mysqli_fetch_assoc($hasil_laporan_perjanjian_siswa)) {
                     ?>
                     <tr>
-                        <td align="center"><?= $nomor_urut++ ?></td>
-                        <!-- Tampilkan tanggal dalam format Bahasa Indonesia -->
-                        <td align="center"><?= formatTanggalIndo($data_laporan_siswa['tanggal_surat']) ?></td>
-                        <td align="center"><?= htmlspecialchars($data_laporan_siswa['nis']) ?></td>
-                        <td align="center"><?= htmlspecialchars($data_laporan_siswa['nama_siswa']) ?></td>
-                        <td><?= htmlspecialchars($data_laporan_siswa['tingkat']) ?></td>
+                        <td align="center" style="color: #94a3b8;"><?= $nomor_urut++ ?></td>
+                        <td><span style="font-weight: 600; color: #475569;"><i class="far fa-calendar-alt" style="margin-right: 8px; color: #94a3b8;"></i><?= formatTanggalIndo($data_laporan_siswa['tanggal_surat']) ?></span></td>
+                        <td><span class="nis-badge"><?= htmlspecialchars($data_laporan_siswa['nis']) ?></span></td>
+                        <td style="font-weight: 700; color: #1e293b;"><?= htmlspecialchars($data_laporan_siswa['nama_siswa']) ?></td>
+                        <td align="center"><span style="background: #f1f5f9; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8rem;"><?= htmlspecialchars($data_laporan_siswa['tingkat']) ?></span></td>
                         <td>
-                            <?php if ($data_laporan_siswa['status_dokumen'] == NULL) { ?>
-                                <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_laporan_siswa['nis'] ?>&tanggal=<?= $data_laporan_siswa['tanggal_surat'] ?>">Detail</a>
-                                </button>
-                                <hr>
-                                <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php" method="post">
-                                    <input type="hidden" name="nis" value="<?= $data_laporan_siswa['nis'] ?>">
-                                    <input type="submit" value="Cetak" style="padding:10px 15px;font-weight:bold;background-color:#fff;border-radius:5px;border:1px solid #ccc;">
-                                </form>
-
-                            <?php } elseif ($data_laporan_siswa['status_dokumen'] == "Masih Proses") { ?>
-                                <button class="btn-primary">
-                                    <a href="/poin_pelanggara_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_laporan_siswa['nis'] ?>&tanggal=<?= $data_laporan_siswa['tanggal_surat'] ?>">Detail Pelanggaran</a>
-                                </button>
-                                <hr>
-                                <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_siswa.php?nis=<?= $data_laporan_siswa['nis'] ?>">Cetak Surat</a>
-                                </button>
-                                <hr>
-                                <form action="" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_laporan_siswa['tanggal_surat']) ?>">
-                                    <input type="hidden" name="jenis_upload" value="siswa">
-                                    <input type="file" name="foto_dokumen" accept="image/*" required>
-                                    <input type="submit" name="upload" value="Upload" class="btn-warning" style="color:white;font-weight:bold;">
-                                </form>
-
-                            <?php } elseif ($data_laporan_siswa['status_dokumen'] == "Selesai") { ?>
-                                <a href="/poin_pelanggaran_siswa/gambar/<?= htmlspecialchars($data_laporan_siswa['foto_dokumen']) ?>"
-                                   target="_blank" class="btn-primary"
-                                   style="text-decoration:none;color:white;font-family:'Arial';font-size:13px;">Lihat Gambar</a>
-                            <?php } ?>
+                            <div class="action-stack">
+                                <?php if ($data_laporan_siswa['status_dokumen'] == NULL) { ?>
+                                    <div style="display: flex; gap: 5px;">
+                                        <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_laporan_siswa['nis'] ?>&tanggal=<?= $data_laporan_siswa['tanggal_surat'] ?>" class="btn-action btn-detail"><i class="fas fa-eye"></i> Detail</a>
+                                        <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php" method="post" style="margin: 0;">
+                                            <input type="hidden" name="nis" value="<?= $data_laporan_siswa['nis'] ?>">
+                                            <button type="submit" class="btn-action btn-print-mini"><i class="fas fa-print"></i> Cetak</button>
+                                        </form>
+                                    </div>
+                                <?php } elseif ($data_laporan_siswa['status_dokumen'] == "Masih Proses") { ?>
+                                    <div style="display: flex; gap: 5px; margin-bottom: 5px;">
+                                        <a href="/poin_pelanggara_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_laporan_siswa['nis'] ?>&tanggal=<?= $data_laporan_siswa['tanggal_surat'] ?>" class="btn-action btn-detail"><i class="fas fa-eye"></i></a>
+                                        <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_siswa.php?nis=<?= $data_laporan_siswa['nis'] ?>" class="btn-action btn-print-mini"><i class="fas fa-print"></i></a>
+                                    </div>
+                                    <form action="" method="post" enctype="multipart/form-data" class="upload-mini">
+                                        <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_laporan_siswa['tanggal_surat']) ?>">
+                                        <input type="hidden" name="jenis_upload" value="siswa">
+                                        <div style="display: flex; gap: 5px;">
+                                            <input type="file" name="foto_dokumen" accept="image/*" required>
+                                            <button type="submit" name="upload" class="btn-action btn-upload"><i class="fas fa-upload"></i></button>
+                                        </div>
+                                    </form>
+                                <?php } elseif ($data_laporan_siswa['status_dokumen'] == "Selesai") { ?>
+                                    <a href="/poin_pelanggaran_siswa/gambar/<?= htmlspecialchars($data_laporan_siswa['foto_dokumen']) ?>" target="_blank" class="btn-action btn-view"><i class="fas fa-image"></i> Lihat Dokumen</a>
+                                <?php } ?>
+                            </div>
                         </td>
                     </tr>
-                    <?php
-                        } // akhir while
-                    } // akhir else
-                    ?>
+                    <?php } } ?>
                 </tbody>
             </table>
         </div>
-    </fieldset>
-</center>
+    </div>
+
 
 
 <br><br>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     BAGIAN 4: LAPORAN - Daftar surat perjanjian ORTU yang sudah dicetak
-════════════════════════════════════════════════════════════════════ -->
-<center>
+    <!-- ═══════════════════════════════════════════════════════════════════
+         BAGIAN 4: LAPORAN - Daftar surat perjanjian ORTU yang sudah dicetak
+    ════════════════════════════════════════════════════════════════════ -->
+    <div class="card-section" style="border-top: 4px solid #f59e0b;">
+        <div class="card-header">
+            <h3><i class="fas fa-file-invoice"></i> Riwayat Perjanjian Ortu / Wali</h3>
+            
+            <form action="list_perjanjian.php" method="get" class="card-actions">
+                <datalist id="pilihan_laporan_ortu">
+                    <?php
+                    $query_pilihan_laporan_ortu = mysqli_query($conn, "SELECT DISTINCT s.nis, s.nama_siswa FROM perjanjian_orang_tua po JOIN pelanggaran_siswa pel USING(id_pelanggaran_siswa) JOIN siswa s USING(nis)");
+                    while ($baris = mysqli_fetch_assoc($query_pilihan_laporan_ortu)) {
+                        echo "<option value='" . htmlspecialchars($baris['nis']) . "'>";
+                        echo "<option value='" . htmlspecialchars($baris['nama_siswa']) . "'>";
+                    }
+                    ?>
+                </datalist>
 
-    <fieldset style="width: 70%;">
-        <legend>Daftar Surat Perjanjian Ortu/Wali</legend>
-        <div class="scroll">
-            <table border="1" cellpadding="10" cellspacing="0" width="100%">
+                <div class="search-group">
+                    <input type="text" name="cari_laporan_ortu" value="<?= isset($_GET['cari_laporan_ortu']) ? htmlspecialchars($_GET['cari_laporan_ortu']) : '' ?>" placeholder="NIS atau Nama Siswa..." list="pilihan_laporan_ortu" autocomplete="off" class="search-input">
+                    <button type="submit" class="btn-search"><i class="fas fa-search"></i></button>
+                </div>
+                <a href="list_perjanjian.php" class="btn-reset">Reset</a>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table>
                 <thead>
                     <tr>
-                        <th colspan="6" align="right">
-                            <h3 style="float:left; margin: 0;">Daftar Siswa Sudah Cetak Surat Perjanjian Ortu / Wali</h3>
-                            <form action="list_perjanjian.php" method="get">
-                                <datalist id="pilihan_laporan_ortu">
-                                    <?php
-                                    // Ambil daftar siswa yang sudah pernah membuat perjanjian ortu
-                                    $query_pilihan_laporan_ortu = mysqli_query($conn,
-                                        "SELECT DISTINCT s.nis, s.nama_siswa
-                                         FROM perjanjian_orang_tua po
-                                         JOIN pelanggaran_siswa pel USING(id_pelanggaran_siswa)
-                                         JOIN siswa s USING(nis)"
-                                    );
-                                    while ($baris_ortu = mysqli_fetch_assoc($query_pilihan_laporan_ortu)) {
-                                        echo "<option value='" . htmlspecialchars($baris_ortu['nis']) . "'>";
-                                        echo "<option value='" . htmlspecialchars($baris_ortu['nama_siswa']) . "'>";
-                                    }
-                                    ?>
-                                </datalist>
-                                <input type="text"
-                                       name="cari_laporan_ortu"
-                                       value="<?= isset($_GET['cari_laporan_ortu']) ? htmlspecialchars($_GET['cari_laporan_ortu']) : '' ?>"
-                                       placeholder="Masukkan NIS / Nama Siswa"
-                                       list="pilihan_laporan_ortu"
-                                       style="padding:8px 15px;width:200px;border-radius:5px;"
-                                       autocomplete="off">
-                                <input type="submit" class="btn-warning" style="color:white;font-weight:bold;" value="Cari">
-                                <a href="list_perjanjian.php" class="btn-danger"
-                                   style="text-decoration:none;color:white;font-family:'Arial';font-size:13px;">Reset</a>
-                            </form>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>No</th>
-                        <th>Tanggal Pembuatan Surat</th>
-                        <th>NIS</th>
+                        <th style="width: 50px; text-align: center;">No</th>
+                        <th>Tanggal Pembuatan</th>
+                        <th style="width: 120px;">NIS</th>
                         <th>Nama Siswa</th>
-                        <th>Tingkat</th>
-                        <th>Aksi</th>
+                        <th style="width: 80px; text-align: center;">Tingkat</th>
+                        <th style="width: 200px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $nomor_urut = 1;
                     if (!$hasil_laporan_perjanjian_ortu || mysqli_num_rows($hasil_laporan_perjanjian_ortu) == 0) {
-                        echo "<tr><td colspan='6' align='center'>Data Tidak Ditemukan</td></tr>";
-                        if (!$hasil_laporan_perjanjian_ortu) {
-                            echo "<tr><td colspan='6' style='color:red;'>Query Error: " . mysqli_error($conn) . "</td></tr>";
-                        }
+                        echo "<tr><td colspan='6' align='center' style='padding: 30px; color: #94a3b8;'>Belum ada data riwayat</td></tr>";
                     } else {
                         while ($data_laporan_ortu = mysqli_fetch_assoc($hasil_laporan_perjanjian_ortu)) {
                     ?>
                     <tr>
-                        <td align="center"><?= $nomor_urut++ ?></td>
-                        <td align="center"><?= formatTanggalIndo($data_laporan_ortu['tanggal_surat']) ?></td>
-                        <td align="center"><?= htmlspecialchars($data_laporan_ortu['nis']) ?></td>
-                        <td align="center"><?= htmlspecialchars($data_laporan_ortu['nama_siswa']) ?></td>
-                        <td><?= htmlspecialchars($data_laporan_ortu['tingkat']) ?></td>
+                        <td align="center" style="color: #94a3b8;"><?= $nomor_urut++ ?></td>
+                        <td><span style="font-weight: 600; color: #475569;"><i class="far fa-calendar-alt" style="margin-right: 8px; color: #94a3b8;"></i><?= formatTanggalIndo($data_laporan_ortu['tanggal_surat']) ?></span></td>
+                        <td><span class="nis-badge"><?= htmlspecialchars($data_laporan_ortu['nis']) ?></span></td>
+                        <td style="font-weight: 700; color: #1e293b;"><?= htmlspecialchars($data_laporan_ortu['nama_siswa']) ?></td>
+                        <td align="center"><span style="background: #f1f5f9; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8rem;"><?= htmlspecialchars($data_laporan_ortu['tingkat']) ?></span></td>
                         <td>
-                            <?php if ($data_laporan_ortu['status_dokumen'] == NULL) { ?>
-                                <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_laporan_ortu['nis'] ?>&tanggal=<?= $data_laporan_ortu['tanggal_surat'] ?>">Detail</a>
-                                </button>
-                                <hr>
-                                <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php" method="post">
-                                    <input type="hidden" name="nis" value="<?= $data_laporan_ortu['nis'] ?>">
-                                    <input type="submit" value="Cetak" style="padding:10px 15px;font-weight:bold;background-color:#fff;border-radius:5px;border:1px solid #ccc;">
-                                </form>
-
-                            <?php } elseif ($data_laporan_ortu['status_dokumen'] == "Masih Proses") { ?>
-                                <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_laporan_ortu['nis'] ?>&tanggal=<?= $data_laporan_ortu['tanggal_surat'] ?>">Detail Pelanggaran</a>
-                                </button>
-                                <hr>
-                                <button class="btn-primary">
-                                    <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $data_laporan_ortu['nis'] ?>">Cetak Surat</a>
-                                </button>
-                                <hr>
-                                <form action="" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_laporan_ortu['tanggal_surat']) ?>">
-                                    <input type="hidden" name="jenis_upload" value="perjanjian_orang_tua">
-                                    <input type="file" name="foto_dokumen" accept="image/*" required>
-                                    <input type="submit" name="upload" value="Upload" class="btn-warning" style="color:white;font-weight:bold;">
-                                </form>
-
-                            <?php } elseif ($data_laporan_ortu['status_dokumen'] == "Selesai") { ?>
-                                <a href="/poin_pelanggaran_siswa/assets/images/<?= htmlspecialchars($data_laporan_ortu['foto_dokumen']) ?>"
-                                   target="_blank" class="btn-primary"
-                                   style="text-decoration:none;color:white;font-family:'Arial';font-size:13px;">Lihat Gambar</a>
-                            <?php } ?>
+                            <div class="action-stack">
+                                <?php if ($data_laporan_ortu['status_dokumen'] == NULL) { ?>
+                                    <div style="display: flex; gap: 5px;">
+                                        <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_laporan_ortu['nis'] ?>&tanggal=<?= $data_laporan_ortu['tanggal_surat'] ?>&from=list_perjanjian.php" class="btn-action btn-detail"><i class="fas fa-eye"></i> Detail</a>
+                                        <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php" method="post" style="margin: 0;">
+                                            <input type="hidden" name="nis" value="<?= $data_laporan_ortu['nis'] ?>">
+                                            <button type="submit" class="btn-action btn-print-mini"><i class="fas fa-print"></i> Cetak</button>
+                                        </form>
+                                    </div>
+                                <?php } elseif ($data_laporan_ortu['status_dokumen'] == "Masih Proses") { ?>
+                                    <div style="display: flex; gap: 5px; margin-bottom: 5px;">
+                                        <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_laporan_ortu['nis'] ?>&tanggal=<?= $data_laporan_ortu['tanggal_surat'] ?>" class="btn-action btn-detail"><i class="fas fa-eye"></i></a>
+                                        <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $data_laporan_ortu['nis'] ?>" class="btn-action btn-print-mini"><i class="fas fa-print"></i></a>
+                                    </div>
+                                    <form action="" method="post" enctype="multipart/form-data" class="upload-mini">
+                                        <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_laporan_ortu['tanggal_surat']) ?>">
+                                        <input type="hidden" name="jenis_upload" value="perjanjian_orang_tua">
+                                        <div style="display: flex; gap: 5px;">
+                                            <input type="file" name="foto_dokumen" accept="image/*" required>
+                                            <button type="submit" name="upload" class="btn-action btn-upload"><i class="fas fa-upload"></i></button>
+                                        </div>
+                                    </form>
+                                <?php } elseif ($data_laporan_ortu['status_dokumen'] == "Selesai") { ?>
+                                    <a href="/poin_pelanggaran_siswa/assets/images/<?= htmlspecialchars($data_laporan_ortu['foto_dokumen']) ?>" target="_blank" class="btn-action btn-view"><i class="fas fa-image"></i> Lihat Dokumen</a>
+                                <?php } ?>
+                            </div>
                         </td>
                     </tr>
-                    <?php
-                        } // akhir while
-                    } // akhir else
-                    ?>
+                    <?php } } ?>
                 </tbody>
             </table>
         </div>
-    </fieldset>
-</center>
+    </div>
+</div> <!-- End of .container -->
 
-
-<?php
-// Pasang footer (bagian bawah halaman)
-include ROOTPATH . "/includes/footer.php";
-?>
-
+<?php include ROOTPATH . "/includes/footer.php"; ?>
