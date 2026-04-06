@@ -45,6 +45,7 @@
                         <i class="fas fa-user-graduate"></i>
                         <span>Siswa</span>
                     </button>
+                    
                     <button type="button" class="role-btn" data-role="guru">
                         <i class="fas fa-chalkboard-teacher"></i>
                         <span>Guru</span>

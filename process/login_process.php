@@ -15,7 +15,7 @@ $password_plain = $_POST["password"];
  */
 
 // 1. CEK GURU/BK/WAKASEK
-$stmt_guru = mysqli_prepare($conn, "SELECT nama_pengguna, username, password, role FROM guru WHERE username = ?");
+$stmt_guru = mysqli_prepare($conn, "SELECT nama_pengguna, username, password, role, jabatan FROM guru WHERE username = ?");
 mysqli_stmt_bind_param($stmt_guru, "s", $username);
 mysqli_stmt_execute($stmt_guru);
 $res_guru = mysqli_stmt_get_result($stmt_guru);
@@ -23,10 +23,18 @@ $res_guru = mysqli_stmt_get_result($stmt_guru);
 if(mysqli_num_rows($res_guru) >= 1){
     $data_guru = mysqli_fetch_assoc($res_guru);
     if(password_verify($password_plain, $data_guru['password'])){
+        
+        $role = $data_guru['role'];
+        // Jika data di database sebelumnya masih mencatat role sebagai 'Guru' namun jabatannya merupakan BK,
+        // berikan akses role 'bk' agar bisa mengakses ke seluruh fitur page dan sistem.
+        if (strtolower(trim($role)) === 'guru' && stripos($data_guru['jabatan'], 'bk') !== false) {
+            $role = 'bk';
+        }
+
         // Login Berhasil - Data 'role' disimpan secara AMAN di server (SESSION)
         $_SESSION["nama"] = $data_guru['nama_pengguna'];
         $_SESSION["username"] = $data_guru['username'];
-        $_SESSION["role"] = $data_guru['role'];
+        $_SESSION["role"] = $role;
         
         header('Location: ../pages/index.php');
         exit;
