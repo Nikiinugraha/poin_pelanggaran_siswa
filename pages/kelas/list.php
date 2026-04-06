@@ -11,9 +11,11 @@ $result = mysqli_query($conn, "SELECT id_kelas, tingkat, program_keahlian, rombe
 <div class="container">
     <div class="header-table">
         <h2><i class="fas fa-school"></i> Data Manajemen Kelas</h2>
-        <a href="add.php" class="btn-add">
-            <i class="fas fa-plus-circle"></i> Tambah Data Kelas
-        </a>
+        <?php if (!in_array(strtolower($_SESSION['role']), ['wakasek', 'guru'])): ?>
+            <a href="add.php" class="btn-add">
+                <i class="fas fa-plus-circle"></i> Tambah Data Kelas
+            </a>
+        <?php endif; ?>
     </div>
 
     <div class="table-wrapper">
@@ -63,12 +65,16 @@ $result = mysqli_query($conn, "SELECT id_kelas, tingkat, program_keahlian, rombe
                                 </div>
                             </td>
                             <td class="action-buttons">
-                                <a href="edit.php?id_kelas=<?= $row['id_kelas'] ?>" class="btn-edit" title="Edit Data">
-                                    <i class="fas fa-pen-to-square"></i>
-                                </a>
-                                <button type="button" class="btn-delete" title="Hapus Data" onclick="showDeleteModal('<?= $row['id_kelas'] ?>', '<?= $class_name ?>')">
-                                    <i class="fas fa-trash-can"></i>
-                                </button>
+                                <?php if (!in_array(strtolower($_SESSION['role']), ['wakasek', 'guru'])): ?>
+                                    <a href="edit.php?id_kelas=<?= $row['id_kelas'] ?>" class="btn-edit" title="Edit Data">
+                                        <i class="fas fa-pen-to-square"></i>
+                                    </a>
+                                    <button type="button" class="btn-delete" title="Hapus Data" onclick="showDeleteModal('<?= $row['id_kelas'] ?>', '<?= $class_name ?>')">
+                                        <i class="fas fa-trash-can"></i>
+                                    </button>
+                                <?php else: ?>
+                                    <span class="badge" style="background:#f8fafc; color:#94a3b8;"><i class="fas fa-lock"></i> No Permission</span>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php

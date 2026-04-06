@@ -3,6 +3,12 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 
 include ROOTPATH . '/config/config.php';
 include ROOTPATH . '/includes/header.php';
+
+// RBAC Protection: Guru and Wakasek cannot add students
+if (in_array(strtolower($_SESSION['role']), ['wakasek', 'guru'])) {
+    echo "<script>alert('Akses Ditolak! Guru dan Wakasek tidak diizinkan menambah data siswa.'); window.location.href='list.php';</script>";
+    exit();
+}
 ?>
 
 

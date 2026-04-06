@@ -259,21 +259,23 @@ include ROOTPATH . "/includes/header.php";
 <link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/laporan/list_panggilan_ortu.css">
 
     <!-- Tombol cetak langsung surat panggilan orang tua kosong / manual -->
-    <button class="btn-print" onclick="window.location.href='/poin_pelanggaran_siswa/pages/cetak/add_panggilan_ortu.php'">
-        <!-- icon printer (gambar mesin pencetak yang lucu) -->
-        <span class="printer-wrapper">
-            <span class="printer-container">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 92 75" height="20px" width="20px">
-                    <path stroke-width="5" stroke="white" d="M12 37.5H80C85.2467 37.5 89.5 41.7533 89.5 47V69C89.5 70.933 87.933 72.5 86 72.5H6C4.067 72.5 2.5 70.933 2.5 69V47C2.5 41.7533 6.75329 37.5 12 37.5Z"></path>
-                    <mask fill="white" id="path-2-inside-1_30_7"><path d="M12 12C12 5.37258 17.3726 0 24 0H57C70.2548 0 81 10.7452 81 24V29H12V12Z"></path></mask>
-                    <path mask="url(#path-2-inside-1_30_7)" fill="white" d="M7 12C7 2.61116 14.6112 -5 24 -5H57C73.0163 -5 86 7.98374 86 24H76C76 13.5066 67.4934 5 57 5H24C20.134 5 17 8.13401 17 12H7ZM81 29H12H81ZM7 29V12C7 2.61116 14.6112 -5 24 -5V5C20.134 5 17 8.13401 17 12V29H7ZM57 -5C73.0163 -5 86 7.98374 86 24V29H76V24C76 13.5066 67.4934 5 57 5V-5Z"></path>
-                    <circle fill="white" r="3" cy="49" cx="78"></circle>
-                </svg>
+    <?php if (trim(strtolower($_SESSION['role'])) !== 'guru'): ?>
+        <button class="btn-print" onclick="window.location.href='/poin_pelanggaran_siswa/pages/cetak/add_panggilan_ortu.php'">
+            <!-- icon printer (gambar mesin pencetak yang lucu) -->
+            <span class="printer-wrapper">
+                <span class="printer-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 92 75" height="20px" width="20px">
+                        <path stroke-width="5" stroke="white" d="M12 37.5H80C85.2467 37.5 89.5 41.7533 89.5 47V69C89.5 70.933 87.933 72.5 86 72.5H6C4.067 72.5 2.5 70.933 2.5 69V47C2.5 41.7533 6.75329 37.5 12 37.5Z"></path>
+                        <mask fill="white" id="path-2-inside-1_30_7"><path d="M12 12C12 5.37258 17.3726 0 24 0H57C70.2548 0 81 10.7452 81 24V29H12V12Z"></path></mask>
+                        <path mask="url(#path-2-inside-1_30_7)" fill="white" d="M7 12C7 2.61116 14.6112 -5 24 -5H57C73.0163 -5 86 7.98374 86 24H76C76 13.5066 67.4934 5 57 5H24C20.134 5 17 8.13401 17 12H7ZM81 29H12H81ZM7 29V12C7 2.61116 14.6112 -5 24 -5V5C20.134 5 17 8.13401 17 12V29H7ZM57 -5C73.0163 -5 86 7.98374 86 24V29H76V24C76 13.5066 67.4934 5 57 5V-5Z"></path>
+                        <circle fill="white" r="3" cy="49" cx="78"></circle>
+                    </svg>
+                </span>
+                <span class="printer-page-wrapper"><span class="printer-page"></span></span>
             </span>
-            <span class="printer-page-wrapper"><span class="printer-page"></span></span>
-        </span>
-        &nbsp;&nbsp;Cetak Surat Panggilan Ortu/Wali
-    </button><br><br>
+            &nbsp;&nbsp;Cetak Surat Panggilan Ortu/Wali
+        </button><br><br>
+    <?php endif; ?>
 
 
     <!-- ═════════════════════════════════════════════════════════
@@ -428,31 +430,33 @@ include ROOTPATH . "/includes/header.php";
                                     <i class="fas fa-info-circle"></i> Detail
                                 </a> 
                                 
-                                <?php 
-                                $cek_surat_panggilan = mysqli_query($conn, "SELECT nis FROM surat_keluar WHERE nis = '" . mysqli_real_escape_string($conn, $baris_calon['nis']) . "' AND jenis_surat = 'Panggilan Orang Tua'");
-                                if(mysqli_num_rows($cek_surat_panggilan) == 0){
-                                ?>
-                                    <hr>
-                                    <form action="/poin_pelanggaran_siswa/pages/cetak/add_panggilan_ortu.php" method="post">
-                                        <input type="hidden" name="nis" value="<?= $baris_calon['nis'] ?>">
-                                        <button type="submit" class="btn-warning">
-                                            <i class="fas fa-print"></i> Cetak Panggilan
-                                        </button>
-                                    </form> 
-                                <?php } ?>
-                                
-                                <?php 
-                                $cek_surat_perjanjian = mysqli_query($conn, "SELECT nis FROM surat_keluar WHERE nis = '" . mysqli_real_escape_string($conn, $baris_calon['nis']) . "' AND jenis_surat = 'Perjanjian Ortu'");
-                                if(mysqli_num_rows($cek_surat_perjanjian) == 0){ 
-                                ?>
-                                    <hr>
-                                    <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php" method="post">
-                                        <input type="hidden" name="nis" value="<?= $baris_calon['nis'] ?>">
-                                        <button type="submit" class="btn-primary">
-                                            <i class="fas fa-file-signature"></i> Cetak Perjanjian
-                                        </button>
-                                    </form>
-                                <?php } ?>
+                                <?php if ($_SESSION['role'] !== 'guru'): ?>
+                                    <?php 
+                                    $cek_surat_panggilan = mysqli_query($conn, "SELECT nis FROM surat_keluar WHERE nis = '" . mysqli_real_escape_string($conn, $baris_calon['nis']) . "' AND jenis_surat = 'Panggilan Orang Tua'");
+                                    if(mysqli_num_rows($cek_surat_panggilan) == 0){
+                                    ?>
+                                        <hr>
+                                        <form action="/poin_pelanggaran_siswa/pages/cetak/add_panggilan_ortu.php" method="post">
+                                            <input type="hidden" name="nis" value="<?= $baris_calon['nis'] ?>">
+                                            <button type="submit" class="btn-warning">
+                                                <i class="fas fa-print"></i> Cetak Panggilan
+                                            </button>
+                                        </form> 
+                                    <?php } ?>
+                                    
+                                    <?php 
+                                    $cek_surat_perjanjian = mysqli_query($conn, "SELECT nis FROM surat_keluar WHERE nis = '" . mysqli_real_escape_string($conn, $baris_calon['nis']) . "' AND jenis_surat = 'Perjanjian Ortu'");
+                                    if(mysqli_num_rows($cek_surat_perjanjian) == 0){ 
+                                    ?>
+                                        <hr>
+                                        <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php" method="post">
+                                            <input type="hidden" name="nis" value="<?= $baris_calon['nis'] ?>">
+                                            <button type="submit" class="btn-primary">
+                                                <i class="fas fa-file-signature"></i> Cetak Perjanjian
+                                            </button>
+                                        </form>
+                                    <?php } ?>
+                                <?php endif; ?>
                                 
                             <?php 
                             } elseif ($baris_calon['status_dokumen'] == "Masih Proses") { 
@@ -460,20 +464,25 @@ include ROOTPATH . "/includes/header.php";
                                 <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $baris_calon['nis'] ?>&tanggal=<?= $baris_calon['tanggal_surat'] ?>&from=list_panggilan_ortu.php" class="btn-primary" style="text-decoration:none;">
                                     <i class="fas fa-info-circle"></i> Detail
                                 </a>
-                                <hr>
-                                <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $baris_calon['nis'] ?>" class="btn-primary" style="text-decoration:none;">
-                                    <i class="fas fa-print"></i> Surat TTD Ortu
-                                </a> 
-                                <hr>
-                                <form action="" method="post" enctype="multipart/form-data" class="upload-mini">
-                                    <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($baris_calon['tanggal_surat']) ?>">
-                                    <input type="hidden" name="jenis_upload" value="perjanjian_orang_tua">
-                                    <div style="font-size:0.75rem; margin-bottom:5px; font-weight:700; color:#64748b;">Upload Dokumen:</div>
-                                    <input type="file" name="foto_dokumen" accept="image/*" required style="font-size:0.8rem; margin-bottom:8px;">
-                                    <button type="submit" name="upload" class="btn-warning" style="width:100%;">
-                                        <i class="fas fa-camera"></i> Upload
-                                    </button>
-                                </form>
+                                <?php if ($_SESSION['role'] !== 'guru'): ?>
+                                    <hr>
+                                    <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $baris_calon['nis'] ?>" class="btn-primary" style="text-decoration:none;">
+                                        <i class="fas fa-print"></i> Surat TTD Ortu
+                                    </a> 
+                                <?php endif; ?>
+                                <?php if (!in_array(trim(strtolower($_SESSION['role'])), ['wakasek', 'guru'])): ?>
+                                    <form action="" method="post" enctype="multipart/form-data" class="upload-mini">
+                                        <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($baris_calon['tanggal_surat']) ?>">
+                                        <input type="hidden" name="jenis_upload" value="perjanjian_orang_tua">
+                                        <div style="font-size:0.75rem; margin-bottom:5px; font-weight:700; color:#64748b;">Upload Dokumen:</div>
+                                        <input type="file" name="foto_dokumen" accept="image/*, application/pdf" required style="font-size:0.8rem; margin-bottom:8px;">
+                                        <button type="submit" name="upload" class="btn-warning" style="width:100%;">
+                                            <i class="fas fa-camera"></i> Upload
+                                        </button>
+                                    </form>
+                                <?php else: ?>
+                                    <p style="font-size: 0.75rem; color: #94a3b8; margin: 10px 0;"><i class="fas fa-lock"></i> Upload hanya untuk Petugas BK</p>
+                                <?php endif; ?>
                             
                             <?php 
                             } elseif ($baris_calon['status_dokumen'] == "Selesai") { 

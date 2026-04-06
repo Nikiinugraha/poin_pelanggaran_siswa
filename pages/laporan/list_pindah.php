@@ -111,10 +111,12 @@ $result_surat_pindah = mysqli_query($conn,
             <h2>Laporan Administrasi Pindah Sekolah</h2>
             <p>Kelola daftar siswa yang poinnya mencapai batas maksimal (100+) dan surat pindah keluar.</p>
         </div>
-        <a href="/poin_pelanggaran_siswa/pages/cetak/add_pindah_sekolah.php" class="btn-add-pindah">
-            <i class="fas fa-file-export"></i>
-            Tambah Surat Pindah
-        </a>
+        <?php if (trim(strtolower($_SESSION['role'])) !== 'guru'): ?>
+            <a href="/poin_pelanggaran_siswa/pages/cetak/add_pindah_sekolah.php" class="btn-add-pindah">
+                <i class="fas fa-file-export"></i>
+                Tambah Surat Pindah
+            </a>
+        <?php endif; ?>
     </header>
 
     <!-- SECTION 1: CALON SISWA PINDAH (100++ POIN) -->
@@ -161,18 +163,26 @@ $result_surat_pindah = mysqli_query($conn,
                             
                             <?php if ($data_siswa['status_dokumen'] == NULL) { ?>
                                 <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_siswa['nis'] ?>&from=list_pindah.php" class="btn-action btn-detail"><i class="fas fa-eye"></i> Detail</a>
-                                <form action="/poin_pelanggaran_siswa/pages/cetak/add_pindah_sekolah.php?from=list_pindah.php" method="post" style="display:inline;">
-                                    <input type="hidden" name="nis" value="<?= $data_siswa['nis'] ?>">
-                                    <button type="submit" class="btn-action btn-print"><i class="fas fa-print"></i> Cetak</button>
-                                </form>
+                                <?php if (trim(strtolower($_SESSION['role'])) !== 'guru'): ?>
+                                    <form action="/poin_pelanggaran_siswa/pages/cetak/add_pindah_sekolah.php?from=list_pindah.php" method="post" style="display:inline;">
+                                        <input type="hidden" name="nis" value="<?= $data_siswa['nis'] ?>">
+                                        <button type="submit" class="btn-action btn-print"><i class="fas fa-print"></i> Cetak</button>
+                                    </form>
+                                <?php endif; ?>
 
                             <?php } elseif ($data_siswa['status_dokumen'] == "Masih Proses") { ?>
-                                <a href="/poin_pelanggaran_siswa/pages/cetak/surat_pindah_sekolah.php?nis=<?= $data_siswa['nis'] ?>&from=list_pindah.php" class="btn-action btn-print"><i class="fas fa-print"></i> Lihat Surat</a>
-                                <form action="" method="post" enctype="multipart/form-data" class="upload-form">
-                                    <input type="hidden" name="id_surat_pindah" value="<?= htmlspecialchars($data_siswa['id_surat_pindah']) ?>">
-                                    <input type="file" name="foto_dokumen" accept="image/*, application/pdf" required>
-                                    <button type="submit" name="upload" class="btn-action btn-upload"><i class="fas fa-upload"></i> Upload</button>
-                                </form>
+                                <?php if (trim(strtolower($_SESSION['role'])) !== 'guru'): ?>
+                                    <a href="/poin_pelanggaran_siswa/pages/cetak/surat_pindah_sekolah.php?nis=<?= $data_siswa['nis'] ?>&from=list_pindah.php" class="btn-action btn-print"><i class="fas fa-print"></i> Lihat Surat</a>
+                                <?php endif; ?>
+                                <?php if (!in_array(trim(strtolower($_SESSION['role'])), ['wakasek', 'guru'])): ?>
+                                    <form action="" method="post" enctype="multipart/form-data" class="upload-form">
+                                        <input type="hidden" name="id_surat_pindah" value="<?= htmlspecialchars($data_siswa['id_surat_pindah']) ?>">
+                                        <input type="file" name="foto_dokumen" accept="image/*, application/pdf" required>
+                                        <button type="submit" name="upload" class="btn-action btn-upload"><i class="fas fa-upload"></i> Upload</button>
+                                    </form>
+                                <?php else: ?>
+                                    <p style="font-size: 0.75rem; color: #94a3b8; margin: 10px 0;"><i class="fas fa-lock"></i> Upload hanya untuk Petugas BK</p>
+                                <?php endif; ?>
 
                             <?php } elseif ($data_siswa['status_dokumen'] == "Selesai") { ?>
                                 <a href="/poin_pelanggaran_siswa/assets/images/<?= htmlspecialchars($data_siswa['foto_dokumen']) ?>" target="_blank" class="btn-action btn-view"><i class="fas fa-image"></i> Lihat Dokumen</a>
@@ -226,9 +236,11 @@ $result_surat_pindah = mysqli_query($conn,
                     <td><?= htmlspecialchars($row['sekolah_tujuan']) ?></td>
                     <td><span style="font-style: italic; color: var(--text-muted);"><?= htmlspecialchars($row['alasan_pindah']) ?></span></td>
                     <td>
-                        <a href="/poin_pelanggaran_siswa/pages/cetak/surat_pindah_sekolah.php?no_surat=<?=$row['no_surat']?>" class="btn-action btn-print">
-                            <i class="fas fa-print"></i> Cetak
-                        </a>
+                        <?php if (trim(strtolower($_SESSION['role'])) !== 'guru'): ?>
+                            <a href="/poin_pelanggaran_siswa/pages/cetak/surat_pindah_sekolah.php?no_surat=<?=$row['no_surat']?>" class="btn-action btn-print">
+                                <i class="fas fa-print"></i> Cetak
+                            </a>
+                        <?php endif; ?>
                     </td>
                 </tr>
                 <?php } } ?>

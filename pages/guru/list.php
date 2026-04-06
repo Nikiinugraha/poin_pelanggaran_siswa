@@ -13,9 +13,11 @@ $result_nonaktif = mysqli_query($conn, 'SELECT * FROM guru WHERE aktif = "N"');
     <!-- Header: Active Teachers -->
     <div class="header-table">
         <h2><i class="fas fa-chalkboard-user"></i> Daftar Guru Aktif</h2>
-        <a href="add.php" class="btn-add">
-            <i class="fas fa-plus-circle"></i> Tambah Data Guru
-        </a>
+        <?php if (!in_array(strtolower($_SESSION['role']), ['wakasek', 'guru'])): ?>
+            <a href="add.php" class="btn-add">
+                <i class="fas fa-plus-circle"></i> Tambah Data Guru
+            </a>
+        <?php endif; ?>
     </div>
 
     <div class="table-wrapper">
@@ -48,9 +50,13 @@ $result_nonaktif = mysqli_query($conn, 'SELECT * FROM guru WHERE aktif = "N"');
                             <td><span class="role-badge"><?= htmlspecialchars($row['role']); ?></span></td>
                             <td><?= htmlspecialchars($row['telp']); ?></td>
                             <td class="action-buttons" style="justify-content: center;">
-                                <a href="edit.php?kode_guru=<?= $row['kode_guru'] ?>" class="btn-edit" title="Edit Data">
-                                    <i class="fas fa-pen-to-square"></i>
-                                </a>
+                                <?php if (!in_array(strtolower($_SESSION['role']), ['wakasek', 'guru'])): ?>
+                                    <a href="edit.php?kode_guru=<?= $row['kode_guru'] ?>" class="btn-edit" title="Edit Data">
+                                        <i class="fas fa-pen-to-square"></i>
+                                    </a>
+                                <?php else: ?>
+                                    <span class="badge" style="background:#f8fafc; color:#94a3b8;"><i class="fas fa-lock"></i></span>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php
@@ -96,9 +102,13 @@ $result_nonaktif = mysqli_query($conn, 'SELECT * FROM guru WHERE aktif = "N"');
                             <td><span class="role-badge"><?= htmlspecialchars($row['role']); ?></span></td>
                             <td><?= htmlspecialchars($row['telp']); ?></td>
                             <td class="action-buttons" style="justify-content: center;">
-                                <a href="edit.php?kode_guru=<?= $row['kode_guru'] ?>" class="btn-edit" style="background:#f1f5f9; color:#94a3b8;" title="Edit Data">
-                                    <i class="fas fa-pen-to-square"></i>
-                                </a>
+                                <?php if (!in_array(strtolower($_SESSION['role']), ['wakasek', 'guru'])): ?>
+                                    <a href="edit.php?kode_guru=<?= $row['kode_guru'] ?>" class="btn-edit" style="background:#f1f5f9; color:#94a3b8;" title="Edit Data">
+                                        <i class="fas fa-pen-to-square"></i>
+                                    </a>
+                                <?php else: ?>
+                                    <span class="badge" style="background:#f1f5f9; color:#cbd5e1;"><i class="fas fa-lock"></i></span>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php

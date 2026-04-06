@@ -3,6 +3,12 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 include ROOTPATH . '/config/config.php';
 include ROOTPATH . '/includes/header.php';
 
+// RBAC Protection: Guru and Wakasek cannot edit students
+if (in_array(trim(strtolower($_SESSION['role'])), ['wakasek', 'guru'])) {
+    echo "<script>alert('Akses Ditolak! Guru dan Wakasek tidak diizinkan mengubah data siswa.'); window.location.href='list.php';</script>";
+    exit();
+}
+
 // Mendapatkan NIS dari URL
 $nis = isset($_GET['nis']) ? $_GET['nis'] : 0;
 $siswa = null;

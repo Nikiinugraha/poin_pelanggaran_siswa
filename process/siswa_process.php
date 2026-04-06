@@ -5,6 +5,13 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 // Menyertakan file konfigurasi database
 include ROOTPATH . '/config/config.php';
 
+// RBAC Protection: Guru and Wakasek cannot perform CRUD on students
+session_start();
+if (in_array(trim(strtolower($_SESSION['role'])), ['wakasek', 'guru'])) {
+    header("Location: /poin_pelanggaran_siswa/pages/siswa/list.php?error=Akses Ditolak! Anda tidak memiliki izin untuk melakukan operasi ini.");
+    exit();
+}
+
 // Mengecek apakah permintaan berasal dari metode POST (bukan GET)
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Mengambil data dari form
@@ -49,7 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $id_ortu_wali = mysqli_insert_id($conn);
 
         // Insert data siswa
-        $password_enkripsi = password_hash($password, PASSWORD_DEFAULT);
+        // Set password default ke NIS jika tidak ada input password khusus
+        $password_default = $nis;
+        $password_enkripsi = password_hash($password_default, PASSWORD_DEFAULT);
         $query = "INSERT INTO siswa (nis, nama_siswa, jenis_kelamin, alamat, password, status, id_ortu_wali, id_kelas) 
         VALUES ('$nis', '$nama_siswa', '$jenis_kelamin', '$alamat', '$password_enkripsi', 'Aktif', '$id_ortu_wali', '$id_kelas')";
         mysqli_query($conn, $query);

@@ -5,6 +5,13 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 // Menyertakan file konfigurasi database
 include ROOTPATH . "/config/config.php";
 
+// RBAC Protection: Guru and Wakasek cannot perform CRUD on teacher data
+session_start();
+if (in_array(trim(strtolower($_SESSION['role'])), ['wakasek', 'guru'])) {
+    header("Location: /poin_pelanggaran_siswa/pages/guru/list.php?error=Akses Ditolak! Anda tidak memiliki izin untuk melakukan operasi ini.");
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $action = $_POST['action'];
 

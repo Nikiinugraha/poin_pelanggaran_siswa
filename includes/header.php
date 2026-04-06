@@ -1,12 +1,12 @@
 <?php
-// Memulai session untuk pengecekan login
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+/** 
+ * CEK AKSES & SIDEBAR UI - RBAC SYSTEM
+ * Sistem ini membedakan tampilan menu antara Guru/Staf dan Siswa.
+ */
 
-// Pengecekan session - Jika tidak ada session username, berarti belum login
+// Pengecekan Session: Redirect ke Login jika belum ada User
 if (!isset($_SESSION['username'])) {
-    echo '<script>alert("Anda harus login terlebih dahulu"); window.location.href="/poin_pelanggaran_siswa/login.php";</script>';
+    echo '<script>alert("Sesi Anda berakhir, silakan masuk kembali."); window.location.href="/poin_pelanggaran_siswa/login.php";</script>';
     exit();
 }
 ?>
@@ -15,119 +15,86 @@ if (!isset($_SESSION['username'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Poin Pelanggaran Siswa</title>
-    <!-- Memanggil library ikon FontAwesome (v6+) -->
+    <title>Sistem Pelanggaran Siswa</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/poin_pelanggaran_siswa/css/components/header.css">
 </head>
 <body class="sidebar-layout">
     
-    <!-- Sidebar Navigation -->
+    <!-- Sidebar -->
     <nav class="sidebar">
         <div class="sidebar-brand">
             <i class="fas fa-graduation-cap"></i>
-            <span>SPPS</span>
+            <span>SPPS DIGITAL</span>
         </div>
 
+        <!-- Identitas User di Sidebar -->
         <div class="sidebar-user">
             <div class="user-avatar">
                 <i class="fas fa-user-circle"></i>
             </div>
             <div class="user-details">
-                <p class="user-name"><?php echo $_SESSION['nama']; ?></p>
-                <p class="user-role"><?php echo ucfirst($_SESSION['role']); ?></p>
+                <p class="user-name"><?php echo htmlspecialchars($_SESSION['nama'] ?? 'Tanpa Nama'); ?></p>
+                <p class="user-role"><?php echo ucfirst(htmlspecialchars($_SESSION['role'] ?? 'Peran Tidak Diketahui')); ?></p>
             </div>
         </div>
 
         <ul class="sidebar-menu">
-            <li class="menu-label">Menu Utama</li>
+            <li class="menu-label">Navigasi Utama</li>
             <li>
                 <a href="/poin_pelanggaran_siswa/pages/index.php">
-                    <i class="fas fa-house-chimney"></i>
-                    <span>Dashboard</span>
+                    <i class="fas fa-house"></i>
+                    <span>Dashboard Utama</span>
                 </a>
             </li>
 
-            <!-- Menu Khusus Guru / Guru BK -->
-            <?php if ($_SESSION['role'] != 'siswa'): ?>
-                <li class="menu-label">Manajemen Data</li>
-                <li class="has-submenu">
-                    <a href="javascript:void(0)" class="submenu-toggle">
-                        <i class="fas fa-database"></i>
-                        <span>Data Master</span>
-                        <i class="fas fa-chevron-right arrow"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li><a href="/poin_pelanggaran_siswa/pages/siswa/list.php">Data Siswa</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/guru/list.php">Data Guru</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/jenis_pelanggaran/list.php">Data Pelanggaran</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/kelas/list.php">Data Kelas</a></li>
-                    </ul>
-                </li>
+            <!-- MENU KHUSUS GURU, BK, DAN STAF (RBAC GURU FULL ACCESS) -->
+            <?php if ($_SESSION['role'] !== 'siswa'): ?>
+                
+                <li class="menu-label">Manajemen Kedisiplinan</li>
                 <li>
                     <a href="/poin_pelanggaran_siswa/pages/pelanggaran/add.php">
                         <i class="fas fa-file-circle-plus"></i>
-                        <span>Entri Pelanggaran</span>
+                        <span>Input Pelanggaran</span>
                     </a>
                 </li>
-                <li class="has-submenu">
-                    <a href="javascript:void(0)" class="submenu-toggle">
-                        <i class="fas fa-file-lines"></i>
-                        <span>Laporan</span>
-                        <i class="fas fa-chevron-right arrow"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_pelanggaran.php">Laporan Pelanggaran</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_panggilan_ortu.php">Panggilan Ortu</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_perjanjian.php">Surat Perjanjian</a></li>
-                        <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_pindah.php">Surat Pindah</a></li>
-                    </ul>
-                </li>
+
+                <!-- Data Master -->
+                <li class="menu-label">Master Data</li>
+                <li><a href="/poin_pelanggaran_siswa/pages/siswa/list.php"><i class="fas fa-users"></i> Data Siswa</a></li>
+                <li><a href="/poin_pelanggaran_siswa/pages/guru/list.php"><i class="fas fa-chalkboard-teacher"></i> Data Guru</a></li>
+                <li><a href="/poin_pelanggaran_siswa/pages/kelas/list.php"><i class="fas fa-school"></i> Data Kelas</a></li>
+                <li><a href="/poin_pelanggaran_siswa/pages/jenis_pelanggaran/list.php"><i class="fas fa-list-check"></i> Kategori Pelanggaran</a></li>
+
+                <!-- Laporan & Surat -->
+                <li class="menu-label">Pusat Laporan</li>
+                <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_pelanggaran.php"><i class="fas fa-clipboard-list"></i> Rekap Pelanggaran</a></li>
+                <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_panggilan_ortu.php"><i class="fas fa-envelope-open-text"></i> Panggilan Ortu</a></li>
+                <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_perjanjian.php"><i class="fas fa-file-contract"></i> Surat Perjanjian</a></li>
+                <li><a href="/poin_pelanggaran_siswa/pages/laporan/list_pindah.php"><i class="fas fa-file-export"></i> Surat Pindah</a></li>
+                
             <?php endif; ?>
 
-            <li class="menu-label">Akun</li>
+            <!-- MENU UNTUK SEMUA ROLE (Siswa & Guru) -->
+            <li class="menu-label">Pengaturan Akun</li>
             <li>
                 <a href="/poin_pelanggaran_siswa/process/profil_process.php?action=edit">
                     <i class="fas fa-user-gear"></i>
-                    <span>Pengaturan Profil</span>
+                    <span>Ubah Profil / Sandi</span>
                 </a>
             </li>
             <li>
-                <a href="/poin_pelanggaran_siswa/logout.php" class="logout-link">
-                    <i class="fas fa-right-from-bracket"></i>
-                    <span>Keluar dari Sistem</span>
+                <a href="/poin_pelanggaran_siswa/logout.php">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Keluar / Logout</span>
                 </a>
             </li>
         </ul>
     </nav>
 
-    <!-- Main Content Wrapper -->
+    <!-- Main Content -->
     <div class="content-wrapper">
         <header class="top-bar">
-            <h2><?php echo isset($page_title) ? $page_title : 'Beranda'; ?></h2>
+            <h2><?php echo $page_title ?? 'Beranda'; ?></h2>
         </header>
         <main>
-        
-        <!-- Sidebar Interaction Script -->
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const submenuToggles = document.querySelectorAll('.submenu-toggle');
-                
-                submenuToggles.forEach(toggle => {
-                    toggle.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const parent = this.parentElement;
-                        const isOpening = !parent.classList.contains('active');
-                        
-                        // Close other sibling submenus
-                        const siblings = parent.parentElement.querySelectorAll('.has-submenu');
-                        siblings.forEach(sibling => {
-                            if (sibling !== parent) sibling.classList.remove('active');
-                        });
-                        
-                        // Toggle current submenu
-                        parent.classList.toggle('active');
-                    });
-                });
-            });
-        </script>

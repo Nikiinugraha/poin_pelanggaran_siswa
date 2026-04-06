@@ -142,6 +142,7 @@ if (isset($_GET['cari_daftar_siswa'])) {
             JOIN jenis_pelanggaran USING(id_jenis_pelanggaran)
             LEFT JOIN perjanjian_siswa ps USING(id_pelanggaran_siswa)
             WHERE siswa.status = 'aktif'
+              AND (ps.status IS NULL OR ps.status != 'Selesai')
               AND (siswa.nama_siswa LIKE '%$kata_cari_siswa%' OR siswa.nis LIKE '%$kata_cari_siswa%')
             GROUP BY siswa.nis, ps.tanggal, ps.status, ps.foto_dokumen
             ORDER BY siswa.nis, ps.tanggal DESC
@@ -170,6 +171,7 @@ if (isset($_GET['cari_daftar_siswa'])) {
             JOIN jenis_pelanggaran USING(id_jenis_pelanggaran)
             LEFT JOIN perjanjian_siswa ps USING(id_pelanggaran_siswa)
             WHERE siswa.status = 'aktif'
+              AND (ps.status IS NULL OR ps.status != 'Selesai')
             GROUP BY siswa.nis, ps.tanggal, ps.status, ps.foto_dokumen
             ORDER BY siswa.nis, ps.tanggal DESC
         ) main
@@ -248,6 +250,7 @@ if (isset($_GET['cari_daftar_ortu'])) {
             JOIN jenis_pelanggaran USING(id_jenis_pelanggaran)
             LEFT JOIN perjanjian_orang_tua po USING(id_pelanggaran_siswa)
             WHERE siswa.status = 'aktif'
+              AND (po.status IS NULL OR po.status != 'Selesai')
               AND (siswa.nama_siswa LIKE '%$kata_cari_ortu%' OR siswa.nis LIKE '%$kata_cari_ortu%')
             GROUP BY siswa.nis, po.tanggal, po.status, po.foto_dokumen
             ORDER BY siswa.nis, po.tanggal DESC
@@ -272,6 +275,7 @@ if (isset($_GET['cari_daftar_ortu'])) {
             JOIN jenis_pelanggaran USING(id_jenis_pelanggaran)
             LEFT JOIN perjanjian_orang_tua po USING(id_pelanggaran_siswa)
             WHERE siswa.status = 'aktif'
+              AND (po.status IS NULL OR po.status != 'Selesai')
             GROUP BY siswa.nis, po.tanggal, po.status, po.foto_dokumen
             ORDER BY siswa.nis, po.tanggal DESC
         ) main
@@ -348,28 +352,30 @@ include ROOTPATH . "/includes/header.php";
         </div>
     </header>
 
-    <div class="action-banners">
-        <a href="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php?from=list_perjanjian.php" class="btn-banner">
-            <div class="banner-info">
-                <div class="banner-icon"><i class="fas fa-user-edit"></i></div>
-                <div class="banner-text">
-                    <h4>Cetak Perjanjian Siswa</h4>
-                    <p>Siswa dengan akumulasi 25-50 poin</p>
+    <?php if (strtolower(trim($_SESSION['role'])) !== 'guru'): ?>
+        <div class="action-banners">
+            <a href="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php?from=list_perjanjian.php" class="btn-banner">
+                <div class="banner-info">
+                    <div class="banner-icon"><i class="fas fa-user-edit"></i></div>
+                    <div class="banner-text">
+                        <h4>Cetak Perjanjian Siswa</h4>
+                        <p>Siswa dengan akumulasi 25-50 poin</p>
+                    </div>
                 </div>
-            </div>
-            <i class="fas fa-arrow-right banner-arrow"></i>
-        </a>
-        <a href="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php" class="btn-banner">
-            <div class="banner-info">
-                <div class="banner-icon"><i class="fas fa-users"></i></div>
-                <div class="banner-text">
-                    <h4>Cetak Perjanjian Ortu</h4>
-                    <p>Siswa dengan akumulasi 50-100 poin</p>
+                <i class="fas fa-arrow-right banner-arrow"></i>
+            </a>
+            <a href="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php" class="btn-banner">
+                <div class="banner-info">
+                    <div class="banner-icon"><i class="fas fa-users"></i></div>
+                    <div class="banner-text">
+                        <h4>Cetak Perjanjian Ortu</h4>
+                        <p>Siswa dengan akumulasi 50-100 poin</p>
+                    </div>
                 </div>
-            </div>
-            <i class="fas fa-arrow-right banner-arrow"></i>
-        </a>
-    </div>
+                <i class="fas fa-arrow-right banner-arrow"></i>
+            </a>
+        </div>
+    <?php endif; ?>
 
     <!-- ═══════════════════════════════════════════════════════════════════
          BAGIAN 1: TABEL CALON PEMBUAT SURAT PERJANJIAN SISWA (25-50 poin)
@@ -429,27 +435,35 @@ include ROOTPATH . "/includes/header.php";
                                     <span class="status-badge status-pending"><i class="fas fa-hourglass-start"></i> Belum Ada Surat</span>
                                     <div style="display: flex; gap: 5px;">
                                         <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_siswa['nis'] ?>&tanggal=<?= $data_siswa['tanggal_surat'] ?>&from=list_perjanjian.php" class="btn-action btn-detail" title="Detail"><i class="fas fa-eye"></i> Detail</a>
-                                        <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php?from=list_perjanjian.php" method="post" style="margin: 0;">
-                                            <input type="hidden" name="nis" value="<?= $data_siswa['nis'] ?>">
-                                            <button type="submit" class="btn-action btn-print-mini"><i class="fas fa-print"></i> Cetak</button>
-                                        </form>
+                                        <?php if (strtolower(trim($_SESSION['role'])) !== 'guru'): ?>
+                                            <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_siswa.php?from=list_perjanjian.php" method="post" style="margin: 0;">
+                                                <input type="hidden" name="nis" value="<?= $data_siswa['nis'] ?>">
+                                                <button type="submit" class="btn-action btn-print-mini"><i class="fas fa-print"></i> Cetak</button>
+                                            </form>
+                                        <?php endif; ?>
                                     </div>
 
                                 <?php } elseif ($data_siswa['status_dokumen'] == "Masih Proses") { ?>
                                     <span class="status-badge status-process"><i class="fas fa-spinner fa-spin"></i> Menunggu Upload</span>
                                     <div style="display: flex; gap: 5px; margin-bottom: 8px;">
                                         <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_siswa['nis'] ?>&tanggal=<?= $data_siswa['tanggal_surat'] ?>&from=list_perjanjian.php" class="btn-action btn-detail" title="Detail"><i class="fas fa-eye"></i></a>
-                                        <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_siswa.php?nis=<?= $data_siswa['nis'] ?>&from=list_perjanjian.php" class="btn-action btn-print-mini" title="Cetak Surat"><i class="fas fa-print"></i></a>
+                                        <?php if (strtolower(trim($_SESSION['role'])) !== 'guru'): ?>
+                                            <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_siswa.php?nis=<?= $data_siswa['nis'] ?>&from=list_perjanjian.php" class="btn-action btn-print-mini" title="Cetak Surat"><i class="fas fa-print"></i></a>
+                                        <?php endif; ?>
                                     </div>
-                                    <form action="" method="post" enctype="multipart/form-data" class="upload-mini">
-                                        <span>Upload Bukti TTD:</span>
-                                        <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_siswa['tanggal_surat']) ?>">
-                                        <input type="hidden" name="jenis_upload" value="siswa">
-                                        <div style="display: flex; gap: 5px; align-items: center;">
-                                            <input type="file" name="foto_dokumen" accept="image/*" required>
-                                            <button type="submit" name="upload" class="btn-action btn-upload" style="padding: 5px 10px;"><i class="fas fa-cloud-arrow-up"></i></button>
-                                        </div>
-                                    </form>
+                                    <?php if (!in_array(strtolower(trim($_SESSION['role'])), ['wakasek', 'guru'])): ?>
+                                        <form action="" method="post" enctype="multipart/form-data" class="upload-mini">
+                                            <span>Upload Bukti TTD:</span>
+                                            <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_siswa['tanggal_surat']) ?>">
+                                            <input type="hidden" name="jenis_upload" value="siswa">
+                                            <div style="display: flex; gap: 5px; align-items: center;">
+                                                <input type="file" name="foto_dokumen" accept="image/*, application/pdf" required>
+                                                <button type="submit" name="upload" class="btn-action btn-upload" style="padding: 5px 10px;"><i class="fas fa-cloud-arrow-up"></i></button>
+                                            </div>
+                                        </form>
+                                    <?php else: ?>
+                                        <p style="font-size: 0.75rem; color: #94a3b8; margin: 5px 0;"><i class="fas fa-lock"></i> Upload hanya untuk Petugas BK</p>
+                                    <?php endif; ?>
 
                                 <?php } elseif ($data_siswa['status_dokumen'] == "Selesai") { ?>
                                     <span class="status-badge status-success"><i class="fas fa-check-circle"></i> Selesai</span>
@@ -527,36 +541,44 @@ include ROOTPATH . "/includes/header.php";
                                     <div style="display: flex; gap: 5px; flex-wrap: wrap;">
                                         <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_ortu['nis'] ?>&tanggal=<?= $data_ortu['tanggal_surat'] ?>&from=list_perjanjian.php" class="btn-action btn-detail" title="Detail"><i class="fas fa-eye"></i> Detail</a>
                                         
-                                        <?php
-                                        $cek_surat_panggilan = mysqli_query($conn, "SELECT nis FROM surat_keluar WHERE nis = '" . mysqli_real_escape_string($conn, $data_ortu['nis']) . "' AND jenis_surat = 'Panggilan Orang Tua'");
-                                        if (mysqli_num_rows($cek_surat_panggilan) == 0) { ?>
-                                            <form action="/poin_pelanggaran_siswa/pages/cetak/add_panggilan_ortu.php?from=list_perjanjian.php" method="post" style="margin: 0;">
-                                                <input type="hidden" name="nis" value="<?= $data_ortu['nis'] ?>">
-                                                <button type="submit" class="btn-action btn-print-mini" title="Cetak Panggilan"><i class="fas fa-envelope"></i> Panggilan</button>
-                                            </form>
-                                        <?php } ?>
+                                        <?php if (strtolower(trim($_SESSION['role'])) !== 'guru'): ?>
+                                            <?php
+                                            $cek_surat_panggilan = mysqli_query($conn, "SELECT nis FROM surat_keluar WHERE nis = '" . mysqli_real_escape_string($conn, $data_ortu['nis']) . "' AND jenis_surat = 'Panggilan Orang Tua'");
+                                            if (mysqli_num_rows($cek_surat_panggilan) == 0) { ?>
+                                                <form action="/poin_pelanggaran_siswa/pages/cetak/add_panggilan_ortu.php?from=list_perjanjian.php" method="post" style="margin: 0;">
+                                                    <input type="hidden" name="nis" value="<?= $data_ortu['nis'] ?>">
+                                                    <button type="submit" class="btn-action btn-print-mini" title="Cetak Panggilan"><i class="fas fa-envelope"></i> Panggilan</button>
+                                                </form>
+                                            <?php } ?>
 
-                                        <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php?from=list_perjanjian.php" method="post" style="margin: 0;">
-                                            <input type="hidden" name="nis" value="<?= $data_ortu['nis'] ?>">
-                                            <button type="submit" class="btn-action btn-print-mini" title="Cetak Perjanjian"><i class="fas fa-file-contract"></i> Perjanjian</button>
-                                        </form>
+                                            <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php?from=list_perjanjian.php" method="post" style="margin: 0;">
+                                                <input type="hidden" name="nis" value="<?= $data_ortu['nis'] ?>">
+                                                <button type="submit" class="btn-action btn-print-mini" title="Cetak Perjanjian"><i class="fas fa-file-contract"></i> Perjanjian</button>
+                                            </form>
+                                        <?php endif; ?>
                                     </div>
 
                                 <?php } elseif ($data_ortu['status_dokumen'] == "Masih Proses") { ?>
                                     <span class="status-badge status-process"><i class="fas fa-spinner fa-spin"></i> Menunggu Upload</span>
                                     <div style="display: flex; gap: 5px; margin-bottom: 8px;">
                                         <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_ortu['nis'] ?>&tanggal=<?= $data_ortu['tanggal_surat'] ?>&from=list_perjanjian.php" class="btn-action btn-detail" title="Detail"><i class="fas fa-eye"></i></a>
-                                        <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $data_ortu['nis'] ?>&from=list_perjanjian.php" class="btn-action btn-print-mini" title="Cetak Surat"><i class="fas fa-print"></i></a>
+                                        <?php if (strtolower(trim($_SESSION['role'])) !== 'guru'): ?>
+                                            <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $data_ortu['nis'] ?>&from=list_perjanjian.php" class="btn-action btn-print-mini" title="Cetak Surat"><i class="fas fa-print"></i></a>
+                                        <?php endif; ?>
                                     </div>
-                                    <form action="" method="post" enctype="multipart/form-data" class="upload-mini">
-                                        <span>Upload Bukti TTD Ortu:</span>
-                                        <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_ortu['tanggal_surat']) ?>">
-                                        <input type="hidden" name="jenis_upload" value="perjanjian_orang_tua">
-                                        <div style="display: flex; gap: 5px; align-items: center;">
-                                            <input type="file" name="foto_dokumen" accept="image/*, application/pdf" required>
-                                            <button type="submit" name="upload" class="btn-action btn-upload"><i class="fas fa-cloud-arrow-up"></i></button>
-                                        </div>
-                                    </form>
+                                    <?php if (!in_array(strtolower(trim($_SESSION['role'])), ['wakasek', 'guru'])): ?>
+                                        <form action="" method="post" enctype="multipart/form-data" class="upload-mini">
+                                            <span>Upload Bukti TTD Ortu:</span>
+                                            <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_ortu['tanggal_surat']) ?>">
+                                            <input type="hidden" name="jenis_upload" value="perjanjian_orang_tua">
+                                            <div style="display: flex; gap: 5px; align-items: center;">
+                                                <input type="file" name="foto_dokumen" accept="image/*, application/pdf" required>
+                                                <button type="submit" name="upload" class="btn-action btn-upload"><i class="fas fa-cloud-arrow-up"></i></button>
+                                            </div>
+                                        </form>
+                                    <?php else: ?>
+                                        <p style="font-size: 0.75rem; color: #94a3b8; margin: 5px 0;"><i class="fas fa-lock"></i> Upload hanya untuk Petugas BK</p>
+                                    <?php endif; ?>
 
                                 <?php } elseif ($data_ortu['status_dokumen'] == "Selesai") { ?>
                                     <span class="status-badge status-success"><i class="fas fa-check-circle"></i> Selesai</span>
@@ -723,25 +745,31 @@ include ROOTPATH . "/includes/header.php";
                             <div class="action-stack">
                                 <?php if ($data_laporan_ortu['status_dokumen'] == NULL) { ?>
                                     <div style="display: flex; gap: 5px;">
-                                        <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_laporan_ortu['nis'] ?>&tanggal=<?= $data_laporan_ortu['tanggal_surat'] ?>&from=list_perjanjian.php" class="btn-action btn-detail"><i class="fas fa-eye"></i> Detail</a>
-                                        <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php" method="post" style="margin: 0;">
-                                            <input type="hidden" name="nis" value="<?= $data_laporan_ortu['nis'] ?>">
-                                            <button type="submit" class="btn-action btn-print-mini"><i class="fas fa-print"></i> Cetak</button>
-                                        </form>
+                                        <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_laporan_ortu['nis'] ?>&tanggal=<?= $data_laporan_ortu['tanggal_surat'] ?>&from=list_perjanjian.php" class="btn-action btn-detail" title="Detail"><i class="fas fa-eye"></i> Detail</a>
+                                        <?php if (strtolower(trim($_SESSION['role'])) !== 'guru'): ?>
+                                            <form action="/poin_pelanggaran_siswa/pages/cetak/add_perjanjian_ortu.php" method="post" style="margin: 0;">
+                                                <input type="hidden" name="nis" value="<?= $data_laporan_ortu['nis'] ?>">
+                                                <button type="submit" class="btn-action btn-print-mini"><i class="fas fa-print"></i> Cetak</button>
+                                            </form>
+                                        <?php endif; ?>
                                     </div>
                                 <?php } elseif ($data_laporan_ortu['status_dokumen'] == "Masih Proses") { ?>
                                     <div style="display: flex; gap: 5px; margin-bottom: 5px;">
-                                        <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_laporan_ortu['nis'] ?>&tanggal=<?= $data_laporan_ortu['tanggal_surat'] ?>" class="btn-action btn-detail"><i class="fas fa-eye"></i></a>
-                                        <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $data_laporan_ortu['nis'] ?>" class="btn-action btn-print-mini"><i class="fas fa-print"></i></a>
+                                        <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $data_laporan_ortu['nis'] ?>&tanggal=<?= $data_laporan_ortu['tanggal_surat'] ?>" class="btn-action btn-detail" title="Detail"><i class="fas fa-eye"></i></a>
+                                        <?php if (strtolower(trim($_SESSION['role'])) !== 'guru'): ?>
+                                            <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $data_laporan_ortu['nis'] ?>" class="btn-action btn-print-mini" title="Cetak Surat"><i class="fas fa-print"></i></a>
+                                        <?php endif; ?>
                                     </div>
-                                    <form action="" method="post" enctype="multipart/form-data" class="upload-mini">
-                                        <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_laporan_ortu['tanggal_surat']) ?>">
-                                        <input type="hidden" name="jenis_upload" value="perjanjian_orang_tua">
-                                        <div style="display: flex; gap: 5px;">
-                                            <input type="file" name="foto_dokumen" accept="image/*" required>
-                                            <button type="submit" name="upload" class="btn-action btn-upload"><i class="fas fa-upload"></i></button>
-                                        </div>
-                                    </form>
+                                    <?php if (!in_array(trim(strtolower($_SESSION['role'])), ['wakasek', 'guru'])): ?>
+                                        <form action="" method="post" enctype="multipart/form-data" class="upload-mini">
+                                            <input type="hidden" name="tanggal_surat" value="<?= htmlspecialchars($data_laporan_ortu['tanggal_surat']) ?>">
+                                            <input type="hidden" name="jenis_upload" value="perjanjian_orang_tua">
+                                            <div style="display: flex; gap: 5px;">
+                                                <input type="file" name="foto_dokumen" accept="image/*" required>
+                                                <button type="submit" name="upload" class="btn-action btn-upload"><i class="fas fa-upload"></i></button>
+                                            </div>
+                                        </form>
+                                    <?php endif; ?>
                                 <?php } elseif ($data_laporan_ortu['status_dokumen'] == "Selesai") { ?>
                                     <a href="/poin_pelanggaran_siswa/assets/images/<?= htmlspecialchars($data_laporan_ortu['foto_dokumen']) ?>" target="_blank" class="btn-action btn-view"><i class="fas fa-image"></i> Lihat Dokumen</a>
                                 <?php } ?>

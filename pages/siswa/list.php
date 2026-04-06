@@ -20,7 +20,9 @@ JOIN guru USING(kode_guru)');
 <div class="container">
     <div class="header-table">
         <h2>Daftar Siswa</h2>
-        <a href="add.php" class="btn-add"><i class="fas fa-plus-circle"></i> Tambah Data Siswa</a>
+        <?php if (!in_array(trim(strtolower($_SESSION['role'])), ['wakasek', 'guru'])): ?>
+            <a href="add.php" class="btn-add"><i class="fas fa-plus-circle"></i> Tambah Data Siswa</a>
+        <?php endif; ?>
     </div>
 
     <div class="table-wrapper">
@@ -76,12 +78,16 @@ JOIN guru USING(kode_guru)');
                             <td><span class="badge" style="background:#f1f5f9; padding:5px 10px; border-radius:6px; font-weight:600;"><?php echo htmlspecialchars($row['tingkat'] . ' ' . $row['program_keahlian'] . ' ' . $row['rombel']); ?></span></td>
                             <td><?php echo htmlspecialchars($row['nama_pengguna']); ?></td>
                             <td class="action-buttons">
-                                <a href="edit.php?nis=<?= $row['nis'] ?>" class="btn-edit" title="Edit Profil">
-                                    <i class="fas fa-pen-to-square"></i>
-                                </a>
-                                <button type="button" class="btn-delete" title="Hapus Data" onclick="showDeleteModal('<?= $row['nis'] ?>', '<?= htmlspecialchars($row['nama_siswa']) ?>')">
-                                    <i class="fas fa-trash-can"></i>
-                                </button>
+                                <?php if (!in_array(trim(strtolower($_SESSION['role'])), ['wakasek', 'guru'])): ?>
+                                    <a href="edit.php?nis=<?= $row['nis'] ?>" class="btn-edit" title="Edit Profil">
+                                        <i class="fas fa-pen-to-square"></i>
+                                    </a>
+                                    <button type="button" class="btn-delete" title="Hapus Data" onclick="showDeleteModal('<?= $row['nis'] ?>', '<?= htmlspecialchars($row['nama_siswa']) ?>')">
+                                        <i class="fas fa-trash-can"></i>
+                                    </button>
+                                <?php else: ?>
+                                    <span class="badge" style="background:#f8fafc; color:#94a3b8;"><i class="fas fa-lock"></i> Read Only</span>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php

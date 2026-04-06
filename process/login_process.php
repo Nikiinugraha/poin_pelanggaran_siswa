@@ -2,42 +2,61 @@
 // Menentukan path utama proyek agar mudah memanggil file lain
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 
-// Menyertakan file konfigurasi database
+// Menyertakan file konfigurasi database (session sudah dimulai di sini)
 include ROOTPATH . "/config/config.php";
 
-session_start(); // Memulai session untuk menyimpan data user di server
-
 $username = $_POST["username"];
-$password_hash = $_POST["password"];
+$password_plain = $_POST["password"];
 
-$query_guru = mysqli_query($conn, "SELECT nama_pengguna, username, password, role FROM guru WHERE username = '$username'");
-$query_siswa = mysqli_query($conn, "SELECT nis, nama_siswa, password FROM siswa WHERE nis = '$username'");
+/** 
+ * KEAMANAN TINGKAT TINGGI: PREPARED STATEMENTS 
+ * Pendekatan ini mencegah SQL Injection - serangan paling umum 
+ * yang dilakukan dengan menyuntikkan query jahat di kolom login.
+ */
 
-if(mysqli_num_rows($query_guru) >= 1){
-    $query_guru = mysqli_fetch_assoc($query_guru);
-    if(password_verify($password_hash, $query_guru['password'])){
-        $_SESSION["nama"] = $query_guru['nama_pengguna'];
-        $_SESSION["username"] = $query_guru['username'];
-        $_SESSION["role"] = $query_guru['role']; // Role: Guru / Waka Kesiswaan / Kepala Sekolah / dll
+// 1. CEK GURU/BK/WAKASEK
+$stmt_guru = mysqli_prepare($conn, "SELECT nama_pengguna, username, password, role FROM guru WHERE username = ?");
+mysqli_stmt_bind_param($stmt_guru, "s", $username);
+mysqli_stmt_execute($stmt_guru);
+$res_guru = mysqli_stmt_get_result($stmt_guru);
+
+if(mysqli_num_rows($res_guru) >= 1){
+    $data_guru = mysqli_fetch_assoc($res_guru);
+    if(password_verify($password_plain, $data_guru['password'])){
+        // Login Berhasil - Data 'role' disimpan secara AMAN di server (SESSION)
+        $_SESSION["nama"] = $data_guru['nama_pengguna'];
+        $_SESSION["username"] = $data_guru['username'];
+        $_SESSION["role"] = $data_guru['role'];
         
         header('Location: ../pages/index.php');
         exit;
-    }else{
-        echo "Password Salah";
-    };
-}elseif(mysqli_num_rows($query_siswa) >= 1){
-    $query_siswa = mysqli_fetch_assoc($query_siswa);
-    if(password_verify($password_hash, $query_siswa['password'])){
-        $_SESSION["nama"] = $query_siswa['nama_siswa'];
-        $_SESSION["username"] = $query_siswa['nis'];
-        $_SESSION["role"] = "siswa"; // Default role untuk siswa
-        
-        header('Location: ../pages/index.php');
+    } else {
+        echo "<script>alert('Password Salah!'); window.location.href='../login.php';</script>";
         exit;
-    }else{
-        echo "Password Salah";
-    };
-}else{
-    echo "anda siapa????";
+    }
 }
-?>
+
+// 2. CEK SISWA (Hanya dieksekusi jika tidak ditemukan di guru)
+$stmt_siswa = mysqli_prepare($conn, "SELECT nis, nama_siswa, password FROM siswa WHERE nis = ?");
+mysqli_stmt_bind_param($stmt_siswa, "s", $username);
+mysqli_stmt_execute($stmt_siswa);
+$res_siswa = mysqli_stmt_get_result($stmt_siswa);
+
+if(mysqli_num_rows($res_siswa) >= 1){
+    $data_siswa = mysqli_fetch_assoc($res_siswa);
+    if(password_verify($password_plain, $data_siswa['password'])){
+        // Login Berhasil - Siswa tidak bisa memalsukan role 'admin/bk' lagi lewat browser
+        $_SESSION["nama"] = $data_siswa['nama_siswa'];
+        $_SESSION["username"] = $data_siswa['nis'];
+        $_SESSION["role"] = "siswa"; 
+        
+        header('Location: ../pages/index.php');
+        exit;
+    } else {
+        echo "<script>alert('Password Salah!'); window.location.href='../login.php';</script>";
+        exit;
+    }
+} else {
+    echo "<script>alert('User tidak ditemukan!'); window.location.href='../login.php';</script>";
+    exit;
+}

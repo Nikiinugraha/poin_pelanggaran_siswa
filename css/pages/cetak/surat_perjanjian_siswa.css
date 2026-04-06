@@ -207,3 +207,30 @@ button:hover {
 .print-btn:hover .printer-page {
     height: 16px;
 }
+
+/* --- List Pindah Button --- */
+.btn-pindah {
+    display: inline-flex;
+    align-items: center;
+    background: #4f46e5;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+}
+
+.btn-pindah:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+    color: white;
+}
+
+.btn-pindah i {
+    font-size: 16px;
+}

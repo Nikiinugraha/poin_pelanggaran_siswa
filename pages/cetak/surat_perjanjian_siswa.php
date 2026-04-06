@@ -4,6 +4,7 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 
 // Menghubungkan ke file konfigurasi (koneksi database)
 include ROOTPATH . "/config/config.php";
+include ROOTPATH . "/includes/cek_akses_cetak.php";
 
 
 if(isset($_GET['nis'])){
@@ -163,6 +164,12 @@ include ROOTPATH . "/includes/header.php";
             </span>
             <span>&nbsp;&nbsp;Cetak Lagi</span>
         </button>
+
+        <!-- tombol menuju list pindah -->
+        <a href="/poin_pelanggaran_siswa/pages/laporan/list_perjanjian.php" class="btn-pindah">
+            <i class="fas fa-exchange-alt"></i>
+            <span>&nbsp;&nbsp;Laporan Perjanjian</span>
+        </a>
     </div>
     
 </center>
