@@ -62,13 +62,6 @@ $back_page = isset($_GET['from']) ? $_GET['from'] : 'list_pelanggaran.php';
 </center>
 
 
-
-
-
-
-
-
-
 <div class="page">
     <!-- Header -->
     <div class="header">
