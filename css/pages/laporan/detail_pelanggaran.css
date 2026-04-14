@@ -163,14 +163,4 @@
     flex: 1;
 }
 
-/* Sembunyikan elemen tertentu saat dicetak */
-@media print {
-    .no-print, .no-print * {
-        display: none !important;
-    }
-    .page {
-        margin: 0;
-        box-shadow: none;
-        width: 100%;
-    }
-}
+/* @media print sudah dikelola secara global di header.css */

@@ -1,7 +1,9 @@
 <?php
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 include ROOTPATH . '/config/config.php';
+$page_title = "Edit Jenis Pelanggaran";
 include ROOTPATH . '/includes/header.php';
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 
 // Mendapatkan ID dari URL
 $id_jenis_pelanggaran = isset($_GET['id_jenis_pelanggaran']) ? $_GET['id_jenis_pelanggaran'] : 0;

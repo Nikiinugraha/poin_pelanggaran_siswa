@@ -1,7 +1,9 @@
 <?php
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 include ROOTPATH . '/config/config.php';
+$page_title = "Edit Kelas";
 include ROOTPATH . '/includes/header.php';
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 
 // Mendapatkan ID Kelas dari URL
 $id_kelas = isset($_GET['id_kelas']) ? $_GET['id_kelas'] : 0;

@@ -1,7 +1,9 @@
 <?php
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 include ROOTPATH . '/config/config.php';
+$page_title = "Tambah Guru";
 include ROOTPATH . '/includes/header.php';
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 
 // Generate Kode Guru Otomatis
 $result = mysqli_query($conn, "SELECT kode_guru FROM guru ORDER BY kode_guru DESC LIMIT 1");

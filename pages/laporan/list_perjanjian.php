@@ -11,6 +11,7 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 
 // Langkah 2: Hubungkan ke database (seperti membuka buku catatan data siswa)
 include ROOTPATH . "/config/config.php";
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 
 
 // ============================================================
@@ -336,6 +337,7 @@ $hasil_laporan_perjanjian_ortu = mysqli_query($conn, $sql_laporan_perjanjian_ort
 
 
 // Langkah terakhir sebelum HTML: pasang header/tampilan atas halaman
+$page_title = "Surat Perjanjian";
 include ROOTPATH . "/includes/header.php";
 ?>
 

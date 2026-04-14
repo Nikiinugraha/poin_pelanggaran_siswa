@@ -2,7 +2,9 @@
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 
 include ROOTPATH . '/config/config.php';
+$page_title = "Tambah Siswa";
 include ROOTPATH . '/includes/header.php';
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 
 // RBAC Protection: Guru and Wakasek cannot add students
 if (in_array(strtolower($_SESSION['role']), ['wakasek', 'guru'])) {

@@ -3,7 +3,8 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 include ROOTPATH . "/config/config.php";
 $page_title = "Laporan Pelanggaran";
 include ROOTPATH . "/includes/header.php";
-
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
+    
 // Logika Pencarian
 $cari = isset($_GET['cari']) ? $_GET['cari'] : '';
 
@@ -28,10 +29,10 @@ $bulan_id = [
 
 // Definisi Indikator Poin
 $point_indicators = [
-    ['min' => 100, 'max' => 150, 'class' => 'poin-high', 'label' => 'Sangat Tinggi', 'desc' => 'Surat DO/Dikeluarkan dari Sekolah'],
-    ['min' => 50, 'max' => 100, 'class' => 'poin-warning', 'label' => 'Waspada', 'desc' => 'Surat Panggilan Orang Tua'],
-    ['min' => 25, 'max' => 50, 'class' => 'poin-med', 'label' => 'Perhatian', 'desc' => 'Surat Perjanjian Siswa'],
-    ['min' => 1, 'max' => 25, 'class' => 'poin-low', 'label' => 'Ringan', 'desc' => 'Pembinaan Wali Kelas']
+    ['min' => 100, 'max' => 999, 'class' => 'poin-high', 'label' => 'Sangat Tinggi', 'desc' => 'Surat DO/Dikeluarkan dari Sekolah'],
+    ['min' => 50, 'max' => 99, 'class' => 'poin-warning', 'label' => 'Waspada', 'desc' => 'Surat Panggilan Orang Tua'],
+    ['min' => 25, 'max' => 49, 'class' => 'poin-med', 'label' => 'Perhatian', 'desc' => 'Surat Perjanjian Siswa'],
+    ['min' => 1, 'max' => 24, 'class' => 'poin-low', 'label' => 'Ringan', 'desc' => 'Pembinaan Wali Kelas']
 ];
 ?>
 

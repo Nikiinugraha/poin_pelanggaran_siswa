@@ -8,6 +8,7 @@ include ROOTPATH . "/config/config.php";
 // Menyertakan tampilan header (bagian atas halaman)
 $page_title = "Laporan Surat Pindah";
 include ROOTPATH . "/includes/header.php";
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 
 // ============================================================
 // FUNGSI PEMBANTU: Ubah format tanggal ke Bahasa Indonesia

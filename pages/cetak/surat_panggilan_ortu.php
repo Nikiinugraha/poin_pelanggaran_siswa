@@ -7,6 +7,9 @@ include ROOTPATH . "/config/config.php";
 include ROOTPATH . "/includes/cek_akses_cetak.php";
 // // Menyertakan tampilan header (bagian atas halaman)
 include ROOTPATH . "/includes/header.php";
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
+
+
 
 
 if(isset($_GET['no_surat'])){

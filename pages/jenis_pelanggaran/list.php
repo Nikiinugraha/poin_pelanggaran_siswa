@@ -1,7 +1,9 @@
 <?php
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 include ROOTPATH . '/config/config.php';
+$page_title = "Kategori Pelanggaran";
 include ROOTPATH . '/includes/header.php';
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 
 $result = mysqli_query($conn, 'SELECT * FROM jenis_pelanggaran');
 ?>
@@ -49,7 +51,7 @@ $result = mysqli_query($conn, 'SELECT * FROM jenis_pelanggaran');
                                         <i class="fas fa-trash-can"></i>
                                     </button>
                                 <?php else: ?>
-                                    <span class="badge" style="background:#f8fafc; color:#94a3b8;"><i class="fas fa-lock"></i> No Permission</span>
+                                    <span class="badge" style="background:#f8fafc; color:#94a3b8;"><i class="fas fa-lock"></i></span>
                                 <?php endif; ?>
                             </td>
                         </tr>

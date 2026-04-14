@@ -1,7 +1,9 @@
 <?php
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 include ROOTPATH . '/config/config.php';
+$page_title = "Tambah Kelas";
 include ROOTPATH . '/includes/header.php';
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 ?>
 
 <link rel="stylesheet" href="/poin_pelanggaran_siswa/css/pages/kelas/add_kelas.css">

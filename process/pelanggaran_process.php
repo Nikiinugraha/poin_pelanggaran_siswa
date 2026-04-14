@@ -25,10 +25,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $query = mysqli_query($conn, "INSERT INTO pelanggaran_siswa (tanggal, nis, id_jenis_pelanggaran, keterangan) VALUES ('$tanggal', '$nis', '$id_jenis_pelanggaran', '$keterangan')");
 
     if($query){
-        header("Location: ../pages/siswa/list.php?success=Data pelanggaran siswa berhasil dicatat!");
+        header("Location: ../pages/laporan/list_pelanggaran.php?success=Data pelanggaran siswa berhasil dicatat!");
         exit;
     } else {
-        header("Location: ../pages/siswa/list.php?error=Gagal mencatat data pelanggaran ke database.");
+        header("Location: ../pages/laporan/list_pelanggaran.php?error=Gagal mencatat data pelanggaran ke database.");
         exit;
     }
    }

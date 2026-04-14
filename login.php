@@ -128,11 +128,11 @@
                         usernameInput.placeholder = 'Masukkan NIS Anda';
                         userIcon.className = 'fas fa-id-card';
                     } else if (role === 'guru') {
-                        usernameLabel.textContent = 'Kode Guru atau Username Guru';
-                        usernameInput.placeholder = 'Masukkan Username';
+                        usernameLabel.textContent = 'Username Guru';
+                        usernameInput.placeholder = 'Masukkan Username Guru';
                         userIcon.className = 'fas fa-chalkboard-teacher';
                     } else if (role === 'bk') {
-                        usernameLabel.textContent = 'Username Petugas BK';
+                        usernameLabel.textContent = 'Username Guru BK';
                         usernameInput.placeholder = 'Masukkan Username BK';
                         userIcon.className = 'fas fa-user-shield';
                     }

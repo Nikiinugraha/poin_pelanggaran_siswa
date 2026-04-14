@@ -3,6 +3,7 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 include ROOTPATH . '/config/config.php';
 include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 
+$page_title = "Daftar Siswa";
 include ROOTPATH . '/includes/header.php';
 ?>
 
@@ -35,6 +36,7 @@ JOIN guru USING(kode_guru)');
                         <th>Nama</th>
                         <th>L/P</th>
                         <th>Alamat Siswa</th>
+                        <th>Status</th>
                         <th style="text-align: center;">Kontak Ortu</th>
                         <th>Kelas</th>
                         <th>Wali Kelas</th>
@@ -70,12 +72,13 @@ JOIN guru USING(kode_guru)');
                             <td><strong><?php echo htmlspecialchars($row['nama_siswa']); ?></strong></td>
                             <td class="text-center" title="<?= $row['jenis_kelamin'] ?>"><?= $jk_icon ?></td>
                             <td><?php echo htmlspecialchars($row['alamat']); ?></td>
+                            <td><?php echo htmlspecialchars($row['status']); ?></td>
                             <td style="text-align: center;">
                                 <button class="btn-quickview" onclick='showParentDetail(<?= $parent_data ?>)'>
                                     <i class="fas fa-house-user"></i> Detail Ortu
                                 </button>
                             </td>
-                            <td><span class="badge" style="background:#f1f5f9; padding:5px 10px; border-radius:6px; font-weight:600;"><?php echo htmlspecialchars($row['tingkat'] . ' ' . $row['program_keahlian'] . ' ' . $row['rombel']); ?></span></td>
+                            <td><span class="badge"><?php echo htmlspecialchars($row['tingkat'] . ' ' . $row['program_keahlian'] . ' ' . $row['rombel']); ?></span></td>
                             <td><?php echo htmlspecialchars($row['nama_pengguna']); ?></td>
                             <td class="action-buttons">
                                 <?php if (!in_array(trim(strtolower($_SESSION['role'])), ['wakasek', 'guru'])): ?>
@@ -86,7 +89,7 @@ JOIN guru USING(kode_guru)');
                                         <i class="fas fa-trash-can"></i>
                                     </button>
                                 <?php else: ?>
-                                    <span class="badge" style="background:#f8fafc; color:#94a3b8;"><i class="fas fa-lock"></i> Read Only</span>
+                                    <span class="badge" style="background:#f8fafc; color:#94a3b8;"><i class="fas fa-lock"></i></span>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -228,6 +231,8 @@ JOIN guru USING(kode_guru)');
         </div>
     </div>
 </div>
+
+<?php include ROOTPATH . '/includes/footer.php'; ?>
 
 <script>
 function showParentDetail(data) {

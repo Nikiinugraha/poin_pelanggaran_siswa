@@ -102,15 +102,7 @@ table tbody td {
 }
 
 /* ID & NIS Styling */
-.nis-badge {
-    font-family: 'JetBrains Mono', monospace;
-    background: #e0f2fe;
-    color: #0369a1;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 700;
-}
+
 
 /* Action Buttons & QuickView */
 .btn-quickview {

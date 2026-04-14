@@ -1,7 +1,9 @@
 <?php
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 include ROOTPATH . '/config/config.php';
+$page_title = "Manajemen Kelas";
 include ROOTPATH . '/includes/header.php';
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 
 $result = mysqli_query($conn, "SELECT id_kelas, tingkat, program_keahlian, rombel, nama_pengguna FROM kelas JOIN tingkat using(id_tingkat) JOIN program_keahlian using(id_program_keahlian) JOIN guru using(kode_guru) ORDER BY id_tingkat DESC, id_program_keahlian ASC, rombel ASC");
 ?>
@@ -73,7 +75,7 @@ $result = mysqli_query($conn, "SELECT id_kelas, tingkat, program_keahlian, rombe
                                         <i class="fas fa-trash-can"></i>
                                     </button>
                                 <?php else: ?>
-                                    <span class="badge" style="background:#f8fafc; color:#94a3b8;"><i class="fas fa-lock"></i> No Permission</span>
+                                    <span class="badge" style="background:#f8fafc; color:#94a3b8;"><i class="fas fa-lock"></i></span>
                                 <?php endif; ?>
                             </td>
                         </tr>

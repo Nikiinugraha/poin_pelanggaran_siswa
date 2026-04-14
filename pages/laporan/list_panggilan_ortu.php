@@ -12,6 +12,7 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 
 // Langkah 2: Hubungkan ke database (membuka buku catatan data siswa)
 include ROOTPATH . "/config/config.php";
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 
 
 // ============================================================
@@ -251,6 +252,7 @@ if (isset($_GET['cari_laporan_panggilan'])) {
 
 
 // Langkah terakhir sebelum HTML: tampilkan bagian atas halaman (header)
+$page_title = "Panggilan Orang Tua";
 include ROOTPATH . "/includes/header.php";
 ?>
 
@@ -298,7 +300,7 @@ include ROOTPATH . "/includes/header.php";
                     </tr>
                     <tr>
                         <th style="width: 50px;">No</th>
-                        <th style="width: 120px;">NIS</th>
+                        <th style="width: 100px;">NIS</th>
                         <th>Nama Siswa</th>
                         <th style="width: 100px;">Total Poin</th>
                         <th style="width: 120px;">Aksi</th>
@@ -319,7 +321,7 @@ include ROOTPATH . "/includes/header.php";
                         <td align="center">
                             <span class="poin-badge-premium" style="background: #ecfdf5; color: #059669; border: 1px solid #d1fae5;"><?= $row_ringan['total_poin'] ?></span>
                         </td>
-                        <td align="center">
+                        <td>
                             <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $row_ringan['nis'] ?>&from=list_panggilan_ortu.php" class="btn-primary" style="text-decoration:none; padding: 6px 12px; font-size: 0.85rem; border-radius: 8px;">
                                 <i class="fas fa-eye"></i> Pantau
                             </a>
@@ -430,7 +432,7 @@ include ROOTPATH . "/includes/header.php";
                                     <i class="fas fa-info-circle"></i> Detail
                                 </a> 
                                 
-                                <?php if ($_SESSION['role'] !== 'guru'): ?>
+                                <?php if (trim(strtolower($_SESSION['role'])) !== 'guru'): ?>
                                     <?php 
                                     $cek_surat_panggilan = mysqli_query($conn, "SELECT nis FROM surat_keluar WHERE nis = '" . mysqli_real_escape_string($conn, $baris_calon['nis']) . "' AND jenis_surat = 'Panggilan Orang Tua'");
                                     if(mysqli_num_rows($cek_surat_panggilan) == 0){
@@ -464,7 +466,7 @@ include ROOTPATH . "/includes/header.php";
                                 <a href="/poin_pelanggaran_siswa/pages/laporan/detail_pelanggaran.php?nis=<?= $baris_calon['nis'] ?>&tanggal=<?= $baris_calon['tanggal_surat'] ?>&from=list_panggilan_ortu.php" class="btn-primary" style="text-decoration:none;">
                                     <i class="fas fa-info-circle"></i> Detail
                                 </a>
-                                <?php if ($_SESSION['role'] !== 'guru'): ?>
+                                                                <?php if (trim(strtolower($_SESSION['role'])) !== 'guru'): ?>
                                     <hr>
                                     <a href="/poin_pelanggaran_siswa/pages/cetak/surat_perjanjian_ortu.php?nis=<?= $baris_calon['nis'] ?>" class="btn-primary" style="text-decoration:none;">
                                         <i class="fas fa-print"></i> Surat TTD Ortu

@@ -110,7 +110,7 @@ include('../includes/header.php');
                 <hr>
                 <div class="stats-mini">
                     <div class="stat-item">
-                        <span>Username/ID</span>
+                        <span>Username/NIS</span>
                         <strong><?php echo $username; ?></strong>
                     </div>
                 </div>

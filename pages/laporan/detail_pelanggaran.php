@@ -9,14 +9,21 @@ $nis = $_GET['nis'];
 
 // mengambil data siswa dari database join ke tabel ortu_wali, kelas, tingkat, program_keahlian, dan guru
 $query_siswa = mysqli_query($conn, "SELECT nis, nama_siswa, tingkat, program_keahlian, rombel, deskripsi FROM siswa
-JOIN kelas USING(id_kelas)
-JOIN tingkat USING(id_tingkat)
-JOIN program_keahlian USING(id_program_keahlian)
+LEFT JOIN kelas USING(id_kelas)
+LEFT JOIN tingkat USING(id_tingkat)
+LEFT JOIN program_keahlian USING(id_program_keahlian)
 WHERE nis = '$nis'");
 $row_siswa = mysqli_fetch_assoc($query_siswa);
 
+// Validasi jika data siswa tidak ditemukan sama sekali di database
+if (!$row_siswa) {
+    echo "<script>alert('Data siswa tidak ditemukan!'); window.history.back();</script>";
+    exit;
+}
+
 
 // Menyertakan tampilan header (bagian atas halaman)
+$page_title = "Detail Pelanggaran: " . htmlspecialchars($row_siswa['nama_siswa']);
 include ROOTPATH . "/includes/header.php";
 
 ?>

@@ -10,8 +10,8 @@
 }
 
 .page-header {
-    margin: 0 auto 30px;
-    max-width: 930px;
+    margin: 0 auto 30px;    
+    max-width: 850px;
     display: flex;
     justify-content: space-between;
     align-items: center;

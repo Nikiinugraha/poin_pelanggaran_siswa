@@ -1,7 +1,9 @@
 <?php
 define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 include ROOTPATH . '/config/config.php';
+$page_title = "Manajemen Guru";
 include ROOTPATH . '/includes/header.php';
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 
 $result = mysqli_query($conn, 'SELECT * FROM guru WHERE aktif = "Y"');
 $result_nonaktif = mysqli_query($conn, 'SELECT * FROM guru WHERE aktif = "N"');

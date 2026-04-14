@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 /* Sidebar Navigation System */
 :root {
     --sidebar-width: 280px;
@@ -240,5 +244,72 @@ main {
     }
     .submenu {
         display: none !important;
+    }
+}
+
+/* ============================================================
+   PRINT OPTIMIZATION
+   Menghilangkan Sidebar, Topbar, dan Footer saat cetak (window.print)
+   ============================================================ */
+@media print {
+    @page {
+        margin: 0;
+        size: A4 portrait;
+    }
+
+    /* Sembunyikan semua elemen navigasi dan UI secara total */
+    header, 
+    nav, 
+    footer,
+    .sidebar, 
+    .top-bar, 
+    .app-footer,
+    .no-print,
+    .btn-back,
+    .print-btn,
+    .action-buttons {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        opacity: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Reset total layout dan cegah halaman kedua */
+    html, body {
+        height: 100% !important;
+        overflow: hidden !important; /* Mencegah konten meluber ke halaman 2 */
+        background-color: white !important;     
+    }
+
+    .sidebar-layout, .content-wrapper, main {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        position: static !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    /* Pastikan gambar (KOP) tidak melebihi area halaman */
+    img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Pengaturan kontainer laporan */
+    .page {
+        margin: 0 !important;
+        padding: 10mm !important;
+        width: 100% !important;
+        max-height: 297mm; /* Ketinggian standar A4 */
+        box-shadow: none !important;
+        border: none !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
     }
 }

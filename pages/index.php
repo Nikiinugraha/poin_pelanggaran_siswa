@@ -29,11 +29,17 @@ $quotes = [
     ["text" => "Jenius adalah 1% inspirasi dan 99% kerja keras.", "author" => "Thomas Alva Edison"],
     ["text" => "Hiduplah seolah kamu akan mati besok. Belajarlah seolah kamu akan hidup selamanya.", "author" => "Mahatma Gandhi"]
 ];
+
+//Mengambil index secara acak dengan tiper array : array_rand
 $random_quote = $quotes[array_rand($quotes)];
 
 // Data Kalender
 $months = ["Jan" => "Jan", "Feb" => "Feb", "Mar" => "Mar", "Apr" => "Apr", "May" => "Mei", "Jun" => "Jun", "Jul" => "Jul", "Aug" => "Agu", "Sep" => "Sep", "Oct" => "Okt", "Nov" => "Nov", "Dec" => "Des"];
 $days = ["Sunday" => "Minggu", "Monday" => "Senin", "Tuesday" => "Selasa", "Wednesday" => "Rabu", "Thursday" => "Kamis", "Friday" => "Jumat", "Saturday" => "Sabtu"];
+
+//membuat variabel untuk menampung bulan dan hari
+//date('M') untuk mengambil bulan dalam format 3 huruf
+//date('l') untuk mengambil hari dalam format lengkap
 $curr_month = $months[date('M')];
 $curr_day = $days[date('l')];
 
@@ -101,7 +107,7 @@ $curr_day = $days[date('l')];
         if ($total_poin < 50) {
             $status_label = "Sangat Baik";
             $status_class = "status-safe";
-        } elseif ($total_poin <= 150) {
+        } elseif ($total_poin < 100) {
             $status_label = "Peringatan";
             $status_class = "status-warning";
         } else {
@@ -213,16 +219,18 @@ $curr_day = $days[date('l')];
         </div>
 
     <?php 
+    
     // ---------------------------------------------------------------------------------------
     // KONTEN DASHBOARD GURU / BK
     // ---------------------------------------------------------------------------------------
     else: 
+
         // 1. Ambil Statistik Global
-        $q_total_siswa = mysqli_query($conn, "SELECT COUNT(*) as total FROM siswa WHERE status='aktif'");
-        $cnt_siswa = mysqli_fetch_assoc($q_total_siswa)['total'];
+        $q_total_siswa = mysqli_query($conn, "SELECT COUNT(*) as total_siswa_aktif FROM siswa WHERE status='aktif'");
+        $cnt_siswa = mysqli_fetch_assoc($q_total_siswa)['total_siswa_aktif'];
         
-        $q_total_pelanggaran = mysqli_query($conn, "SELECT COUNT(*) as total FROM pelanggaran_siswa");
-        $cnt_pelanggaran = mysqli_fetch_assoc($q_total_pelanggaran)['total'];
+        $q_total_pelanggaran = mysqli_query($conn, "SELECT COUNT(*) as total_pelanggaran FROM pelanggaran_siswa");
+        $cnt_pelanggaran = mysqli_fetch_assoc($q_total_pelanggaran)['total_pelanggaran'];
 
         // Siswa dengan poin >= 100 (Butuh Tindakan)
         $q_warning = mysqli_query($conn, "

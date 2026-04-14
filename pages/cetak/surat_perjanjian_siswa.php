@@ -5,6 +5,7 @@ define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/poin_pelanggaran_siswa');
 // Menghubungkan ke file konfigurasi (koneksi database)
 include ROOTPATH . "/config/config.php";
 include ROOTPATH . "/includes/cek_akses_cetak.php";
+include ROOTPATH . '/includes/cek_akses_guru.php'; // Proteksi khusus Guru
 
 
 if(isset($_GET['nis'])){
